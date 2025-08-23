@@ -1,14 +1,12 @@
 # Switch OC Suite
-
 [![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 [![Downloads](https://img.shields.io/github/downloads/hanai3Bi/Switch-OC-Suite/total)](https://github.com/hanai3Bi/Switch-OC-Suite/releases)
 
  
      
+*If Switch OC Suite is so good, then why isn't there a Switch OC Suite 2?*
 
-한국어 : [Korean](https://github.com/hanai3Bi/Switch-OC-Suite/blob/master/README_kr.md)
-
-This project is very dangerous and can possibly damage your console. Therefore I do not recommend using this project. If you decide to use it, USE AT YOUR OWN RISK. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND.
+This project is very dangerous and can possibly damage your console. If you decide to use it, USE AT YOUR OWN RISK. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND.
 
 Overclocking Suite for Nintendo Switch consoles running Atmosphere CFW.
 
