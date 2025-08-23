@@ -46,7 +46,7 @@ volatile CustomizeTable C = {
  *   Value should be divided evenly by 12'500.
  *   Not enabled by default.
  */
-.commonEmcMemVolt  = 0,
+.commonEmcMemVolt  = 1175000, // RAM Rated Voltage
 
 /* Erista CPU:
  * - Max Voltage in mV
@@ -68,7 +68,7 @@ volatile CustomizeTable C = {
  * - Max Voltage in mV:
  *   Default voltage: 1120
  */
-.marikoCpuMaxVolt    = 1235,
+.marikoCpuMaxVolt    = 1120,
 
 /* Mariko EMC(RAM):
  * - RAM Clock in kHz:
@@ -137,6 +137,8 @@ volatile CustomizeTable C = {
     { 1887000, { 1235000 }, {  5100873, -279186,  4747 } },
     { 1963500, { 1235000 }, {  5100873, -279186,  4747 } },
     { 2091000, { 1235000 }, {  5100873, -279186,  4747 } },
+    { 2193000, { 1235000 }, {  5100873, -279186,  4747 } },
+    { 2295000, { 1235000 }, {  5100873, -279186,  4747 } },
 },
 
 /* - Mariko CPU DVFS Table:
@@ -167,6 +169,8 @@ volatile CustomizeTable C = {
     { 2295000, { 1866287, -42005, 27 }, { 1235000 } },
     // Unsafe
     { 2397000, { 1961107, -43506, 27 }, { 1235000 } },
+    { 2499000, { 1754400,   -35643,  27 }, { 1235000 } },
+    { 2601000, { 1805897,   -36331,  27 }, { 1235000 } },
 },
 
 .marikoCpuDvfsTableSLT = {
