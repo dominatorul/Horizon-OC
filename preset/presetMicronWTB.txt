@@ -1,41 +1,41 @@
 OCS2-MICRON-WTB-PRESET
-.BL = 32,
+.BL = 16,
 .tRFCpb = 140,
 .tRFCab = 280,
-.tRAS = 27,
+.tRAS = 42,
 .tRPpb = 18,
 .tRPab = 21,
-.tRC = 38,
+.tRC = 60,
 
 .tDQSCK_min = 1.5,
 .tDQSCK_max = 3.5,
-.tWPRE = 2.0,
-.tRPST = 0.5,
+.tWPRE = 1.8,
+.tRPST = 0.4,
 .tDQSS_max = 1.25,
-.tDQS2DQ_max = 0.7,
+.tDQS2DQ_max = 0.8,
 .tDQSQ = 0.18,
 
-.tWTR = 10,
-.tRTP = 7.5,
-.tWR = 18,
+.tWTR = MAX(10, 8 * nCK_mariko),
+.tRTP = 7.5, // Cannot find concrete value for this timing
+.tWR = MAX(10, 4 * nCK_mariko),
 .tR2REF = 25.5,
 
-.tRCD = 18,
-.tRRD = 18,
+.tRCD = 20, // Cannot find concrete value for this timing
+.tRRD = 10, // Cannot find concrete value for this timing
 .tREFpb = 488,
 
-.tXP = 7.5,
-.tCMDCKE = 1.75,
-.tMRWCKEL = 14,
-.tCKELCS = 5,
+.tXP = MAX(7.5, 5 * nCK_mariko),
+.tCMDCKE = MAX(1.75, 3 * nCK_mariko),
+.tMRWCKEL = MAX(14, 10 * nCK_mariko),
+.tCKELCS = MAX(5, 5 * nCK_mariko),
 .tCSCKEH = 1.75,
-.tXSR = 287.5,
-.tCKE = 5,
+.tXSR = MAX(C.tRFcpb + 7.5, 5 * nCK_mariko),
+.tCKE = MAX(7.5, 4 * nCK_mariko),
 
-.tSR = 15,
-.tFAW = 54,
+.tSR = MAX(15, 3 * nCK_mariko),
+.tFAW = 30,
 
-.tCKCKEH = 1.75,
+.tCKCKEH = MAX(1.75, 3 * nCK_mariko),
 
-.WL = 15,
-.RL = 30,
+.WL = 14,
+.RL = 32,
