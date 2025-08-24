@@ -37,5 +37,5 @@ OCS2-MICRON-WTB-PRESET
 
 .tCKCKEH = 1.75,
 
-.WL = 5,
-.RL = 11,
+.WL = 15,
+.RL = 30,
