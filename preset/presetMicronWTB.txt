@@ -2,10 +2,10 @@ OCS2-MICRON-WTB-PRESET
 .BL = 32,
 .tRFCpb = 140,
 .tRFCab = 280,
-.tRAS = 42,
+.tRAS = 27,
 .tRPpb = 18,
 .tRPab = 21,
-.tRC = 60,
+.tRC = 38,
 
 .tDQSCK_min = 1.5,
 .tDQSCK_max = 3.5,
