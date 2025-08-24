@@ -10,7 +10,7 @@ This project is very dangerous and can possibly damage your console. If you deci
 
 Overclocking Suite for Nintendo Switch consoles running Atmosphere CFW.
 
-[Project Homepage](https://hanai3Bi.github.io/Switch-OC-Suite)
+[Project Homepage](https://souldbminersmwc.github.io/Switch-OC-Suite-2)
 
 **DISCLAIMER: USE AT YOUR OWN RISK!**
 
