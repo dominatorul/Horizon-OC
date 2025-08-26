@@ -140,7 +140,7 @@ namespace erista {
         { },
     };
 
-    constexpr u32 CpuVoltL4T = 1235'000;
+    constexpr u32 CpuVoltL4T = 1500'000;
 
     constexpr u16 CpuMinVolts[] = { 950, 850, 825, 810 };
 
