@@ -60,6 +60,12 @@ typedef struct CustomizeTable {
     // advanced config
     u32 marikoEmcDvbShift;
     //
+    const double nCK_mariko;
+    const double nCK_erista;
+    
+    const double tCK_avg_e;
+    const double tCK_avg_m;
+
     const uint32_t BL;
     const uint32_t tRFCpb;
     const uint32_t tRFCab;
@@ -99,7 +105,6 @@ typedef struct CustomizeTable {
     const uint32_t tFAW;
 
     const double tCKCKEH;
-    const double tCK_avg;
 
     const uint32_t WL;
     const uint32_t RL;

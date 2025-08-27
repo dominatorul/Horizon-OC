@@ -20,8 +20,6 @@
 #define MIN(A, B)   std::min(A, B)
 #define CEIL(A)     std::ceil(A)
 #define FLOOR(A)    std::floor(A) 
-#define nCK_erista (1000'000. / C.eristaEmcMaxClock)
-#define nCK_mariko (1000'000. / C.marikoEmcMaxClock)
 
 #include "customize.hpp"
 #include "oc_common.hpp"
@@ -53,7 +51,7 @@ volatile CustomizeTable C = {
  *   Value should be divided evenly by 12'500.
  *   Not enabled by default.
  */
-.commonEmcMemVolt  = 1175000, // RAM Rated Voltage
+.commonEmcMemVolt  = 1212500, // RAM Rated Voltage
 
 /* Erista CPU:
  * - Max Voltage in mV
@@ -86,7 +84,7 @@ volatile CustomizeTable C = {
  *   - System instabilities
  *   - NAND corruption
  */
-.marikoEmcMaxClock = 1996800,
+.marikoEmcMaxClock = 2400000,
 /* - EMC Vddq (Mariko Only) Voltage in uV
  *   Range: 550'000 to 650'000 uV
  *   Value should be divided evenly by 5'000
@@ -94,54 +92,59 @@ volatile CustomizeTable C = {
  *   Not enabled by default.
  *   This will not work without sys-clk-OC.
  */
-.marikoEmcVddqVolt = 0,
+.marikoEmcVddqVolt = 640,
 
-.marikoCpuUV = 0,
+.marikoCpuUV = 3,
 
-.marikoGpuUV = 0,
+.marikoGpuUV = 2,
 
 .commonGpuVoltOffset = 0,
 
-.marikoEmcDvbShift = 0,
+.marikoEmcDvbShift = 3,
  // TODO - Don't use defines for these!
+.nCK_mariko = 18.0,
+.nCK_erista = 18.0,
+
+.tCK_avg_e = 1000'000. / C.eristaEmcMaxClock,
+.tCK_avg_m = 1000'000. / C.marikoEmcMaxClock,
 
 .BL = 16,
 .tRFCpb = 140,
 .tRFCab = 280,
-.tRAS = 42,
+.tRAS = (uint32_t)MAX(42.0, 3 * C.nCK_mariko),
 .tRPpb = 18,
 .tRPab = 21,
-.tRC = 60,
+.tRC = C.tRAS + C.tRPab,
 
 .tDQSCK_min = 1.5,
 .tDQSCK_max = 3.5,
-.tWPRE = 1.8,
-.tRPST = 0.4,
-.tDQSS_max = 1.25,
+.tWPRE = 2 * C.nCK_mariko,
+.tRPST = 1.5 * C.nCK_mariko,
+.tDQSS_max = 1.25 - ((60 - 30) / C.tCK_avg_m),
 .tDQS2DQ_max = 0.8,
 .tDQSQ = 0.18,
 
-.tWTR = (uint32_t)MAX(10.0, 8 * nCK_mariko),
-.tRTP = 7.5, // Cannot find concrete value for this timing
-.tWR = (uint32_t)MAX(10.0, 4 * nCK_mariko),
-.tR2REF = 25.5,
+.tWTR = (uint32_t)MAX(10.0, 8 * C.nCK_mariko),
+.tRTP = C.nCK_mariko * C.tCK_avg_m, // Cannot find concrete value for this timing
+.tWR = (uint32_t)MAX(10.0, 4 * C.nCK_mariko),
+.tR2REF = 8, // Try 16, 8 or 9 × 2 × 8 or 16
 
 .tRCD = 20, // Cannot find concrete value for this timing
 .tRRD = 10, // Cannot find concrete value for this timing
 .tREFpb = 488,
 
-.tXP = MAX(7.5, 5 * nCK_mariko),
-.tCMDCKE = MAX(1.75, 3 * nCK_mariko),
-.tMRWCKEL = (uint32_t)MAX(14.0, 10 * nCK_mariko),
-.tCKELCS = MAX(5.0, 5 * nCK_mariko),
+.tXP = MAX(7.5, 5 * C.nCK_mariko),
+.tCMDCKE = MAX(1.75, 3 * C.nCK_mariko),
+.tMRWCKEL = (uint32_t)MAX(14.0, 10 * C.nCK_mariko),
+.tCKELCS = MAX(5.0, 5 * C.nCK_mariko),
 .tCSCKEH = 1.75,
-.tXSR = MAX(C.tRFCpb + 7.5, 5 * nCK_mariko),
-.tCKE = MAX(7.5, 4 * nCK_mariko),
+.tXSR = MAX(C.tRFCpb + 7.5, 5 * C.nCK_mariko),
+.tCKE = MAX(7.5, 4 * C.nCK_mariko),
 
-.tSR = (uint32_t)MAX(15.0, 3 * nCK_mariko),
-.tFAW = 30,
+.tSR = (uint32_t)MAX(15.0, 3 * C.nCK_mariko),
+.tFAW = (uint32_t)(4 * C.tCK_avg_m),
 
-.tCKCKEH = MAX(1.75, 3 * nCK_mariko),
+.tCKCKEH = MAX(1.75, 3 * C.nCK_mariko),
 
 .WL = 14,
 .RL = 32,
