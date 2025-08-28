@@ -15,11 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-// ram timing defines
-#define MAX(A, B)   std::max(A, B)
-#define MIN(A, B)   std::min(A, B)
-#define CEIL(A)     std::ceil(A)
-#define FLOOR(A)    std::floor(A) 
+
 #include "customize.hpp"
 
 namespace ams::ldr::oc {
@@ -100,10 +96,6 @@ volatile CustomizeTable C = {
 .commonGpuVoltOffset = 0,
 
 .marikoEmcDvbShift = 0,
- // TODO - Don't use defines for these!
-
-#define nCK_erista 1000'000. / C.eristaEmcMaxClock;
-#define nCK_mariko 1000'000. / C.marikoEmcMaxClock;
 
 .BL = 16,
 .tRFCpb = 140,
@@ -121,27 +113,27 @@ volatile CustomizeTable C = {
 .tDQS2DQ_max = 0.8,
 .tDQSQ = 0.18,
 
-.tWTR = MAX(10, 8 * nCK_mariko),
-.tRTP = 7.5, // Cannot find concrete value for this timing
-.tWR = MAX(10, 4 * nCK_mariko),
+.tWTR = 10,
+.tRTP = 7.5,
+.tWR = 18,
 .tR2REF = 25.5,
 
-.tRCD = 20, // Cannot find concrete value for this timing
-.tRRD = 10, // Cannot find concrete value for this timing
+.tRCD = 18,
+.tRRD = 10,
 .tREFpb = 488,
 
-.tXP = MAX(7.5, 5 * nCK_mariko),
-.tCMDCKE = MAX(1.75, 3 * nCK_mariko),
-.tMRWCKEL = MAX(14, 10 * nCK_mariko),
-.tCKELCS = MAX(5, 5 * nCK_mariko),
+.tXP = 10,
+.tCMDCKE = 1.75,
+.tMRWCKEL = 14,
+.tCKELCS = 5,
 .tCSCKEH = 1.75,
-.tXSR = MAX(C.tRFcpb + 7.5, 5 * nCK_mariko),
-.tCKE = MAX(7.5, 4 * nCK_mariko),
+.tXSR = 287.5,
+.tCKE = 7.5,
 
-.tSR = MAX(15, 3 * nCK_mariko),
-.tFAW = 30,
+.tSR = 15,
+.tFAW = 40,
 
-.tCKCKEH = MAX(1.75, 3 * nCK_mariko),
+.tCKCKEH = 1.75,
 
 .WL = 14,
 .RL = 32,
