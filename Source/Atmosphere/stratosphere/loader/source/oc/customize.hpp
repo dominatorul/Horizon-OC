@@ -59,50 +59,14 @@ typedef struct CustomizeTable {
     u32 commonGpuVoltOffset;
     // advanced config
     u32 marikoEmcDvbShift;
+    u32 ramTimingPresetOne;
+    u32 ramTimingPresetTwo;
+    u32 ramTimingPresetThree;
+    u32 ramTimingPresetFour;
+    u32 ramTimingPresetFive;
+    u32 ramTimingPresetSix;
+    u32 ramTimingPresetSeven;
     //
-    const uint32_t BL;
-    const uint32_t tRFCpb;
-    const uint32_t tRFCab;
-    const uint32_t tRAS;
-    const uint32_t tRPpb;
-    const uint32_t tRPab;
-    const uint32_t tRC;
-
-    const double tDQSCK_min;
-    const double tDQSCK_max;
-    const double tWPRE;
-    const double tRPST;
-    const double tDQSS_max;
-    const double tDQS2DQ_max;
-    const double tDQSQ;
-
-    const uint32_t tWTR;
-    const double tRTP;
-    const uint32_t tWR;
-    const double tR2REF;
-
-    const uint32_t tRCD;
-    const double tRRD;
-    const uint32_t tREFpb;
-
-    const double tXP;
-    const double tCMDCKE;
-
-    const uint32_t tMRWCKEL;
-
-    const double tCKELCS;
-    const double tCSCKEH;
-    const double tXSR;
-    const double tCKE;
-
-    const uint32_t tSR;
-    const uint32_t tFAW;
-
-    const double tCKCKEH;
-    const double tCK_avg;
-
-    const uint32_t WL;
-    const uint32_t RL;
     u32 marikoGpuVoltArray[17];
     CustomizeCpuDvfsTable eristaCpuDvfsTable;
     CustomizeCpuDvfsTable marikoCpuDvfsTable;
@@ -121,4 +85,5 @@ extern volatile CustomizeTable C;
 
 //extern volatile EristaMtcTable EristaMtcTablePlaceholder;
 //extern volatile MarikoMtcTable MarikoMtcTablePlaceholder;
+
 }

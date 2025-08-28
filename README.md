@@ -97,7 +97,7 @@ Overclocking Suite for Nintendo Switch consoles running Atmosphere CFW.
 
 3. Compile Atmosphere loader with devkitpro.
 
-4. When compilation is done, uncompress the kip to make it work with configurator: `hactool -t kip1 loader.kip --uncompress=loader.kip`
+4. When compilation is done, uncompress the kip to make it work with configurator: `hactool -t kip1 Atmosphere/stratosphere/loader/out/nintendo_nx_arm64_armv8a/release/loader.kip --uncompress=./loader.kip`
 
 </details>
 

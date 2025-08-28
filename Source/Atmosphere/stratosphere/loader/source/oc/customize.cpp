@@ -97,46 +97,19 @@ volatile CustomizeTable C = {
 
 .marikoEmcDvbShift = 0,
 
-.BL = 16,
-.tRFCpb = 140,
-.tRFCab = 280,
-.tRAS = 42,
-.tRPpb = 18,
-.tRPab = 21,
-.tRC = 60,
+.ramTimingPresetOne = 0,
 
-.tDQSCK_min = 1.5,
-.tDQSCK_max = 3.5,
-.tWPRE = 1.8,
-.tRPST = 0.4,
-.tDQSS_max = 1.25,
-.tDQS2DQ_max = 0.8,
-.tDQSQ = 0.18,
+.ramTimingPresetTwo = 0,
 
-.tWTR = 10,
-.tRTP = 7.5,
-.tWR = 18,
-.tR2REF = 25.5,
+.ramTimingPresetThree = 0,
 
-.tRCD = 18,
-.tRRD = 10,
-.tREFpb = 488,
+.ramTimingPresetFour = 0,
 
-.tXP = 10,
-.tCMDCKE = 1.75,
-.tMRWCKEL = 14,
-.tCKELCS = 5,
-.tCSCKEH = 1.75,
-.tXSR = 287.5,
-.tCKE = 7.5,
+.ramTimingPresetFive = 0,
 
-.tSR = 15,
-.tFAW = 40,
+.ramTimingPresetSix = 0,
 
-.tCKCKEH = 1.75,
-
-.WL = 14,
-.RL = 32,
+.ramTimingPresetSeven = 0,
 
 .marikoGpuVoltArray = {610, 610, 610, 610, 610, 610, 610, 610, 610, 610, 620, 640, 675, 710, 735, 785, 815},
 
