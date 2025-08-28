@@ -20,11 +20,8 @@
 #define MIN(A, B)   std::min(A, B)
 #define CEIL(A)     std::ceil(A)
 #define FLOOR(A)    std::floor(A) 
-#define nCK_erista (1000'000. / C.eristaEmcMaxClock)
-#define nCK_mariko (1000'000. / C.marikoEmcMaxClock)
-
 #include "customize.hpp"
-#include "oc_common.hpp"
+
 namespace ams::ldr::oc {
 
 //volatile EristaMtcTable EristaMtcTablePlaceholder = { .rev = ERISTA_MTC_MAGIC, };
@@ -105,6 +102,9 @@ volatile CustomizeTable C = {
 .marikoEmcDvbShift = 0,
  // TODO - Don't use defines for these!
 
+#define nCK_erista (1000'000. / C.eristaEmcMaxClock);
+#define nCK_mariko (1000'000. / C.marikoEmcMaxClock);
+
 .BL = 16,
 .tRFCpb = 140,
 .tRFCab = 280,
@@ -121,9 +121,9 @@ volatile CustomizeTable C = {
 .tDQS2DQ_max = 0.8,
 .tDQSQ = 0.18,
 
-.tWTR = (uint32_t)MAX(10.0, 8 * nCK_mariko),
+.tWTR = MAX(10, 8 * nCK_mariko),
 .tRTP = 7.5, // Cannot find concrete value for this timing
-.tWR = (uint32_t)MAX(10.0, 4 * nCK_mariko),
+.tWR = MAX(10, 4 * nCK_mariko),
 .tR2REF = 25.5,
 
 .tRCD = 20, // Cannot find concrete value for this timing
@@ -132,13 +132,13 @@ volatile CustomizeTable C = {
 
 .tXP = MAX(7.5, 5 * nCK_mariko),
 .tCMDCKE = MAX(1.75, 3 * nCK_mariko),
-.tMRWCKEL = (uint32_t)MAX(14.0, 10 * nCK_mariko),
-.tCKELCS = MAX(5.0, 5 * nCK_mariko),
+.tMRWCKEL = MAX(14, 10 * nCK_mariko),
+.tCKELCS = MAX(5, 5 * nCK_mariko),
 .tCSCKEH = 1.75,
-.tXSR = MAX(C.tRFCpb + 7.5, 5 * nCK_mariko),
+.tXSR = MAX(C.tRFcpb + 7.5, 5 * nCK_mariko),
 .tCKE = MAX(7.5, 4 * nCK_mariko),
 
-.tSR = (uint32_t)MAX(15.0, 3 * nCK_mariko),
+.tSR = MAX(15, 3 * nCK_mariko),
 .tFAW = 30,
 
 .tCKCKEH = MAX(1.75, 3 * nCK_mariko),
