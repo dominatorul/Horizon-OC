@@ -102,8 +102,8 @@ volatile CustomizeTable C = {
 .marikoEmcDvbShift = 0,
  // TODO - Don't use defines for these!
 
-#define nCK_erista (1000'000. / C.eristaEmcMaxClock);
-#define nCK_mariko (1000'000. / C.marikoEmcMaxClock);
+#define nCK_erista 1000'000. / C.eristaEmcMaxClock;
+#define nCK_mariko 1000'000. / C.marikoEmcMaxClock;
 
 .BL = 16,
 .tRFCpb = 140,
