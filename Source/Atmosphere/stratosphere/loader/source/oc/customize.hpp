@@ -1,8 +1,6 @@
 /*
  * Copyright (C) Switch-OC-Suite
  *
- * Copyright (c) 2023 hanai3Bi
- * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms and conditions of the GNU General Public License,
  * version 2, as published by the Free Software Foundation.
@@ -59,15 +57,20 @@ typedef struct CustomizeTable {
     u32 commonGpuVoltOffset;
     // advanced config
     u32 marikoEmcDvbShift;
-    u32 ramTimingPresetOne;
-    u32 ramTimingPresetTwo;
-    u32 ramTimingPresetThree;
-    u32 ramTimingPresetFour;
-    u32 ramTimingPresetFive;
-    u32 ramTimingPresetSix;
-    u32 ramTimingPresetSeven;
+    const u32 tRAS;
+    const u32 tRCD;
+    const u32 tREFpb;
+    const u32 tRFCpb;
+    const u32 tRPpb;
+    const double tRRD;
+    const u32 R2W;
+    const u32 tWTR;
+
     //
-    u32 marikoGpuVoltArray[17];
+    u32 marikoGpuVoltArray[18];
+	u8 marikoCpuHighVoltOffset;
+	u8 marikoB3;
+	u8 marikoCpuHighUV;
     CustomizeCpuDvfsTable eristaCpuDvfsTable;
     CustomizeCpuDvfsTable marikoCpuDvfsTable;
     CustomizeCpuDvfsTable marikoCpuDvfsTableSLT;

@@ -26,7 +26,7 @@ struct MarikoTiming {
     uint32_t emc_rfc_slr;
     uint32_t emc_ras;
     uint32_t emc_rp;
-    uint32_t emc_r2w;
+    uint32_t emcR2W;
     uint32_t emc_w2r;
     uint32_t emc_r2p;
     uint32_t emc_w2p;
@@ -257,7 +257,7 @@ struct EristaTiming {
     uint32_t emc_rfc_slr;
     uint32_t emc_ras;
     uint32_t emc_rp;
-    uint32_t emc_r2w;
+    uint32_t emcR2W;
     uint32_t emc_w2r;
     uint32_t emc_r2p;
     uint32_t emc_w2p;
@@ -777,7 +777,7 @@ struct MarikoMtcTable {
         uint32_t mc_emem_arb_timing_wap2pre;
         uint32_t mc_emem_arb_timing_r2r;
         uint32_t mc_emem_arb_timing_w2w;
-        uint32_t mc_emem_arb_timing_r2w;
+        uint32_t mc_emem_arb_timingR2W;
         uint32_t mc_emem_arb_timing_ccdmw;
         uint32_t mc_emem_arb_timing_w2r;
         uint32_t mc_emem_arb_timing_rfcpb;
@@ -1170,7 +1170,7 @@ struct EristaMtcTable {
         uint32_t mc_emem_arb_timing_wap2pre;
         uint32_t mc_emem_arb_timing_r2r;
         uint32_t mc_emem_arb_timing_w2w;
-        uint32_t mc_emem_arb_timing_r2w;
+        uint32_t mc_emem_arb_timingR2W;
         uint32_t mc_emem_arb_timing_ccdmw;
         uint32_t mc_emem_arb_timing_w2r;
         uint32_t mc_emem_arb_timing_rfcpb;
