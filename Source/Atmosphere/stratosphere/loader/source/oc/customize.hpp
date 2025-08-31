@@ -57,16 +57,13 @@ typedef struct CustomizeTable {
     u32 commonGpuVoltOffset;
     // advanced config
     u32 marikoEmcDvbShift;
-    const u32 tRAS;
-    const u32 tRCD;
-    const u32 tREFpb;
-    const u32 tRFCpb;
-    const u32 tRPpb;
-    const double tRRD;
-    const u32 R2W;
-    const u32 tWTR;
-    const u32 tFAW;
-    const u32 tWR;
+    u32 ramTimingPresetOne;
+    u32 ramTimingPresetTwo;
+    u32 ramTimingPresetThree;
+    u32 ramTimingPresetFour;
+    u32 ramTimingPresetFive;
+    u32 ramTimingPresetSix;
+    u32 ramTimingPresetSeven;
     //
     u32 marikoGpuVoltArray[18];
 	u8 marikoCpuHighVoltOffset;

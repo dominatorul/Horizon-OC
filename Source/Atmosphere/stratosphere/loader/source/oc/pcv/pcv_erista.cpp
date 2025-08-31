@@ -85,16 +85,16 @@ void MemMtcTableAutoAdjust(EristaMtcTable* table) {
 
     WRITE_PARAM_ALL_REG(table, emc_rc,                  GET_CYCLE_CEIL(tRC));
     WRITE_PARAM_ALL_REG(table, emc_rfc,                 GET_CYCLE_CEIL(tRFCab));
-    WRITE_PARAM_ALL_REG(table, emc_rfcpb,               GET_CYCLE_CEIL(C.tRFCpb));
-    WRITE_PARAM_ALL_REG(table, emc_ras,                 GET_CYCLE_CEIL(C.tRAS));
-    WRITE_PARAM_ALL_REG(table, emc_rp,                  GET_CYCLE_CEIL(C.tRPpb));
-    WRITE_PARAM_ALL_REG(table, emcR2W,                 C.R2W);
+    WRITE_PARAM_ALL_REG(table, emc_rfcpb,               GET_CYCLE_CEIL(tRFCpb));
+    WRITE_PARAM_ALL_REG(table, emc_ras,                 GET_CYCLE_CEIL(tRAS));
+    WRITE_PARAM_ALL_REG(table, emc_rp,                  GET_CYCLE_CEIL(tRPpb));
+    WRITE_PARAM_ALL_REG(table, emc_r2w,                 R2W);
     WRITE_PARAM_ALL_REG(table, emc_w2r,                 W2R);
     WRITE_PARAM_ALL_REG(table, emc_r2p,                 GET_CYCLE_CEIL(tRTP));
     WRITE_PARAM_ALL_REG(table, emc_w2p,                 WTP);
-    WRITE_PARAM_ALL_REG(table, emc_rd_rcd,              GET_CYCLE_CEIL(C.tRCD));
-    WRITE_PARAM_ALL_REG(table, emc_wr_rcd,              GET_CYCLE_CEIL(C.tRCD));
-    WRITE_PARAM_ALL_REG(table, emc_rrd,                 GET_CYCLE_CEIL(C.tRRD));
+    WRITE_PARAM_ALL_REG(table, emc_rd_rcd,              GET_CYCLE_CEIL(tRCD));
+    WRITE_PARAM_ALL_REG(table, emc_wr_rcd,              GET_CYCLE_CEIL(tRCD));
+    WRITE_PARAM_ALL_REG(table, emc_rrd,                 GET_CYCLE_CEIL(tRRD));
     WRITE_PARAM_ALL_REG(table, emc_refresh,             REFRESH);
     WRITE_PARAM_ALL_REG(table, emc_pre_refresh_req_cnt, REFRESH / 4);
     WRITE_PARAM_ALL_REG(table, emc_pdex2wr,             GET_CYCLE_CEIL(tXP));
@@ -111,7 +111,7 @@ void MemMtcTableAutoAdjust(EristaMtcTable* table) {
     WRITE_PARAM_ALL_REG(table, emc_tcke,                GET_CYCLE_CEIL(tCKE));
     WRITE_PARAM_ALL_REG(table, emc_tckesr,              GET_CYCLE_CEIL(tSR));
     WRITE_PARAM_ALL_REG(table, emc_tpd,                 GET_CYCLE_CEIL(tCKE));
-    WRITE_PARAM_ALL_REG(table, emc_tfaw,                GET_CYCLE_CEIL(C.tFAW));
+    WRITE_PARAM_ALL_REG(table, emc_tfaw,                GET_CYCLE_CEIL(tFAW));
     WRITE_PARAM_ALL_REG(table, emc_trpab,               GET_CYCLE_CEIL(tRPab));
     WRITE_PARAM_ALL_REG(table, emc_tclkstable,          GET_CYCLE_CEIL(tCKCKEH));
     WRITE_PARAM_ALL_REG(table, emc_tclkstop,            GET_CYCLE_CEIL(tCKE)+8);
@@ -121,19 +121,19 @@ void MemMtcTableAutoAdjust(EristaMtcTable* table) {
     
     constexpr u32 MC_ARB_DIV = 4;
     constexpr u32 MC_ARB_SFA = 2;
-    table->burst_mc_regs.mc_emem_arb_timing_rcd     = CEIL(GET_CYCLE_CEIL(C.tRCD) / MC_ARB_DIV) - 2;
-    table->burst_mc_regs.mc_emem_arb_timing_rp      = CEIL(GET_CYCLE_CEIL(C.tRPpb) / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+    table->burst_mc_regs.mc_emem_arb_timing_rcd     = CEIL(GET_CYCLE_CEIL(tRCD) / MC_ARB_DIV) - 2;
+    table->burst_mc_regs.mc_emem_arb_timing_rp      = CEIL(GET_CYCLE_CEIL(tRPpb) / MC_ARB_DIV) - 1 + MC_ARB_SFA;
     table->burst_mc_regs.mc_emem_arb_timing_rc      = CEIL(GET_CYCLE_CEIL(tRC) / MC_ARB_DIV) - 1;
-    table->burst_mc_regs.mc_emem_arb_timing_ras     = CEIL(GET_CYCLE_CEIL(C.tRAS) / MC_ARB_DIV) - 2;
-    table->burst_mc_regs.mc_emem_arb_timing_faw     = CEIL(GET_CYCLE_CEIL(C.tFAW) / MC_ARB_DIV) - 1;
-    table->burst_mc_regs.mc_emem_arb_timing_rrd     = CEIL(GET_CYCLE_CEIL(C.tRRD) / MC_ARB_DIV) - 1;
+    table->burst_mc_regs.mc_emem_arb_timing_ras     = CEIL(GET_CYCLE_CEIL(tRAS) / MC_ARB_DIV) - 2;
+    table->burst_mc_regs.mc_emem_arb_timing_faw     = CEIL(GET_CYCLE_CEIL(tFAW) / MC_ARB_DIV) - 1;
+    table->burst_mc_regs.mc_emem_arb_timing_rrd     = CEIL(GET_CYCLE_CEIL(tRRD) / MC_ARB_DIV) - 1;
     table->burst_mc_regs.mc_emem_arb_timing_rap2pre = CEIL(GET_CYCLE_CEIL(tRTP) / MC_ARB_DIV);
     table->burst_mc_regs.mc_emem_arb_timing_wap2pre = CEIL(WTP / MC_ARB_DIV);
     //table->burst_mc_regs.mc_emem_arb_timing_r2r     = CEIL(table->burst_regs.emc_rext / MC_ARB_DIV) - 1 + MC_ARB_SFA;
     //table->burst_mc_regs.mc_emem_arb_timing_w2w     = CEIL(table->burst_regs.emc_wext / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-    table->burst_mc_regs.mc_emem_arb_timingR2W     = CEIL(C.R2W / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+    table->burst_mc_regs.mc_emem_arb_timing_r2w     = CEIL(R2W / MC_ARB_DIV) - 1 + MC_ARB_SFA;
     table->burst_mc_regs.mc_emem_arb_timing_w2r     = CEIL(W2R / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-    table->burst_mc_regs.mc_emem_arb_timing_rfcpb   = CEIL(GET_CYCLE_CEIL(C.tRFCpb) / MC_ARB_DIV);
+    table->burst_mc_regs.mc_emem_arb_timing_rfcpb   = CEIL(GET_CYCLE_CEIL(tRFCpb) / MC_ARB_DIV);
     //table->burst_mc_regs.mc_emem_arb_timing_ccdmw   = CEIL(tCCDMW / MC_ARB_DIV) -1 + MC_ARB_SFA;
 }
 
@@ -144,58 +144,72 @@ void MemMtcTableCustomAdjust(EristaMtcTable* table) {
     constexpr u32 MC_ARB_DIV = 4;
     constexpr u32 MC_ARB_SFA = 2;
 
-    WRITE_PARAM_ALL_REG(table, emc_rc,       GET_CYCLE_CEIL(tRC));
-    WRITE_PARAM_ALL_REG(table, emc_ras,      GET_CYCLE_CEIL(C.tRAS));
-    WRITE_PARAM_ALL_REG(table, emc_rp,       GET_CYCLE_CEIL(C.tRPpb));
-    WRITE_PARAM_ALL_REG(table, emc_trpab,    GET_CYCLE_CEIL(tRPab));
-    WRITE_PARAM_ALL_REG(table, emc_rd_rcd,   GET_CYCLE_CEIL(C.tRCD));
-    WRITE_PARAM_ALL_REG(table, emc_wr_rcd,   GET_CYCLE_CEIL(C.tRCD));
-    WRITE_PARAM_ALL_REG(table, emc_pdex2mrr, GET_CYCLE_CEIL(tPDEX2MRR));
+    if (TIMING_PRESET_ONE) {
+        WRITE_PARAM_ALL_REG(table, emc_rc,       GET_CYCLE_CEIL(tRC));
+        WRITE_PARAM_ALL_REG(table, emc_ras,      GET_CYCLE_CEIL(tRAS));
+        WRITE_PARAM_ALL_REG(table, emc_rp,       GET_CYCLE_CEIL(tRPpb));
+        WRITE_PARAM_ALL_REG(table, emc_trpab,    GET_CYCLE_CEIL(tRPab));
+        WRITE_PARAM_ALL_REG(table, emc_rd_rcd,   GET_CYCLE_CEIL(tRCD));
+        WRITE_PARAM_ALL_REG(table, emc_wr_rcd,   GET_CYCLE_CEIL(tRCD));
+        WRITE_PARAM_ALL_REG(table, emc_pdex2mrr, GET_CYCLE_CEIL(tPDEX2MRR));
 
-    table->burst_mc_regs.mc_emem_arb_timing_rcd     = CEIL(GET_CYCLE_CEIL(C.tRCD) / MC_ARB_DIV - 2);
-    table->burst_mc_regs.mc_emem_arb_timing_rc      = CEIL(GET_CYCLE_CEIL(tRC) / MC_ARB_DIV - 1);
-    table->burst_mc_regs.mc_emem_arb_timing_rp      = CEIL(GET_CYCLE_CEIL(C.tRPpb) / MC_ARB_DIV - 1 + MC_ARB_SFA);
-    table->burst_mc_regs.mc_emem_arb_timing_ras     = CEIL(GET_CYCLE_CEIL(C.tRAS) / MC_ARB_DIV - 2);
+        table->burst_mc_regs.mc_emem_arb_timing_rcd     = CEIL(GET_CYCLE_CEIL(tRCD) / MC_ARB_DIV - 2);
+        table->burst_mc_regs.mc_emem_arb_timing_rc      = CEIL(GET_CYCLE_CEIL(tRC) / MC_ARB_DIV - 1);
+        table->burst_mc_regs.mc_emem_arb_timing_rp      = CEIL(GET_CYCLE_CEIL(tRPpb) / MC_ARB_DIV - 1 + MC_ARB_SFA);
+        table->burst_mc_regs.mc_emem_arb_timing_ras     = CEIL(GET_CYCLE_CEIL(tRAS) / MC_ARB_DIV - 2);
+    }
 
-    WRITE_PARAM_ALL_REG(table, emc_tfaw,     GET_CYCLE_CEIL(C.tFAW));
-    WRITE_PARAM_ALL_REG(table, emc_rrd,      GET_CYCLE_CEIL(C.tRRD));
+    if (TIMING_PRESET_TWO) {
+        WRITE_PARAM_ALL_REG(table, emc_tfaw,     GET_CYCLE_CEIL(tFAW));
+        WRITE_PARAM_ALL_REG(table, emc_rrd,      GET_CYCLE_CEIL(tRRD));
 
-    table->burst_mc_regs.mc_emem_arb_timing_faw     = CEIL(GET_CYCLE_CEIL(C.tFAW) / MC_ARB_DIV) - 1;
-    table->burst_mc_regs.mc_emem_arb_timing_rrd     = CEIL(GET_CYCLE_CEIL(C.tRRD) / MC_ARB_DIV) - 1;
+        table->burst_mc_regs.mc_emem_arb_timing_faw     = CEIL(GET_CYCLE_CEIL(tFAW) / MC_ARB_DIV) - 1;
+        table->burst_mc_regs.mc_emem_arb_timing_rrd     = CEIL(GET_CYCLE_CEIL(tRRD) / MC_ARB_DIV) - 1;
+    }
 
-    WRITE_PARAM_ALL_REG(table, emc_r2p,      GET_CYCLE_CEIL(tRTP));
-    WRITE_PARAM_ALL_REG(table, emc_w2p,      WTP);
-    WRITE_PARAM_ALL_REG(table, emc_rw2pden,  WTPDEN);
+    if (TIMING_PRESET_THREE) {
+        WRITE_PARAM_ALL_REG(table, emc_r2p,      GET_CYCLE_CEIL(tRTP));
+        WRITE_PARAM_ALL_REG(table, emc_w2p,      WTP);
+        WRITE_PARAM_ALL_REG(table, emc_rw2pden,  WTPDEN);
 
-    table->burst_mc_regs.mc_emem_arb_timing_rap2pre = CEIL(GET_CYCLE_CEIL(tRTP) / MC_ARB_DIV);
-    table->burst_mc_regs.mc_emem_arb_timing_wap2pre = CEIL(WTP / MC_ARB_DIV);
+        table->burst_mc_regs.mc_emem_arb_timing_rap2pre = CEIL(GET_CYCLE_CEIL(tRTP) / MC_ARB_DIV);
+        table->burst_mc_regs.mc_emem_arb_timing_wap2pre = CEIL(WTP / MC_ARB_DIV);
+    }
 
-    WRITE_PARAM_ALL_REG(table, emc_rfc,      GET_CYCLE_CEIL(tRFCab));
-    WRITE_PARAM_ALL_REG(table, emc_rfcpb,    GET_CYCLE_CEIL(C.tRFCpb));
-    WRITE_PARAM_ALL_REG(table, emc_txsr,     MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe));
-    WRITE_PARAM_ALL_REG(table, emc_txsrdll,  MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe));
+    if (TIMING_PRESET_FOUR) {
+        WRITE_PARAM_ALL_REG(table, emc_rfc,      GET_CYCLE_CEIL(tRFCab));
+        WRITE_PARAM_ALL_REG(table, emc_rfcpb,    GET_CYCLE_CEIL(tRFCpb));
+        WRITE_PARAM_ALL_REG(table, emc_txsr,     MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe));
+        WRITE_PARAM_ALL_REG(table, emc_txsrdll,  MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe));
 
-    table->burst_mc_regs.mc_emem_arb_timing_rfcpb   = CEIL(GET_CYCLE_CEIL(C.tRFCpb) / MC_ARB_DIV);
+        table->burst_mc_regs.mc_emem_arb_timing_rfcpb   = CEIL(GET_CYCLE_CEIL(tRFCpb) / MC_ARB_DIV);
+    }
 
-    WRITE_PARAM_ALL_REG(table, emc_w2r, W2R);
+    if (TIMING_PRESET_FIVE) {
+        WRITE_PARAM_ALL_REG(table, emc_w2r, W2R);
 
-    table->burst_mc_regs.mc_emem_arb_timing_w2r     = CEIL(W2R / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+        table->burst_mc_regs.mc_emem_arb_timing_w2r     = CEIL(W2R / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+    }
 
-    WRITE_PARAM_ALL_REG(table, emc_refresh,  REFRESH);
-    WRITE_PARAM_ALL_REG(table, emc_pre_refresh_req_cnt, REFRESH / 4);
-    WRITE_PARAM_ALL_REG(table, emc_trefbw,   REFBW);
+    if (TIMING_PRESET_SIX) {
+        WRITE_PARAM_ALL_REG(table, emc_refresh,  REFRESH);
+        WRITE_PARAM_ALL_REG(table, emc_pre_refresh_req_cnt, REFRESH / 4);
+        WRITE_PARAM_ALL_REG(table, emc_trefbw,   REFBW);
+    }
 
-    WRITE_PARAM_ALL_REG(table, emcR2W,      C.R2W);
-    WRITE_PARAM_ALL_REG(table, emc_w2r,      W2R);
-    WRITE_PARAM_ALL_REG(table, emc_w2p,      WTP);
-    WRITE_PARAM_ALL_REG(table, emc_rw2pden,  WTPDEN);
-    
-    table->burst_mc_regs.mc_emem_arb_timing_wap2pre = CEIL(WTP / MC_ARB_DIV);
-    table->burst_mc_regs.mc_emem_arb_timingR2W     = CEIL(C.R2W / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-    table->burst_mc_regs.mc_emem_arb_timing_w2r     = CEIL(W2R / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+    if (TIMING_PRESET_SEVEN) {
+        WRITE_PARAM_ALL_REG(table, emc_r2w,      R2W);
+        WRITE_PARAM_ALL_REG(table, emc_w2r,      W2R);
+        WRITE_PARAM_ALL_REG(table, emc_w2p,      WTP);
+        WRITE_PARAM_ALL_REG(table, emc_rw2pden,  WTPDEN);
+        
+        table->burst_mc_regs.mc_emem_arb_timing_wap2pre = CEIL(WTP / MC_ARB_DIV);
+        table->burst_mc_regs.mc_emem_arb_timing_r2w     = CEIL(R2W / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+        table->burst_mc_regs.mc_emem_arb_timing_w2r     = CEIL(W2R / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+    }
 
     u32 DA_TURNS = 0;
-    DA_TURNS |= u8(table->burst_mc_regs.mc_emem_arb_timingR2W / 2) << 16; //C.R2W TURN
+    DA_TURNS |= u8(table->burst_mc_regs.mc_emem_arb_timing_r2w / 2) << 16; //R2W TURN
     DA_TURNS |= u8(table->burst_mc_regs.mc_emem_arb_timing_w2r / 2) << 24; //W2R TURN
     WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_da_turns,       DA_TURNS);
     u32 DA_COVERS = 0;

@@ -44,7 +44,7 @@ volatile CustomizeTable C = {
  *   Value should be divided evenly by 12'500.
  *   Not enabled by default.
  */
-.commonEmcMemVolt  = 1212500,
+.commonEmcMemVolt  = 1237500,
 
 /* Erista CPU:
  * - Max Voltage in mV
@@ -77,41 +77,45 @@ volatile CustomizeTable C = {
  *   - System instabilities
  *   - NAND corruption
  */
-.marikoEmcMaxClock = 2400000,
+.marikoEmcMaxClock = 2428800,
 /* - EMC Vddq (Mariko Only) Voltage in uV
  *   Range: 550'000 to 650'000 uV
- *   Value should be dicvided evenly by 5'000
+ *   Value should be divided evenly by 5'000
  *   Default: 600'000
  *   Not enabled by default.
  *   This will not work without sys-clk-OC.
  */
 .marikoEmcVddqVolt = 640000,
 
-.marikoCpuUV = 1,
+.marikoCpuUV = 2,
 
 .marikoGpuUV = 2,
 
-.commonGpuVoltOffset = 0,
+.commonGpuVoltOffset = 10,
 
 .marikoEmcDvbShift = 5,
 
-.tRAS = 30,
-.tRCD = 13,
-.tREFpb = 9999, // MAX REFI
-.tRFCpb = 80, // Eos value x2
-.tRPpb = 13,
-.tRRD = 3,
-.R2W = 6,
-.tWTR = 5, 
-.tFAW = 12,
-.tWR = 8,
+.ramTimingPresetOne = 4, // T1-3 EOS
+
+.ramTimingPresetTwo = 2, // T4
+
+.ramTimingPresetThree = 2, // Try all values from 0-6
+
+.ramTimingPresetFour = 2, // EOS T5
+
+.ramTimingPresetFive = 2, // EOS T7
+
+.ramTimingPresetSix = 2, // EOS T8
+
+.ramTimingPresetSeven = 2, 
+
 .marikoGpuVoltArray = {635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 660, 685, 715, 745, 765, 785},
 
 .marikoCpuHighVoltOffset = 70,
 
 .marikoB3 = 179,
 
-.marikoCpuHighUV = 0,
+.marikoCpuHighUV = 8,
 
 /* Advanced Settings:
  * - Erista CPU DVFS Table:
@@ -162,15 +166,10 @@ volatile CustomizeTable C = {
     { 1887000, { 1609246, -37515, 27 }, { 1120000 } },
     { 1963500, { 1675751, -38635, 27 }, { 1120000 } },
     // Appending table
-    { 2091000, { 1580725,   -33235,      113 }, { 1120000 } },
-    { 2193000, { 1580725,   -33235,      113 }, { 1235000 } },
-    { 2295000, { 1635431,   -34095,      113 }, { 1235000 } },
-    { 2397000, { 1702903,   -34955,      113 }, { 1235000 } },
-    { 2499000, { 1754400,   -35643,      113 }, { 1235000 } },
-    { 2601000, { 1805897,   -36331,      113 }, { 1235000 } },
-	{ 2703000, { 1857394,   -37019,      113 }, { 1235000 } },
-	{ 2805000, { 1908891,   -37707,      113 }, { 1235000 } },
-	{ 2907000, { 1960388,   -38395,      113 }, { 1250000 } },
+    { 2091000, { 1716501, -39395, 27 }, { 1235000 } },
+    { 2193000, { 1775132, -40505, 27 }, { 1235000 } },
+    { 2295000, { 1866287, -42005, 27 }, { 1235000 } },
+    { 2397000, { 1961107, -43506, 27 }, { 1235000 } },
 },
 
 .marikoCpuDvfsTableSLT = {
