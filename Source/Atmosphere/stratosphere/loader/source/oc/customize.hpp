@@ -65,7 +65,8 @@ typedef struct CustomizeTable {
     const double tRRD;
     const u32 R2W;
     const u32 tWTR;
-
+    const u32 tFAW;
+    const u32 tWR;
     //
     u32 marikoGpuVoltArray[18];
 	u8 marikoCpuHighVoltOffset;

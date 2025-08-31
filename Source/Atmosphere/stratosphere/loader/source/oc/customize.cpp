@@ -66,7 +66,7 @@ volatile CustomizeTable C = {
  * - Max Voltage in mV:
  *   Default voltage: 1120
  */
-.marikoCpuMaxVolt    = 1160,
+.marikoCpuMaxVolt    = 1235,
 
 /* Mariko EMC(RAM):
  * - RAM Clock in kHz:
@@ -95,15 +95,16 @@ volatile CustomizeTable C = {
 
 .marikoEmcDvbShift = 5,
 
-.tRAS = 0,
-.tRCD = 0,
-.tREFpb = 0,
-.tRFCpb = 0,
-.tRPpb = 0,
-.tRRD = 0,
-.R2W = 0,
-.tWTR = 0,
-
+.tRAS = 30,
+.tRCD = 13,
+.tREFpb = 9999, // MAX REFI
+.tRFCpb = 80, // Eos value x2
+.tRPpb = 13,
+.tRRD = 3,
+.R2W = 6,
+.tWTR = 5, 
+.tFAW = 12,
+.tWR = 8,
 .marikoGpuVoltArray = {635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 660, 685, 715, 745, 765, 785},
 
 .marikoCpuHighVoltOffset = 70,

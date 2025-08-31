@@ -42,7 +42,7 @@ namespace ams::ldr::oc {
     const double tRTP = 7.5;
     
     // write recovery time
-    const u32 tWR = 18;
+    // const u32 tWR = 18;
     
     // Read to refresh delay
     const u32 tR2REF = tRTP + C.tRPpb;
@@ -82,9 +82,7 @@ namespace ams::ldr::oc {
     // Minimum self refresh time (entry to exit)
     const u32 tSR = 15;
     
-    // tFAW (Four-bank Activate Window) in ns
-    const u32 tFAW = 40;
-    
+    // tFAW (Four-bank Activate Window) in ns    
     // Valid Clock requirement before CKE Input HIGH in ns
     const double tCKCKEH = 1.75;
     
