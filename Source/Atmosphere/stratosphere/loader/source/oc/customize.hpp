@@ -55,8 +55,8 @@ typedef struct CustomizeTable {
     u32 marikoCpuUV;
     u32 marikoGpuUV;
     u32 commonGpuVoltOffset;
-    u8 marikoCpuHighVoltOffset;
-	u8 marikoCpuHighUV;
+    u32 marikoCpuHighVoltOffset;
+	u32 marikoCpuHighUV;
 
     u32 cpuMaxFreq;
     u32 gpuMaxFreq;
