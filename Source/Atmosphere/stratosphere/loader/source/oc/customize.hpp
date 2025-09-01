@@ -16,7 +16,7 @@
 
 #pragma once
 
-#define CUST_REV 11
+#define CUST_REV 1
 
 #include "oc_common.hpp"
 #include "pcv/pcv_common.hpp"
@@ -69,6 +69,14 @@ typedef struct CustomizeTable {
 	u8 marikoCpuHighVoltOffset;
 	u8 marikoB3;
 	u8 marikoCpuHighUV;
+
+    u32 cpuMaxFreq;
+    u32 gpuMaxFreq;
+    u32 eristaCPUvMax;
+    u32 marikoCPUvMax;
+    u32 MemVltMax;
+    u32 marikoVDDQMax;
+    
     CustomizeCpuDvfsTable eristaCpuDvfsTable;
     CustomizeCpuDvfsTable marikoCpuDvfsTable;
     CustomizeCpuDvfsTable marikoCpuDvfsTableSLT;
@@ -78,6 +86,7 @@ typedef struct CustomizeTable {
     CustomizeGpuDvfsTable marikoGpuDvfsTableHiOPT;
     //EristaMtcTable* eristaMtcTable;
     //MarikoMtcTable* marikoMtcTable;
+
 } CustomizeTable;
 //static_assert(sizeof(CustomizeTable) == sizeof(u8) * 4 + sizeof(u32) * 10 + sizeof(CustomizeCpuDvfsTable) * 5 + sizeof(void*) * 2);
 //static_assert(sizeof(CustomizeTable) == 7000);
