@@ -126,8 +126,7 @@ var CustTable = [
         "Acceptable range: 1100000 ≤ x ≤ 1250000, and it should be divided evenly by 12500.",
         "Erista Default: 1125000",
         "Mariko Default: 1100000",
-        "Official lpddr4(x) range: 1060mV~1175mV (1100mV nominal)",
-        "OCS need high voltage unlike l4t because of not scaling mtc table well. However it is recommended to stay within official limits",
+        "Official LPDDR4(X) range: 1060mV~1175mV (1100mV nominal)",
         "Not enabled by default"
     ], 0, [11e5, 125e4], 12500),
 
@@ -149,11 +148,10 @@ var CustTable = [
     ], 1235, [1120, 1300], 5),
 
     new CustEntry("marikoEmcMaxClock", "Mariko RAM Max Clock in kHz", CustPlatform.Mariko, 4, [
-        "Values should be ≥ 1600000, and divided evenly by 3200.",
-        "Recommended Clocks: 1862400, 2131200, 2400000 (JEDEC)",
-        "Some clocks above 2400Mhz might not boot, because OCS doesn't scale table very well",
+        "Values should be ≥ 1600000, and divided evenly by 9600.",
+        "Recommended Clocks: 1862400, 2131200, 2400000, etc. (JEDEC)",
         "<b>WARNING:</b> RAM overclock could be UNSTABLE if timing parameters are not suitable for your DRAM."
-    ], 1996800, [16e5, 2502400], 3200),
+    ], 1996800, [16e5, 3200000], 3200),
 
     new CustEntry("marikoEmcVddqVolt", "EMC Vddq (Mariko Only) Voltage in uV", CustPlatform.Mariko, 4, [
         "Acceptable range: 550000 ≤ x ≤ 650000",
@@ -193,17 +191,19 @@ var CustTable = [
     ], 0, [0, 100], 1),
 
     new CustEntry("marikoCpuHighUV", "Enable Mariko CPU High Undervolt", CustPlatform.Mariko, 4, [
-        "Reduce CPU power draw at high clocks",
+        "Reduce CPU power draw at high clocks by offsetting the voltage sent to the CPU",
     ], 0, [0, 12], 1),
 
     new CustEntry("cpuMaxFreq", "Maximum allowed CPU Frequency", CustPlatform.All, 4, [
         "Default: 1963500",
-        "This is the maximum frequency for the CPU you can set in sys-clk-ocs2."
-    ], 1963500, [306000, 2907000], 1, !1),
+        "This is the maximum frequency for the CPU you can set in sys-clk-ocs2.",
+        "This is capped at 2091mhz for Erista units"
+    ], 1963500, [204000, 2907000], 1, !1),
 
     new CustEntry("gpuMaxFreq", "Maximum allowed GPU Frequency", CustPlatform.All, 4, [
         "Default: 1267200",
-        "This is the maximum frequency for the GPU you can set in sys-clk-ocs2."
+        "This is the maximum frequency for the GPU you can set in sys-clk-ocs2.",
+        "This is capped at 998mhz for Erista units"
     ], 1267200, [76800, 1305600], 1, !1),
 ];
 
