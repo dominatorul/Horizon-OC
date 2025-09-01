@@ -77,7 +77,7 @@ volatile CustomizeTable C = {
  *   - System instabilities
  *   - NAND corruption
  */
-.marikoEmcMaxClock = 2428800,
+.marikoEmcMaxClock = 1996800,
 /* - EMC Vddq (Mariko Only) Voltage in uV
  *   Range: 550'000 to 650'000 uV
  *   Value should be divided evenly by 5'000
@@ -87,13 +87,13 @@ volatile CustomizeTable C = {
  */
 .marikoEmcVddqVolt = 640000,
 
-.marikoCpuUV = 2,
+.marikoCpuUV = 0,
 
-.marikoGpuUV = 2,
+.marikoGpuUV = 0,
 
-.commonGpuVoltOffset = 10,
+.commonGpuVoltOffset = 0,
 
-.marikoEmcDvbShift = 5,
+.marikoEmcDvbShift = 0,
 
 .ramTimingPresetOne = 4, // T1-3 EOS
 
@@ -111,11 +111,11 @@ volatile CustomizeTable C = {
 
 .marikoGpuVoltArray = {635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 660, 685, 715, 745, 765, 785},
 
-.marikoCpuHighVoltOffset = 70,
+.marikoCpuHighVoltOffset = 0,
 
 .marikoB3 = 179,
 
-.marikoCpuHighUV = 8,
+.marikoCpuHighUV = 0,
 
 .cpuMaxFreq = 1963500,
 
