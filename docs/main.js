@@ -188,11 +188,11 @@ var CustTable = [
         "Acceptable range: 0 ~ 100"
     ], 0, [0, 100], 1),
 
-    new CustEntry("marikoCpuHighVoltOffset", "CPU Voltage offset at high frequencies", CustPlatform.Mariko, 4, [
+    new CustEntry("marikoCpuHighVoltOffset", "CPU Voltage offset at high frequencies", CustPlatform.Mariko, 1, [
         "Reduce CPU power draw at high clocks",
     ], 0, [0, 100], 1),
 
-    new CustEntry("marikoCpuHighUV", "Enable Mariko CPU High Undervolt", CustPlatform.Mariko, 4, [
+    new CustEntry("marikoCpuHighUV", "Enable Mariko CPU High Undervolt", CustPlatform.Mariko, 1, [
         "Reduce CPU power draw at high clocks",
     ], 0, [0, 12], 1),
 

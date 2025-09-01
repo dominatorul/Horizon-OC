@@ -55,6 +55,11 @@ typedef struct CustomizeTable {
     u32 marikoCpuUV;
     u32 marikoGpuUV;
     u32 commonGpuVoltOffset;
+    u8 marikoCpuHighVoltOffset;
+	u8 marikoCpuHighUV;
+
+    u32 cpuMaxFreq;
+    u32 gpuMaxFreq;
     // advanced config
     u32 marikoEmcDvbShift;
     u32 ramTimingPresetOne;
@@ -66,11 +71,7 @@ typedef struct CustomizeTable {
     u32 ramTimingPresetSeven;
     //
     u32 marikoGpuVoltArray[18];
-	u8 marikoCpuHighVoltOffset;
-	u8 marikoCpuHighUV;
 
-    u32 cpuMaxFreq;
-    u32 gpuMaxFreq;
 
     
     CustomizeCpuDvfsTable eristaCpuDvfsTable;
@@ -87,7 +88,6 @@ typedef struct CustomizeTable {
     u32 MemVltMax;
     u32 marikoVDDQMax;
     u8 marikoB3;
-
 
 } CustomizeTable;
 //static_assert(sizeof(CustomizeTable) == sizeof(u8) * 4 + sizeof(u32) * 10 + sizeof(CustomizeCpuDvfsTable) * 5 + sizeof(void*) * 2);

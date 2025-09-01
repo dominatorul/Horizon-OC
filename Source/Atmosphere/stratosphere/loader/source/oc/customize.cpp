@@ -93,6 +93,14 @@ volatile CustomizeTable C = {
 
 .commonGpuVoltOffset = 0,
 
+.marikoCpuHighVoltOffset = 0,
+
+.marikoCpuHighUV = 0,
+
+.cpuMaxFreq = 1963500,
+
+.gpuMaxFreq = 1267200,
+
 .marikoEmcDvbShift = 0,
 
 .ramTimingPresetOne = 4, // T1-3 EOS
@@ -111,13 +119,7 @@ volatile CustomizeTable C = {
 
 .marikoGpuVoltArray = {635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 660, 685, 715, 745, 765, 785},
 
-.marikoCpuHighVoltOffset = 0,
 
-.marikoCpuHighUV = 0,
-
-.cpuMaxFreq = 1963500,
-
-.gpuMaxFreq = 1267200,
 
 
 /* Advanced Settings:
