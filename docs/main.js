@@ -464,7 +464,7 @@ class Cust {
     }
     parse() {
         let e = this.beginOffset + this.magicLen;
-        if (this.rev = this.mapper[4].get(e), 11 != this.rev) throw new Error(`Unsupported custRev, expected: 11, got ${this.rev}`);
+        if (this.rev = this.mapper[4].get(e), 1 != this.rev) throw new Error(`Unsupported custRev, expected: 1, got ${this.rev}`);
         e += 4, document.getElementById("cust_rev").innerHTML = `Cust v${this.rev} is loaded.`;
         let t = t => {
             var i;
