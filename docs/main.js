@@ -188,14 +188,9 @@ var CustTable = [
         "Acceptable range: 0 ~ 100"
     ], 0, [0, 100], 1),
 
-    // Additional fields in struct footer
     new CustEntry("marikoCpuHighVoltOffset", "CPU Voltage offset at high frequencies", CustPlatform.Mariko, 4, [
         "Reduce CPU power draw at high clocks",
     ], 0, [0, 100], 1),
-
-    new CustEntry("marikoB3", "Unknown Mariko B3", CustPlatform.Mariko, 4, [
-        "Reserved entry for alignment with header struct"
-    ], 0, [0, 1], 1),
 
     new CustEntry("marikoCpuHighUV", "Enable Mariko CPU High Undervolt", CustPlatform.Mariko, 4, [
         "Reduce CPU power draw at high clocks",
@@ -210,6 +205,15 @@ var CustTable = [
         "Default: 1267200",
         "This is the maximum frequency for the GPU you can set in sys-clk-ocs2."
     ], 1267200, [76800, 1305600], 1, !1),
+
+    new CustEntry("eristaCPUvMax", "Erista CPUvMax", CustPlatform.Erista, 4, [], 0, [0, 0], 1),
+    new CustEntry("marikoCPUvMax", "Mariko CPUvMax", CustPlatform.Mariko, 4, [], 0, [0, 0], 1),
+    new CustEntry("MemVltMax", "Memory Voltage Max", CustPlatform.All, 4, [], 0, [0, 0], 1),
+    new CustEntry("marikoVDDQMax", "Mariko VDDQ Max", CustPlatform.Mariko, 4, [], 0, [0, 0], 1),
+
+    new CustEntry("marikoB3", "Unknown Mariko B3", CustPlatform.Mariko, 4, [
+        "Reserved entry for alignment with header struct"
+    ], 0, [0, 1], 1),
 ];
 
 var AdvTable = [
@@ -219,13 +223,94 @@ var AdvTable = [
         "Acceptable range : 0~9"
     ], 0, [0, 9], 1),
 
-    new AdvEntry("ramTimingPresetOne", "Primary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 6], 1),
-    new AdvEntry("ramTimingPresetTwo", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 5], 1),
-    new AdvEntry("ramTimingPresetThree", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 6], 1),
-    new AdvEntry("ramTimingPresetFour", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 6], 1),
-    new AdvEntry("ramTimingPresetFive", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 6], 1),
-    new AdvEntry("ramTimingPresetSix", "Tertiary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 5], 1),
-    new AdvEntry("ramTimingPresetSeven", "Latency Decrement", CustPlatform.Mariko, 4, [...], 0, [0, 6], 1),
+    new AdvEntry("ramTimingPresetOne", "Primary RAM Timing Preset", CustPlatform.Mariko, 4, [
+        "<b>WARNING</b>: Unstable timings can corrupt your nand",
+        "Select Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
+        "Values are : tRCD - tRP - tRAS (tRC = tRP + tRAS)",
+        "<b>0</b> : Do Not Adjust (2400Mhz: 12 - 12 - 28) (CUST_ADJ only)",
+        "<b>1</b> : 18 - 18 - 42 (Default timing)",
+        "<b>2</b> : 17 - 17 - 39",
+        "<b>3</b> : 16 - 16 - 36",
+        "<b>4</b> : 15 - 15 - 34",
+        "<b>5</b> : 14 - 14 - 32",
+        "<b>6</b> : 13 - 13 - 30"
+    ], 1, [0, 6], 1),
+
+    new AdvEntry("ramTimingPresetTwo", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [
+        "WARNING: Unstable timings can corrupt your nand",
+        "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
+        "Values are : tRRD - tFAW",
+        "<b>0</b> : Do Not Adjust (2400Mhz: 6.6 - 26.6) (CUST_ADJ only)",
+        "<b>1</b> : 10 - 40 (Default timing) (3733 specs)",
+        "<b>2</b> : 7.5 - 30 (4266 specs)",
+        "<b>3</b> : 6 - 24",
+        "<b>4</b> : 4 - 16",
+        "<b>5</b> : 3 - 12"
+    ], 1, [0, 5], 1),
+
+    new AdvEntry("ramTimingPresetThree", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [
+        "WARNING: Unstable timings can corrupt your nand",
+        "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
+        "Values are : tWR - tRTP",
+        "<b>0</b> : Do Not Adjust (2400Mhz: ?? - 5) (CUST_ADJ only)",
+        "<b>1</b> : 18 - 7.5 (Default timing)",
+        "<b>2</b> : 15 - 7.5",
+        "<b>3</b> : 15 - 6",
+        "<b>4</b> : 12 - 6",
+        "<b>5</b> : 12 - 4",
+        "<b>6</b> : 8 - 4"
+    ], 1, [0, 6], 1),
+
+    new AdvEntry("ramTimingPresetFour", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [
+        "WARNING: Unstable timings can corrupt your nand",
+        "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
+        "Values are : tRFC",
+        "<b>0</b> : Do Not Adjust (2400Mhz: 93.3) (CUST_ADJ only)",
+        "<b>1</b> : 140 (Default timing)",
+        "<b>2</b> : 120",
+        "<b>3</b> : 100",
+        "<b>4</b> : 80",
+        "<b>5</b> : 70",
+        "<b>6</b> : 60"
+    ], 1, [0, 6], 1),
+
+    new AdvEntry("ramTimingPresetFive", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [
+        "WARNING: Unstable timings can corrupt your nand",
+        "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
+        "Values are : tWTR",
+        "<b>0</b> : Do Not Adjust (2400Mhz: ??) (CUST_ADJ only)",
+        "<b>1</b> : 10 (Default timing)",
+        "<b>2</b> : 8",
+        "<b>3</b> : 6",
+        "<b>4</b> : 4",
+        "<b>5</b> : 2",
+        "<b>6</b> : 1"
+    ], 1, [0, 6], 1),
+
+    new AdvEntry("ramTimingPresetSix", "Tertiary RAM Timing Preset", CustPlatform.Mariko, 4, [
+        "WARNING: Unstable timings can corrupt your nand",
+        "Tertiary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
+        "Values are : tREFpb",
+        "<b>0</b> : Do Not Adjust (2400Mhz: 325) (CUST_ADJ only)",
+        "<b>1</b> : 488 (Default timing)",
+        "<b>2</b> : 976",
+        "<b>3</b> : 1952",
+        "<b>4</b> : 3256",
+        "<b>5</b> : MAX"
+    ], 1, [0, 5], 1),
+
+    new AdvEntry("ramTimingPresetSeven", "Latency Decrement", CustPlatform.Mariko, 4, [
+        "WARNING: Unstable timings can corrupt your nand",
+        "Latency decrement for both AUTO_ADJ and CUSTOM_ADJ",
+        "This preset decreases Write/Read related delays. Values are Write - Read",
+        "<b>0</b> : 0 - 0, Do Not Adjust for CUST_ADJ",
+        "<b>1</b> : '-2' - '-4'",
+        "<b>2</b> : '-4' - '-8'",
+        "<b>3</b> : '-6' - '-12'",
+        "<b>4</b> : '-8' - '-16'",
+        "<b>5</b> : '-10' - '-20'",
+        "<b>6</b> : '-12' - '-24'"
+    ], 0, [0, 6], 1)
 ];
 
 var GpuTable = [

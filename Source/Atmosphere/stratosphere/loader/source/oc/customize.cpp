@@ -113,21 +113,13 @@ volatile CustomizeTable C = {
 
 .marikoCpuHighVoltOffset = 0,
 
-.marikoB3 = 179,
-
 .marikoCpuHighUV = 0,
 
 .cpuMaxFreq = 1963500,
 
 .gpuMaxFreq = 1267200,
 
-.eristaCPUvMax = 1300,
 
-.marikoCPUvMax = 1235,
-
-.MemVltMax = 1350000,
-
-.marikoVDDQMax = 650000,
 /* Advanced Settings:
  * - Erista CPU DVFS Table:
  */
@@ -300,6 +292,15 @@ volatile CustomizeTable C = {
 
 //.eristaMtcTable = const_cast<EristaMtcTable *>(&EristaMtcTablePlaceholder),
 //.marikoMtcTable = const_cast<MarikoMtcTable *>(&MarikoMtcTablePlaceholder),
+.eristaCPUvMax = 1300,
+
+.marikoCPUvMax = 1235,
+
+.MemVltMax = 1350000,
+
+.marikoVDDQMax = 650000,
+
+.marikoB3 = 179,
 
 };
 
