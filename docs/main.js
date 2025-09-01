@@ -205,15 +205,6 @@ var CustTable = [
         "Default: 1267200",
         "This is the maximum frequency for the GPU you can set in sys-clk-ocs2."
     ], 1267200, [76800, 1305600], 1, !1),
-
-    new CustEntry("eristaCPUvMax", "Erista CPUvMax", CustPlatform.Erista, 4, [], 0, [0, 0], 1),
-    new CustEntry("marikoCPUvMax", "Mariko CPUvMax", CustPlatform.Mariko, 4, [], 0, [0, 0], 1),
-    new CustEntry("MemVltMax", "Memory Voltage Max", CustPlatform.All, 4, [], 0, [0, 0], 1),
-    new CustEntry("marikoVDDQMax", "Mariko VDDQ Max", CustPlatform.Mariko, 4, [], 0, [0, 0], 1),
-
-    new CustEntry("marikoB3", "Unknown Mariko B3", CustPlatform.Mariko, 4, [
-        "Reserved entry for alignment with header struct"
-    ], 0, [0, 1], 1),
 ];
 
 var AdvTable = [
