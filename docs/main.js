@@ -514,7 +514,7 @@ class ReleaseInfo {
         }))
     }
     parseOcResponse(e) {
-        this.ocVer = e.tag_name, this.loaderKipAsset = new ReleaseAsset(e.assets.filter((e => e.name.endsWith("loader.kip")))[0]), this.sdOutZipAsset = new ReleaseAsset(e.assets.filter((e => e.name.endsWith("SdOut.zip")))[0]), this.sysclkOCAsset = new ReleaseAsset(e.assets.filter((e => e.name.endsWith("sys-clk-oc.zip")))[0])
+        this.ocVer = e.tag_name, this.loaderKipAsset = new ReleaseAsset(e.assets.filter((e => e.name.endsWith("loader.kip")))[0]), this.sdOutZipAsset = new ReleaseAsset(e.assets.filter((e => e.name.endsWith("SdOut.zip")))[0]), this.sysclkOCAsset = new ReleaseAsset(e.assets.filter((e => e.name.endsWith("sys-clk-ocs2.zip")))[0])
     }
 }
 class DownloadSection {
