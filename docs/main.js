@@ -111,144 +111,144 @@ class GpuEntry extends CustEntry {
     }
 }
 var CustTable = [
-    var CustTable = [
-        new CustEntry("mtcConf", "DRAM Timing", CustPlatform.All, 4, [
-            "<b>0</b>: AUTO_ADJ_ALL: Auto adjust mtc table with LPDDR4 3733 Mbps specs, 8Gb density. Change timing with Advanced Config (Default)",
-            "<b>1</b>: CUSTOM_ADJ_ALL: Adjust only non-zero preset timings in Advanced Config",
-            "<b>2</b>: NO_ADJ_ALL: Use 1600 mtc table wihout adjusting (Timing becomes tighter if you raise dram clock)."
-        ], 0, [0, 2], 1),
-    
-        new CustEntry("commonCpuBoostClock", "Boost Clock in kHz", CustPlatform.All, 4, [
-            "System default: 1785000",
-            "Boost clock will be applied when applications request Boost Mode via performance configuration."
-        ], 2091e3, [204000, 2907000], 1, !1),
-    
-        new CustEntry("commonEmcMemVolt", "EMC Vdd2 Voltage in uV", CustPlatform.All, 4, [
-            "Acceptable range: 1100000 ≤ x ≤ 1250000, and it should be divided evenly by 12500.",
-            "Erista Default: 1125000",
-            "Mariko Default: 1100000",
-            "Official lpddr4(x) range: 1060mV~1175mV (1100mV nominal)",
-            "OCS need high voltage unlike l4t because of not scaling mtc table well. However it is recommended to stay within official limits",
-            "Not enabled by default"
-        ], 0, [11e5, 125e4], 12500),
-    
-        new CustEntry("eristaCpuMaxVolt", "Erista CPU Max Voltage in mV", CustPlatform.Erista, 4, [
-            "Acceptable range: 1120 ≤ x ≤ 1300",
-            "L4T Default: 1235"
-        ], 1235, [1000, 1500], 1),
-    
-        new CustEntry("eristaEmcMaxClock", "Erista RAM Max Clock in kHz", CustPlatform.Erista, 4, [
-            "Values should be ≥ 1600000, and divided evenly by 3200.",
-            "Recommended Clocks: 1862400, 2131200 (JEDEC)",
-            "<b>WARNING:</b> RAM overclock could be UNSTABLE if timing parameters are not suitable for your DRAM"
-        ], 1862400, [16e5, 2131200], 3200),
-    
-        new CustEntry("marikoCpuMaxVolt", "Mariko CPU Max Voltage in mV", CustPlatform.Mariko, 4, [
-            "System default: 1120",
-            "Acceptable range: 1120 ≤ x ≤ 1300",
-            "Changing this value affects cpu voltage calculation"
-        ], 1235, [1120, 1300], 5),
-    
-        new CustEntry("marikoEmcMaxClock", "Mariko RAM Max Clock in kHz", CustPlatform.Mariko, 4, [
-            "Values should be ≥ 1600000, and divided evenly by 3200.",
-            "Recommended Clocks: 1862400, 2131200, 2400000 (JEDEC)",
-            "Some clocks above 2400Mhz might not boot, because OCS doesn't scale table very well",
-            "<b>WARNING:</b> RAM overclock could be UNSTABLE if timing parameters are not suitable for your DRAM."
-        ], 1996800, [16e5, 2502400], 3200),
-    
-        new CustEntry("marikoEmcVddqVolt", "EMC Vddq (Mariko Only) Voltage in uV", CustPlatform.Mariko, 4, [
-            "Acceptable range: 550000 ≤ x ≤ 650000",
-            "Value should be divided evenly by 5000",
-            "Default: 600000",
-            "Official lpddr4(x) range: 570mV~650mV (600mV nominal)",
-            "Not enabled by default."
-        ], 0, [55e4, 65e4], 5e3),
-    
-        new CustEntry("marikoCpuUV", "Enable Mariko CPU Undervolt", CustPlatform.Mariko, 4, [
-            "Reduce CPU power draw",
-            "<b>0</b> : Default Table",
-            "<b>1</b> : Undervolt Level 1 (SLT - CPU speedo < 1650)",
-            "<b>2</b> : Undervolt Level 1 (SLT - CPU speedo >= 1650)"
-        ], 0, [0, 2], 1),
-    
-        new CustEntry("marikoGpuUV", "Enable Mariko GPU Undervolt", CustPlatform.Mariko, 4, [
-            "Reduce GPU power draw",
-            "Your GPU might not withstand undervolt, and can hang your console, or crash games",
-            "Undervolting too much will drop GPU performance even if it seems stable",
-            "GPU voltages are dynamic and will change with temperature and gpu speedo",
-            "<b>0</b> : Default Table",
-            "<b>1</b> : Undervolt Level 1 (SLT: Aggressive)",
-            "<b>2</b> : Undervolt Level 2 (HiOPT: Drastic)",
-            "<b>3</b> : Custom static GPU Voltage Table (Use Gpu Configuation below)"
-        ], 0, [0, 3], 1),
-    
-        new CustEntry("commonGpuVoltOffset", "GPU Volt Offset", CustPlatform.All, 4, [
-            "Negative Voltage offset value for gpu dynamic voltage calculation",
-            "For example, value of 10 will decrease 10mV gpu volt from all frequencies",
-            "Default gpu vmin: Erista - 812.5mV / Mariko - 610mV",
-            "Acceptable range: 0 ~ 100"
-        ], 0, [0, 100], 1),
-    
-        // Additional fields in struct footer
-        new CustEntry("marikoCpuHighVoltOffset", "CPU Voltage offset at high frequencies", CustPlatform.Mariko, 4, [
-            "Reduce CPU power draw at high clocks",
-        ], 0, [0, 100], 1),
-    
-        new CustEntry("marikoB3", "Unknown Mariko B3", CustPlatform.Mariko, 4, [
-            "Reserved entry for alignment with header struct"
-        ], 0, [0, 1], 1),
-    
-        new CustEntry("marikoCpuHighUV", "Enable Mariko CPU High Undervolt", CustPlatform.Mariko, 4, [
-            "Reduce CPU power draw at high clocks",
-        ], 0, [0, 12], 1),
-    
-        new CustEntry("cpuMaxFreq", "Maximum allowed CPU Frequency", CustPlatform.All, 4, [
-            "Default: 1963500",
-            "This is the maximum frequency for the CPU you can set in sys-clk-ocs2."
-        ], 1963500, [1020000, 2907000], 1, !1),
-    
-        new CustEntry("gpuMaxFreq", "Maximum allowed GPU Frequency", CustPlatform.All, 4, [
-            "Default: 1267200",
-            "This is the maximum frequency for the GPU you can set in sys-clk-ocs2."
-        ], 1267200, [1075200, 1305600], 1, !1),
-    ];
-    
-    var AdvTable = [
-        new AdvEntry("marikoEmcDvbShift", "Step up Mariko EMC DVB Table", CustPlatform.Mariko, 4, [
-            "Each number adds 25mV to SoC voltage",
-            "Helps with stability at higher memory clock",
-            "Acceptable range : 0~9"
-        ], 0, [0, 9], 1),
-    
-        new AdvEntry("ramTimingPresetOne", "Primary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 6], 1),
-        new AdvEntry("ramTimingPresetTwo", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 5], 1),
-        new AdvEntry("ramTimingPresetThree", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 6], 1),
-        new AdvEntry("ramTimingPresetFour", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 6], 1),
-        new AdvEntry("ramTimingPresetFive", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 6], 1),
-        new AdvEntry("ramTimingPresetSix", "Tertiary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 5], 1),
-        new AdvEntry("ramTimingPresetSeven", "Latency Decrement", CustPlatform.Mariko, 4, [...], 0, [0, 6], 1),
-    ];
-    
-    var GpuTable = [
-        new GpuEntry("0", "76.8"),
-        new GpuEntry("1", "153.6"),
-        new GpuEntry("2", "230.4"),
-        new GpuEntry("3", "307.2"),
-        new GpuEntry("4", "384.0"),
-        new GpuEntry("5", "460.8"),
-        new GpuEntry("6", "537.6"),
-        new GpuEntry("7", "614.4"),
-        new GpuEntry("8", "691.2"),
-        new GpuEntry("9", "768.0"),
-        new GpuEntry("10", "844.8"),
-        new GpuEntry("11", "921.6"),
-        new GpuEntry("12", "998.4"),
-        new GpuEntry("13", "1075.2"),
-        new GpuEntry("14", "1152.0"),
-        new GpuEntry("15", "1228.8"),
-        new GpuEntry("16", "1267.2"),
-        new GpuEntry("17", "1305.6")
-    ];
+    new CustEntry("mtcConf", "DRAM Timing", CustPlatform.All, 4, [
+        "<b>0</b>: AUTO_ADJ_ALL: Auto adjust mtc table with LPDDR4 3733 Mbps specs, 8Gb density. Change timing with Advanced Config (Default)",
+        "<b>1</b>: CUSTOM_ADJ_ALL: Adjust only non-zero preset timings in Advanced Config",
+        "<b>2</b>: NO_ADJ_ALL: Use 1600 mtc table wihout adjusting (Timing becomes tighter if you raise dram clock)."
+    ], 0, [0, 2], 1),
+
+    new CustEntry("commonCpuBoostClock", "Boost Clock in kHz", CustPlatform.All, 4, [
+        "System default: 1785000",
+        "Boost clock will be applied when applications request Boost Mode via performance configuration."
+    ], 2091e3, [204000, 2907000], 1, !1),
+
+    new CustEntry("commonEmcMemVolt", "EMC Vdd2 Voltage in uV", CustPlatform.All, 4, [
+        "Acceptable range: 1100000 ≤ x ≤ 1250000, and it should be divided evenly by 12500.",
+        "Erista Default: 1125000",
+        "Mariko Default: 1100000",
+        "Official lpddr4(x) range: 1060mV~1175mV (1100mV nominal)",
+        "OCS need high voltage unlike l4t because of not scaling mtc table well. However it is recommended to stay within official limits",
+        "Not enabled by default"
+    ], 0, [11e5, 125e4], 12500),
+
+    new CustEntry("eristaCpuMaxVolt", "Erista CPU Max Voltage in mV", CustPlatform.Erista, 4, [
+        "Acceptable range: 1120 ≤ x ≤ 1300",
+        "L4T Default: 1235"
+    ], 1235, [1000, 1500], 1),
+
+    new CustEntry("eristaEmcMaxClock", "Erista RAM Max Clock in kHz", CustPlatform.Erista, 4, [
+        "Values should be ≥ 1600000, and divided evenly by 3200.",
+        "Recommended Clocks: 1862400, 2131200 (JEDEC)",
+        "<b>WARNING:</b> RAM overclock could be UNSTABLE if timing parameters are not suitable for your DRAM"
+    ], 1862400, [16e5, 2131200], 3200),
+
+    new CustEntry("marikoCpuMaxVolt", "Mariko CPU Max Voltage in mV", CustPlatform.Mariko, 4, [
+        "System default: 1120",
+        "Acceptable range: 1120 ≤ x ≤ 1300",
+        "Changing this value affects cpu voltage calculation"
+    ], 1235, [1120, 1300], 5),
+
+    new CustEntry("marikoEmcMaxClock", "Mariko RAM Max Clock in kHz", CustPlatform.Mariko, 4, [
+        "Values should be ≥ 1600000, and divided evenly by 3200.",
+        "Recommended Clocks: 1862400, 2131200, 2400000 (JEDEC)",
+        "Some clocks above 2400Mhz might not boot, because OCS doesn't scale table very well",
+        "<b>WARNING:</b> RAM overclock could be UNSTABLE if timing parameters are not suitable for your DRAM."
+    ], 1996800, [16e5, 2502400], 3200),
+
+    new CustEntry("marikoEmcVddqVolt", "EMC Vddq (Mariko Only) Voltage in uV", CustPlatform.Mariko, 4, [
+        "Acceptable range: 550000 ≤ x ≤ 650000",
+        "Value should be divided evenly by 5000",
+        "Default: 600000",
+        "Official lpddr4(x) range: 570mV~650mV (600mV nominal)",
+        "Not enabled by default."
+    ], 0, [55e4, 65e4], 5e3),
+
+    new CustEntry("marikoCpuUV", "Enable Mariko CPU Undervolt", CustPlatform.Mariko, 4, [
+        "Reduce CPU power draw",
+        "<b>0</b> : Default Table",
+        "<b>1</b> : Undervolt Level 1 (SLT - CPU speedo < 1650)",
+        "<b>2</b> : Undervolt Level 1 (SLT - CPU speedo >= 1650)"
+    ], 0, [0, 2], 1),
+
+    new CustEntry("marikoGpuUV", "Enable Mariko GPU Undervolt", CustPlatform.Mariko, 4, [
+        "Reduce GPU power draw",
+        "Your GPU might not withstand undervolt, and can hang your console, or crash games",
+        "Undervolting too much will drop GPU performance even if it seems stable",
+        "GPU voltages are dynamic and will change with temperature and gpu speedo",
+        "<b>0</b> : Default Table",
+        "<b>1</b> : Undervolt Level 1 (SLT: Aggressive)",
+        "<b>2</b> : Undervolt Level 2 (HiOPT: Drastic)",
+        "<b>3</b> : Custom static GPU Voltage Table (Use Gpu Configuation below)"
+    ], 0, [0, 3], 1),
+
+    new CustEntry("commonGpuVoltOffset", "GPU Volt Offset", CustPlatform.All, 4, [
+        "Negative Voltage offset value for gpu dynamic voltage calculation",
+        "For example, value of 10 will decrease 10mV gpu volt from all frequencies",
+        "Default gpu vmin: Erista - 812.5mV / Mariko - 610mV",
+        "Acceptable range: 0 ~ 100"
+    ], 0, [0, 100], 1),
+
+    // Additional fields in struct footer
+    new CustEntry("marikoCpuHighVoltOffset", "CPU Voltage offset at high frequencies", CustPlatform.Mariko, 4, [
+        "Reduce CPU power draw at high clocks",
+    ], 0, [0, 100], 1),
+
+    new CustEntry("marikoB3", "Unknown Mariko B3", CustPlatform.Mariko, 4, [
+        "Reserved entry for alignment with header struct"
+    ], 0, [0, 1], 1),
+
+    new CustEntry("marikoCpuHighUV", "Enable Mariko CPU High Undervolt", CustPlatform.Mariko, 4, [
+        "Reduce CPU power draw at high clocks",
+    ], 0, [0, 12], 1),
+
+    new CustEntry("cpuMaxFreq", "Maximum allowed CPU Frequency", CustPlatform.All, 4, [
+        "Default: 1963500",
+        "This is the maximum frequency for the CPU you can set in sys-clk-ocs2."
+    ], 1963500, [306000, 2907000], 1, !1),
+
+    new CustEntry("gpuMaxFreq", "Maximum allowed GPU Frequency", CustPlatform.All, 4, [
+        "Default: 1267200",
+        "This is the maximum frequency for the GPU you can set in sys-clk-ocs2."
+    ], 1267200, [76800, 1305600], 1, !1),
+];
+
+var AdvTable = [
+    new AdvEntry("marikoEmcDvbShift", "Step up Mariko EMC DVB Table", CustPlatform.Mariko, 4, [
+        "Each number adds 25mV to SoC voltage",
+        "Helps with stability at higher memory clock",
+        "Acceptable range : 0~9"
+    ], 0, [0, 9], 1),
+
+    new AdvEntry("ramTimingPresetOne", "Primary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 6], 1),
+    new AdvEntry("ramTimingPresetTwo", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 5], 1),
+    new AdvEntry("ramTimingPresetThree", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 6], 1),
+    new AdvEntry("ramTimingPresetFour", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 6], 1),
+    new AdvEntry("ramTimingPresetFive", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 6], 1),
+    new AdvEntry("ramTimingPresetSix", "Tertiary RAM Timing Preset", CustPlatform.Mariko, 4, [...], 1, [0, 5], 1),
+    new AdvEntry("ramTimingPresetSeven", "Latency Decrement", CustPlatform.Mariko, 4, [...], 0, [0, 6], 1),
+];
+
+var GpuTable = [
+    new GpuEntry("0", "76.8"),
+    new GpuEntry("1", "153.6"),
+    new GpuEntry("2", "230.4"),
+    new GpuEntry("3", "307.2"),
+    new GpuEntry("4", "384.0"),
+    new GpuEntry("5", "460.8"),
+    new GpuEntry("6", "537.6"),
+    new GpuEntry("7", "614.4"),
+    new GpuEntry("8", "691.2"),
+    new GpuEntry("9", "768.0"),
+    new GpuEntry("10", "844.8"),
+    new GpuEntry("11", "921.6"),
+    new GpuEntry("12", "998.4"),
+    new GpuEntry("13", "1075.2"),
+    new GpuEntry("14", "1152.0"),
+    new GpuEntry("15", "1228.8"),
+    new GpuEntry("16", "1267.2"),
+    new GpuEntry("17", "1305.6")
+];
+
 class ErrorToolTip {
     constructor(e, t) {
         this.id = e, this.msg = t, this.id = e, this.element = document.getElementById(e), t && this.setMsg(t)
