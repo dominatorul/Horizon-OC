@@ -111,17 +111,17 @@ void SafetyCheck() {
     }
     
     sValidator validators[] = {
-        { C.commonCpuBoostClock, 1020'000, C.cpuMaxFreq, true },
-        { C.commonEmcMemVolt,    1000'000, C.MemVltMax },
-        { C.eristaCpuMaxVolt,        1100,     C.eristaCPUvMax },
+        { C.commonCpuBoostClock, 1020'000, C.cpuMaxFreq + 1, true },
+        { C.commonEmcMemVolt,    1000'000, C.MemVltMax + 1 },
+        { C.eristaCpuMaxVolt,        1100,     C.eristaCPUvMax + 1 },
         { C.eristaEmcMaxClock,   1600'000, 2428'800 },
-        { C.marikoCpuMaxVolt,         800,     C.marikoCPUvMax },
+        { C.marikoCpuMaxVolt,         800,     C.marikoCPUvMax + 1 },
         { C.marikoEmcMaxClock,   1600'000, 3504'000 },
-        { C.marikoEmcVddqVolt,    550'000,  C.marikoVDDQMax },
-        { eristaCpuDvfsMaxFreq,  1785'000, C.cpuMaxFreq },
-        { marikoCpuDvfsMaxFreq,  1785'000, C.cpuMaxFreq },
-        { eristaGpuDvfsMaxFreq,   768'000, C.gpuMaxFreq },
-        { marikoGpuDvfsMaxFreq,   768'000, C.gpuMaxFreq },
+        { C.marikoEmcVddqVolt,    550'000,  C.marikoVDDQMax + 1 },
+        { eristaCpuDvfsMaxFreq,  1785'000, C.cpuMaxFreq + 1 },
+        { marikoCpuDvfsMaxFreq,  1785'000, C.cpuMaxFreq + 1 },
+        { eristaGpuDvfsMaxFreq,   768'000, C.gpuMaxFreq + 1 },
+        { marikoGpuDvfsMaxFreq,   768'000, C.gpuMaxFreq + 1 },
     };
 
     for (auto& i : validators) {
