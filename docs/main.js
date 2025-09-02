@@ -194,27 +194,30 @@ var CustTable = [
         "Reduce CPU power draw at high clocks by offsetting the voltage sent to the CPU",
     ], 0, [0, 12], 1),
 
-    new CustEntry("cpuMaxFreq", "Maximum allowed CPU Frequency", CustPlatform.All, 4, [
+    new CustEntry("cpuMaxFreq", "Maximum allowed CPU Frequency (KHz)", CustPlatform.All, 4, [
         "Default: 1963500",
         "This is the maximum frequency for the CPU you can set in sys-clk-ocs2.",
-        "This is capped at 2091mhz for Erista units"
+        "The value for this setting is capped at 2091mhz for Erista units and 2907MHz for Mariko units",
+        "Anything above 1785MHz for Erista units and 1963MHz for Mariko units is unsafe without undervolting"
     ], 1963500, [204000, 2907000], 1, !1),
 
-    new CustEntry("gpuMaxFreq", "Maximum allowed GPU Frequency", CustPlatform.All, 4, [
+    new CustEntry("gpuMaxFreq", "Maximum allowed GPU Frequency (KHz)", CustPlatform.All, 4, [
         "Default: 1267200",
         "This is the maximum frequency for the GPU you can set in sys-clk-ocs2.",
-        "This is capped at 998mhz for Erista units"
-    ], 1267200, [76800, 1305600], 1, !1),
+        "The value for this setting is capped at 998mhz for Erista units, and 1305MHz on Mariko units",
+        "The maximum safe value without undervolt is 844MHz for Erista units and 1152MHz for Mariko units"
+    ], 1152000, [76800, 1305600], 1, !1),
 ];
 
 var AdvTable = [
     new AdvEntry("marikoEmcDvbShift", "Step up Mariko EMC DVB Table", CustPlatform.Mariko, 4, [
         "Each number adds 25mV to SoC voltage",
-        "Helps with stability at higher memory clock",
+        "Helps with stability at higher memory clock, with the only downside being slightly higher tempratures",
+        "Such functionality is completely useless on Erista units",
         "Acceptable range : 0~9"
     ], 0, [0, 9], 1),
 
-    new AdvEntry("ramTimingPresetOne", "Primary RAM Timing Preset", CustPlatform.Mariko, 4, [
+    new AdvEntry("ramTimingPresetOne", "Primary RAM Timing Preset", CustPlatform.All, 4, [
         "<b>WARNING</b>: Unstable timings can corrupt your nand",
         "Select Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
         "Values are : tRCD - tRP - tRAS (tRC = tRP + tRAS)",
@@ -227,7 +230,7 @@ var AdvTable = [
         "<b>6</b> : 13 - 13 - 30"
     ], 1, [0, 6], 1),
 
-    new AdvEntry("ramTimingPresetTwo", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [
+    new AdvEntry("ramTimingPresetTwo", "Secondary RAM Timing Preset", CustPlatform.All, 4, [
         "WARNING: Unstable timings can corrupt your nand",
         "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
         "Values are : tRRD - tFAW",
@@ -239,7 +242,7 @@ var AdvTable = [
         "<b>5</b> : 3 - 12"
     ], 1, [0, 5], 1),
 
-    new AdvEntry("ramTimingPresetThree", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [
+    new AdvEntry("ramTimingPresetThree", "Secondary RAM Timing Preset", CustPlatform.All, 4, [
         "WARNING: Unstable timings can corrupt your nand",
         "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
         "Values are : tWR - tRTP",
@@ -252,7 +255,7 @@ var AdvTable = [
         "<b>6</b> : 8 - 4"
     ], 1, [0, 6], 1),
 
-    new AdvEntry("ramTimingPresetFour", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [
+    new AdvEntry("ramTimingPresetFour", "Secondary RAM Timing Preset", CustPlatform.All, 4, [
         "WARNING: Unstable timings can corrupt your nand",
         "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
         "Values are : tRFC",
@@ -265,7 +268,7 @@ var AdvTable = [
         "<b>6</b> : 60"
     ], 1, [0, 6], 1),
 
-    new AdvEntry("ramTimingPresetFive", "Secondary RAM Timing Preset", CustPlatform.Mariko, 4, [
+    new AdvEntry("ramTimingPresetFive", "Secondary RAM Timing Preset", CustPlatform.All, 4, [
         "WARNING: Unstable timings can corrupt your nand",
         "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
         "Values are : tWTR",
@@ -278,7 +281,7 @@ var AdvTable = [
         "<b>6</b> : 1"
     ], 1, [0, 6], 1),
 
-    new AdvEntry("ramTimingPresetSix", "Tertiary RAM Timing Preset", CustPlatform.Mariko, 4, [
+    new AdvEntry("ramTimingPresetSix", "Tertiary RAM Timing Preset", CustPlatform.All, 4, [
         "WARNING: Unstable timings can corrupt your nand",
         "Tertiary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
         "Values are : tREFpb",
@@ -290,7 +293,7 @@ var AdvTable = [
         "<b>5</b> : MAX"
     ], 1, [0, 5], 1),
 
-    new AdvEntry("ramTimingPresetSeven", "Latency Decrement", CustPlatform.Mariko, 4, [
+    new AdvEntry("ramTimingPresetSeven", "Latency Decrement", CustPlatform.All, 4, [
         "WARNING: Unstable timings can corrupt your nand",
         "Latency decrement for both AUTO_ADJ and CUSTOM_ADJ",
         "This preset decreases Write/Read related delays. Values are Write - Read",
@@ -322,7 +325,7 @@ var GpuTable = [
     new GpuEntry("14", "1152.0"),
     new GpuEntry("15", "1228.8"),
     new GpuEntry("16", "1267.2"),
-    new GpuEntry("17", "1305.6")
+    new GpuEntry("17", "1305.6 (UNSAFE)")
 ];
 
 class ErrorToolTip {
