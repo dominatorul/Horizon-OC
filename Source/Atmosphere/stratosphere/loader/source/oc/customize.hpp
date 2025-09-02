@@ -16,7 +16,7 @@
 
 #pragma once
 
-#define CUST_REV 1
+#define CUST_REV 2
 
 #include "oc_common.hpp"
 #include "pcv/pcv_common.hpp"
@@ -45,7 +45,10 @@ typedef struct CustomizeTable {
     u8  cust[4] = {'C', 'U', 'S', 'T'};
     u32 custRev = CUST_REV;
     u32 mtcConf;
-    u32 commonCpuBoostClock;
+    
+    u32 marikoCpuBoostClock;
+    u32 eristaCpuBoostClock;
+
     u32 commonEmcMemVolt;
     u32 eristaCpuMaxVolt;
     u32 eristaEmcMaxClock;
@@ -53,13 +56,15 @@ typedef struct CustomizeTable {
     u32 marikoEmcMaxClock;
     u32 marikoEmcVddqVolt;
     u32 marikoCpuUV;
+    u32 marikoCpuHighUV;
     u32 marikoGpuUV;
     u32 commonGpuVoltOffset;
     u32 marikoCpuHighVoltOffset;
-	u32 marikoCpuHighUV;
 
     u32 cpuMaxFreq;
     u32 gpuMaxFreq;
+    u32 EcpuMaxFreq;
+    u32 EgpuMaxFreq;
     // advanced config
     u32 marikoEmcDvbShift;
     u32 ramTimingPresetOne;

@@ -28,7 +28,7 @@ volatile CustomizeTable C = {
  * NO_ADJ_ALL: No timing adjustment for both Erista and Mariko.
  * CUSTOMIZED_ALL: Replace with values in customized table for both Erista and Mariko.
  */
-.mtcConf = CUSTOM_ADJ_ALL,
+.mtcConf = AUTO_ADJ_ALL,
 
 /* Common:
  * - Boost Clock in kHz:
@@ -36,21 +36,24 @@ volatile CustomizeTable C = {
  *   Boost clock will be applied when applications request higher CPU frequency for quicker loading.
  *   This will be set regardless of whether sys-clk is enabled.
  */
-.commonCpuBoostClock = 2295000,
+.marikoCpuBoostClock = 1963500,
+
+.eristaCpuBoostClock = 1785000,
+
 /* - EMC Vddq (Erista Only) and RAM Vdd2 Voltage in uV
  *   Range: 1100'000 to 1250'000 uV
- *   Erista Default(HOS): 1125'000 (bootloader: 1100'000)
- *   Mariko Default: 1100'000 (It will not work without sys-clk-OC.)
+ *   Erista Default(HOS): 1175'000 (bootloader: 1100'000)
+ *   Mariko Default: 1175'000 (It will not work without sys-clk-OC.)
  *   Value should be divided evenly by 12'500.
  *   Not enabled by default.
  */
-.commonEmcMemVolt  = 1212500,
+.commonEmcMemVolt  = 1175000,
 
 /* Erista CPU:
  * - Max Voltage in mV
  * - CpuVoltL4T: 1235
  */
-.eristaCpuMaxVolt  = 1235,
+.eristaCpuMaxVolt  = 1257,
 
 /* Erista EMC(RAM):
  * - RAM Clock in kHz
@@ -66,7 +69,7 @@ volatile CustomizeTable C = {
  * - Max Voltage in mV:
  *   Default voltage: 1120
  */
-.marikoCpuMaxVolt    = 1235,
+.marikoCpuMaxVolt    = 1120,
 
 /* Mariko EMC(RAM):
  * - RAM Clock in kHz:
@@ -89,37 +92,39 @@ volatile CustomizeTable C = {
 
 .marikoCpuUV = 0,
 
+.marikoCpuHighUV = 0,
+
 .marikoGpuUV = 0,
 
 .commonGpuVoltOffset = 0,
 
 .marikoCpuHighVoltOffset = 0,
 
-.marikoCpuHighUV = 0,
+.cpuMaxFreq = 1963,
 
-.cpuMaxFreq = 1963500,
+.gpuMaxFreq = 1152,
 
-.gpuMaxFreq = 1267200,
+.EcpuMaxFreq = 1963,
+
+.EgpuMaxFreq = 921,
 
 .marikoEmcDvbShift = 0,
 
-.ramTimingPresetOne = 4, // T1-3 EOS
+.ramTimingPresetOne = 0, // T1-3 EOS
 
-.ramTimingPresetTwo = 2, // T4
+.ramTimingPresetTwo = 0, // T4
 
-.ramTimingPresetThree = 2, // Try all values from 0-6
+.ramTimingPresetThree = 0, // Try all values from 0-6
 
-.ramTimingPresetFour = 2, // EOS T5
+.ramTimingPresetFour = 0, // EOS T5
 
-.ramTimingPresetFive = 2, // EOS T7
+.ramTimingPresetFive = 0, // EOS T7
 
-.ramTimingPresetSix = 2, // EOS T8
+.ramTimingPresetSix = 0, // EOS T8
 
-.ramTimingPresetSeven = 2, 
+.ramTimingPresetSeven = 0, 
 
 .marikoGpuVoltArray = {635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 660, 685, 715, 745, 765, 785},
-
-.marikoGpuVoltArray_RAM_OC = {635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 660, 685, 715, 745, 765, 785},
 
 
 

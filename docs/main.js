@@ -25,7 +25,7 @@ var __awaiter = this && this.__awaiter || function(e, t, i, n) {
         o((n = n.apply(e, t || [])).next())
     }))
 };
-const CUST_REV_ADV = 1;
+const CUST_REV_ADV = 2;
 var CustPlatform;
 ! function(e) {
     e[e.Undefined = 0] = "Undefined", e[e.Erista = 1] = "Erista", e[e.Mariko = 2] = "Mariko", e[e.All = 3] = "All"
@@ -113,14 +113,20 @@ class GpuEntry extends CustEntry {
 var CustTable = [
     new CustEntry("mtcConf", "DRAM Timing", CustPlatform.All, 4, [
         "<b>0</b>: AUTO_ADJ_ALL: Auto adjust mtc table with LPDDR4 3733 Mbps specs, 8Gb density. Change timing with Advanced Config (Default)",
-        "<b>1</b>: CUSTOM_ADJ_ALL: Adjust only non-zero preset timings in Advanced Config",
+        "<b>1</b>: CUSTOM_ADJ_ALL: Adjust only non-zero preset timings in Advanced Config. This may not work on Erista units",
         "<b>2</b>: NO_ADJ_ALL: Use 1600 mtc table wihout adjusting (Timing becomes tighter if you raise dram clock)."
     ], 0, [0, 2], 1),
 
-    new CustEntry("commonCpuBoostClock", "Boost Clock in kHz", CustPlatform.All, 4, [
+    new CustEntry("marikoCpuBoostClock", "Mariko Boost Clock in kHz", CustPlatform.Mariko, 4, [
         "System default: 1785000",
         "Boost clock will be applied when applications request Boost Mode via performance configuration."
-    ], 2091e3, [204000, 2907000], 1, !1),
+    ], 1963500, [204000, 2907000], 1, !1),
+
+    new CustEntry("eristaCpuBoostClock", "Erista Boost Clock in kHz", CustPlatform.Erista, 4, [
+        "System default: 1785000",
+        "Boost clock will be applied when applications request Boost Mode via performance configuration."
+    ], 1963e3, [204000, 2907000], 1, !1),
+
 
     new CustEntry("commonEmcMemVolt", "EMC Vdd2 Voltage in uV", CustPlatform.All, 4, [
         "Acceptable range: 1100000 ≤ x ≤ 1250000, and it should be divided evenly by 12500.",
@@ -139,13 +145,13 @@ var CustTable = [
         "Values should be ≥ 1600000, and divided evenly by 3200.",
         "Recommended Clocks: 1862400, 2131200 (JEDEC)",
         "<b>WARNING:</b> RAM overclock could be UNSTABLE if timing parameters are not suitable for your DRAM"
-    ], 1862400, [16e5, 2131200], 3200),
+    ], 1862400, [16e5, 2500000], 3200),
 
     new CustEntry("marikoCpuMaxVolt", "Mariko CPU Max Voltage in mV", CustPlatform.Mariko, 4, [
         "System default: 1120",
         "Acceptable range: 1120 ≤ x ≤ 1300",
         "Changing this value affects cpu voltage calculation"
-    ], 1235, [1120, 1300], 5),
+    ], 1120, [1120, 1300], 5),
 
     new CustEntry("marikoEmcMaxClock", "Mariko RAM Max Clock in kHz", CustPlatform.Mariko, 4, [
         "Values should be ≥ 1600000, and divided evenly by 9600.",
@@ -167,6 +173,10 @@ var CustTable = [
         "<b>1</b> : Undervolt Level 1 (SLT - CPU speedo < 1650)",
         "<b>2</b> : Undervolt Level 1 (SLT - CPU speedo >= 1650)"
     ], 0, [0, 2], 1),
+
+    new CustEntry("marikoCpuHighUV", "Enable Mariko CPU High Undervolt", CustPlatform.Mariko, 4, [
+        "Reduce CPU power draw at high clocks by offsetting the voltage sent to the CPU",
+    ], 0, [0, 12], 1),
 
     new CustEntry("marikoGpuUV", "Enable Mariko GPU Undervolt", CustPlatform.Mariko, 4, [
         "Reduce GPU power draw",
@@ -190,23 +200,34 @@ var CustTable = [
         "Reduce CPU power draw at high clocks",
     ], 0, [0, 100], 1),
 
-    new CustEntry("marikoCpuHighUV", "Enable Mariko CPU High Undervolt", CustPlatform.Mariko, 4, [
-        "Reduce CPU power draw at high clocks by offsetting the voltage sent to the CPU",
-    ], 0, [0, 12], 1),
-
-    new CustEntry("cpuMaxFreq", "Maximum allowed CPU Frequency (KHz)", CustPlatform.All, 4, [
-        "Default: 1963500",
+    new CustEntry("cpuMaxFreq", "Mariko Maximum allowed CPU Frequency (MHz)", CustPlatform.Mariko, 4, [
+        "Default: 1963",
         "This is the maximum frequency for the CPU you can set in sys-clk-ocs2.",
-        "The value for this setting is capped at 2091mhz for Erista units and 2907MHz for Mariko units",
-        "Anything above 1785MHz for Erista units and 1963MHz for Mariko units is unsafe without undervolting"
-    ], 1963500, [204000, 2907000], 1, !1),
+        "The value for this setting is capped at 2907MHz",
+        "Anything above 1963MHz is unsafe without undervolting"
+    ], 1963, [204, 2907], 1, !1),
 
-    new CustEntry("gpuMaxFreq", "Maximum allowed GPU Frequency (KHz)", CustPlatform.All, 4, [
-        "Default: 1267200",
+    new CustEntry("gpuMaxFreq", "Mariko Maximum allowed GPU Frequency (MHz)", CustPlatform.Mariko, 4, [
+        "Default: 1267",
         "This is the maximum frequency for the GPU you can set in sys-clk-ocs2.",
-        "The value for this setting is capped at 998mhz for Erista units, and 1305MHz on Mariko units",
-        "The maximum safe value without undervolt is 844MHz for Erista units and 1152MHz for Mariko units"
-    ], 1152000, [76800, 1305600], 1, !1),
+        "The value for this setting is capped at 998mhz",
+        "The maximum safe value without undervolt is 1152MHz"
+    ], 1152, [76, 1305], 1, !1),
+
+    new CustEntry("EcpuMaxFreq", "Erista Maximum allowed CPU Frequency (MHz)", CustPlatform.Erista, 4, [
+        "Default: 1785",
+        "This is the maximum frequency for the CPU you can set in sys-clk-ocs2.",
+        "The value for this setting is capped at 2091mhz",
+        "Anything above 1785MHz is unsafe without undervolting"
+    ], 1785, [204, 2091], 1, !1),
+
+    new CustEntry("EgpuMaxFreq", "Erista Maximum allowed GPU Frequency (MHz)", CustPlatform.Erista, 4, [
+        "Default: 921",
+        "This is the maximum frequency for the GPU you can set in sys-clk-ocs2.",
+        "The value for this setting is capped at 998mhz",
+        "The maximum safe value without undervolt is 921MHz"
+    ], 921, [76, 998], 1, !1),
+
 ];
 
 var AdvTable = [
@@ -231,7 +252,7 @@ var AdvTable = [
     ], 1, [0, 6], 1),
 
     new AdvEntry("ramTimingPresetTwo", "Secondary RAM Timing Preset", CustPlatform.All, 4, [
-        "WARNING: Unstable timings can corrupt your nand",
+        "<b>WARNING</b>: Unstable timings can corrupt your nand",
         "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
         "Values are : tRRD - tFAW",
         "<b>0</b> : Do Not Adjust (2400Mhz: 6.6 - 26.6) (CUST_ADJ only)",
@@ -243,7 +264,7 @@ var AdvTable = [
     ], 1, [0, 5], 1),
 
     new AdvEntry("ramTimingPresetThree", "Secondary RAM Timing Preset", CustPlatform.All, 4, [
-        "WARNING: Unstable timings can corrupt your nand",
+        "<b>WARNING</b>: Unstable timings can corrupt your nand",
         "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
         "Values are : tWR - tRTP",
         "<b>0</b> : Do Not Adjust (2400Mhz: ?? - 5) (CUST_ADJ only)",
@@ -256,7 +277,7 @@ var AdvTable = [
     ], 1, [0, 6], 1),
 
     new AdvEntry("ramTimingPresetFour", "Secondary RAM Timing Preset", CustPlatform.All, 4, [
-        "WARNING: Unstable timings can corrupt your nand",
+        "<b>WARNING</b>: Unstable timings can corrupt your nand",
         "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
         "Values are : tRFC",
         "<b>0</b> : Do Not Adjust (2400Mhz: 93.3) (CUST_ADJ only)",
@@ -269,7 +290,7 @@ var AdvTable = [
     ], 1, [0, 6], 1),
 
     new AdvEntry("ramTimingPresetFive", "Secondary RAM Timing Preset", CustPlatform.All, 4, [
-        "WARNING: Unstable timings can corrupt your nand",
+        "<b>WARNING</b>: Unstable timings can corrupt your nand",
         "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
         "Values are : tWTR",
         "<b>0</b> : Do Not Adjust (2400Mhz: ??) (CUST_ADJ only)",
@@ -282,7 +303,7 @@ var AdvTable = [
     ], 1, [0, 6], 1),
 
     new AdvEntry("ramTimingPresetSix", "Tertiary RAM Timing Preset", CustPlatform.All, 4, [
-        "WARNING: Unstable timings can corrupt your nand",
+        "<b>WARNING</b>: Unstable timings can corrupt your nand",
         "Tertiary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
         "Values are : tREFpb",
         "<b>0</b> : Do Not Adjust (2400Mhz: 325) (CUST_ADJ only)",
@@ -294,7 +315,7 @@ var AdvTable = [
     ], 1, [0, 5], 1),
 
     new AdvEntry("ramTimingPresetSeven", "Latency Decrement", CustPlatform.All, 4, [
-        "WARNING: Unstable timings can corrupt your nand",
+        "<b>WARNING</b>: Unstable timings can corrupt your nand",
         "Latency decrement for both AUTO_ADJ and CUSTOM_ADJ",
         "This preset decreases Write/Read related delays. Values are Write - Read",
         "<b>0</b> : 0 - 0, Do Not Adjust for CUST_ADJ",
@@ -321,11 +342,11 @@ var GpuTable = [
     new GpuEntry("10", "844.8"),
     new GpuEntry("11", "921.6"),
     new GpuEntry("12", "998.4"),
-    new GpuEntry("13", "1075.2"),
-    new GpuEntry("14", "1152.0"),
-    new GpuEntry("15", "1228.8"),
-    new GpuEntry("16", "1267.2"),
-    new GpuEntry("17", "1305.6 (UNSAFE)")
+    new GpuEntry("13", "1075.2", CustPlatform.Mariko),
+    new GpuEntry("14", "1152.0", CustPlatform.Mariko),
+    new GpuEntry("15", "1228.8", CustPlatform.Mariko),
+    new GpuEntry("16", "1267.2", CustPlatform.Mariko),
+    new GpuEntry("17", "1305.6 <b>(UNSAFE)</b>", CustPlatform.Mariko)
 ];
 
 class ErrorToolTip {
@@ -470,7 +491,7 @@ class Cust {
     }
     parse() {
         let e = this.beginOffset + this.magicLen;
-        if (this.rev = this.mapper[4].get(e), 1 != this.rev) throw new Error(`Unsupported custRev, expected: 1, got ${this.rev}`);
+        if (this.rev = this.mapper[4].get(e), CUST_REV_ADV != this.rev) throw new Error(`Unsupported custRev, expected: 1, got ${this.rev}`);
         e += 4, document.getElementById("cust_rev").innerHTML = `Cust v${this.rev} is loaded.`;
         let t = t => {
             var i;
