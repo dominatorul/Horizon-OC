@@ -118,23 +118,23 @@ var CustTable = [
     ], 0, [0, 2], 1),
 
     new CustEntry("marikoCpuBoostClock", "Mariko Boost Clock in kHz", CustPlatform.Mariko, 4, [
-        "System default: 1963500",
+        "System default: 1785000",
         "Boost clock will be applied when applications request Boost Mode via performance configuration."
     ], 1963500, [204000, 2907000], 1, !1),
 
     new CustEntry("eristaCpuBoostClock", "Erista Boost Clock in kHz", CustPlatform.Erista, 4, [
         "System default: 1785000",
         "Boost clock will be applied when applications request Boost Mode via performance configuration."
-    ], 17855e2, [204000, 2092000], 1, !1),
+    ], 1963e3, [204000, 2907000], 1, !1),
 
 
     new CustEntry("commonEmcMemVolt", "EMC Vdd2 Voltage in uV", CustPlatform.All, 4, [
         "Acceptable range: 1100000 ≤ x ≤ 1250000, and it should be divided evenly by 12500.",
-        "Erista Default: 1175000",
-        "Mariko Default: 1175000",
+        "Erista Default: 1125000",
+        "Mariko Default: 1100000",
         "Official LPDDR4(X) range: 1060mV~1175mV (1100mV nominal)",
         "Not enabled by default"
-    ], 1175000, [11e5, 125e4], 12500),
+    ], 0, [11e5, 125e4], 12500),
 
     new CustEntry("eristaCpuMaxVolt", "Erista CPU Max Voltage in mV", CustPlatform.Erista, 4, [
         "Acceptable range: 1120 ≤ x ≤ 1300",
