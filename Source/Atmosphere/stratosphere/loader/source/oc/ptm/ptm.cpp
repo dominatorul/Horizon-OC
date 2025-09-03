@@ -23,7 +23,7 @@ namespace ams::ldr::oc::ptm {
     bool isMariko = true;
 #endif
 Result CpuPtmBoost(perf_conf_entry* entry) {
-    if (!C.marikoCpuBoostClock || !C.eristaCpuBoostClock)
+    if (!C.commonCpuBoostClock)
         R_SUCCEED();
     u32 cpuPtmBoostNew;
     if(isMariko) {
