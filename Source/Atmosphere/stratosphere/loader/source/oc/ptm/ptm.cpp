@@ -17,20 +17,12 @@
 #include "ptm.hpp"
 
 namespace ams::ldr::oc::ptm {
-#ifdef ATMOSPHERE_IS_STRATOSPHERE
-    bool isMariko = (spl::GetSocType() == spl::SocType_Mariko);
-#else
-    bool isMariko = true;
-#endif
+
 Result CpuPtmBoost(perf_conf_entry* entry) {
     if (!C.commonCpuBoostClock)
         R_SUCCEED();
-    u32 cpuPtmBoostNew;
-    if(isMariko) {
-        cpuPtmBoostNew = C.marikoCpuBoostClock * 1000;
-    } else {
-        cpuPtmBoostNew = C.eristaCpuBoostClock * 1000;
-    }
+
+    u32 cpuPtmBoostNew = C.commonCpuBoostClock * 1000;
 
     PATCH_OFFSET(&(entry->cpu_freq_1), cpuPtmBoostNew);
     PATCH_OFFSET(&(entry->cpu_freq_2), cpuPtmBoostNew);
@@ -78,6 +70,13 @@ void Patch(uintptr_t mapped_nso, size_t nso_size) {
 
     PatcherEntry<perf_conf_entry> cpuPtmBoostPatch = { "CPU Ptm Boost", &CpuPtmBoost, 2, };
     PatcherEntry<perf_conf_entry> memPtmPatch = { "MEM Ptm", &MemPtm, 16, };
+
+    #ifdef ATMOSPHERE_IS_STRATOSPHERE
+    bool isMariko = (spl::GetSocType() == spl::SocType_Mariko);
+    #else
+    bool isMariko = true;
+    #endif
+
 
     for (u32 i = 0; i < entryCnt; i++) {
         perf_conf_entry* entry = confTable + i;
