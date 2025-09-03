@@ -53,7 +53,7 @@ volatile CustomizeTable C = {
  * - Max Voltage in mV
  * - CpuVoltL4T: 1235
  */
-.eristaCpuMaxVolt  = 1257,
+.eristaCpuMaxVolt  = 1235,
 
 /* Erista EMC(RAM):
  * - RAM Clock in kHz
