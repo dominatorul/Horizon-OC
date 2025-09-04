@@ -44,7 +44,7 @@ volatile CustomizeTable C = {
  *   Value should be divided evenly by 12'500.
  *   Not enabled by default.
  */
-.commonEmcMemVolt  = 1212500,
+.commonEmcMemVolt  = 1175000,
 
 /* Erista CPU:
  * - Max Voltage in mV

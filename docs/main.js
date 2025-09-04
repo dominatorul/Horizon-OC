@@ -25,7 +25,7 @@ var __awaiter = this && this.__awaiter || function(e, t, i, n) {
         o((n = n.apply(e, t || [])).next())
     }))
 };
-const CUST_REV_ADV = 1;
+const CUST_REV_ADV = 2;
 var CustPlatform;
 ! function(e) {
     e[e.Undefined = 0] = "Undefined", e[e.Erista = 1] = "Erista", e[e.Mariko = 2] = "Mariko", e[e.All = 3] = "All"
@@ -94,7 +94,7 @@ class AdvEntry extends CustEntry {
     }
 }
 class GpuEntry extends CustEntry {
-    constructor(e, t, i = CustPlatform.Mariko, n = 4, a = ["range: 610 ≤ x ≤ 960"], r = 610, s = [610, 960], l = 5, o = !1) {
+    constructor(e, t, i = CustPlatform.Mariko, n = 4, a = ["range: 480 ≤ x ≤ 960 (Zero is disabled)"], r = 480, s = [0, 960], l = 5, o = !1) {
         super(e, t, i, n, a, r, s, l, o), this.id = e, this.name = t, this.platform = i, this.size = n, this.desc = a, this.defval = r, this.step = l, this.zeroable = o
     }
     createElement() {
@@ -483,7 +483,7 @@ class Cust {
     }
     parse() {
         let e = this.beginOffset + this.magicLen;
-        if (this.rev = this.mapper[4].get(e), 1 != this.rev) throw new Error(`Unsupported custRev, expected: 1, got ${this.rev}`);
+        if (this.rev = this.mapper[4].get(e), CUST_REV_ADV != this.rev) throw new Error(`Unsupported custRev, expected: 1, got ${this.rev}`);
         e += 4, document.getElementById("cust_rev").innerHTML = `Cust v${this.rev} is loaded.`;
         let t = t => {
             var i;
