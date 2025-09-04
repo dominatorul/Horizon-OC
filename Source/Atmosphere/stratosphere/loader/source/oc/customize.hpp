@@ -60,6 +60,7 @@ typedef struct CustomizeTable {
 
     u32 cpuMaxFreq;
     u32 gpuMaxFreq;
+    u32 gpuVmax;
     // advanced config
     u32 marikoEmcDvbShift;
     u32 ramTimingPresetOne;
@@ -70,8 +71,7 @@ typedef struct CustomizeTable {
     u32 ramTimingPresetSix;
     u32 ramTimingPresetSeven;
     //
-    u32 marikoGpuVoltArray[18];
-    u32 marikoGpuVoltArray_RAM_OC[18];
+    u32 marikoGpuVoltArray[24];
 
     
     CustomizeCpuDvfsTable eristaCpuDvfsTable;
@@ -81,6 +81,7 @@ typedef struct CustomizeTable {
     CustomizeGpuDvfsTable marikoGpuDvfsTable;
     CustomizeGpuDvfsTable marikoGpuDvfsTableSLT;
     CustomizeGpuDvfsTable marikoGpuDvfsTableHiOPT;
+    CustomizeGpuDvfsTable marikoGpuDvfsTableUv3;
     //EristaMtcTable* eristaMtcTable;
     //MarikoMtcTable* marikoMtcTable;
     u32 eristaCPUvMax;

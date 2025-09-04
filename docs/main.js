@@ -94,7 +94,7 @@ class AdvEntry extends CustEntry {
     }
 }
 class GpuEntry extends CustEntry {
-    constructor(e, t, i = CustPlatform.Mariko, n = 4, a = ["range: 610 ≤ x ≤ 1000"], r = 610, s = [610, 1e3], l = 5, o = !1) {
+    constructor(e, t, i = CustPlatform.Mariko, n = 4, a = ["range: 610 ≤ x ≤ 960"], r = 610, s = [610, 960], l = 5, o = !1) {
         super(e, t, i, n, a, r, s, l, o), this.id = e, this.name = t, this.platform = i, this.size = n, this.desc = a, this.defval = r, this.step = l, this.zeroable = o
     }
     createElement() {
@@ -120,26 +120,25 @@ var CustTable = [
     new CustEntry("commonCpuBoostClock", "Boost Clock in kHz", CustPlatform.All, 4, [
         "System default: 1785000",
         "Boost clock will be applied when applications request Boost Mode via performance configuration."
-    ], 2091e3, [204000, 2907000], 1, !1),
+    ], 1785000, [204000, 2907000], 1, !1),
 
     new CustEntry("commonEmcMemVolt", "EMC Vdd2 Voltage in uV", CustPlatform.All, 4, [
         "Acceptable range: 1100000 ≤ x ≤ 1250000, and it should be divided evenly by 12500.",
-        "Erista Default: 1125000",
-        "Mariko Default: 1100000",
-        "Official LPDDR4(X) range: 1060mV~1175mV (1100mV nominal)",
-        "Not enabled by default"
-    ], 0, [11e5, 125e4], 12500),
+        "Erista Default: 1175000",
+        "Mariko Default: 1175000",
+        "Official LPDDR4(X) voltage: 1175mV (1175mV nominal)"
+    ], 1175000, [11e5, 125e4], 12500),
 
     new CustEntry("eristaCpuMaxVolt", "Erista CPU Max Voltage in mV", CustPlatform.Erista, 4, [
         "Acceptable range: 1120 ≤ x ≤ 1300",
-        "L4T Default: 1235"
+        "Default: 1235"
     ], 1235, [1000, 1500], 1),
 
     new CustEntry("eristaEmcMaxClock", "Erista RAM Max Clock in kHz", CustPlatform.Erista, 4, [
         "Values should be ≥ 1600000, and divided evenly by 3200.",
         "Recommended Clocks: 1862400, 2131200 (JEDEC)",
         "<b>WARNING:</b> RAM overclock could be UNSTABLE if timing parameters are not suitable for your DRAM"
-    ], 1862400, [16e5, 2131200], 3200),
+    ], 1862400, [16e5, 2428800], 3200),
 
     new CustEntry("marikoCpuMaxVolt", "Mariko CPU Max Voltage in mV", CustPlatform.Mariko, 4, [
         "System default: 1120",
@@ -159,7 +158,7 @@ var CustTable = [
         "Default: 600000",
         "Official lpddr4(x) range: 570mV~650mV (600mV nominal)",
         "Not enabled by default."
-    ], 0, [55e4, 65e4], 5e3),
+    ], 600000, [55e4, 65e4], 5e3),
 
     new CustEntry("marikoCpuUV", "Enable Mariko CPU Undervolt", CustPlatform.Mariko, 4, [
         "Reduce CPU power draw",
@@ -195,18 +194,26 @@ var CustTable = [
     ], 0, [0, 12], 1),
 
     new CustEntry("cpuMaxFreq", "Maximum allowed CPU Frequency (KHz)", CustPlatform.All, 4, [
-        "Default: 1963500",
+        "Default: 1785000",
         "This is the maximum frequency for the CPU you can set in sys-clk-ocs2.",
         "The value for this setting is capped at 2091mhz for Erista units and 2907MHz for Mariko units",
         "Anything above 1785MHz for Erista units and 1963MHz for Mariko units is unsafe without undervolting"
-    ], 1963500, [204000, 2907000], 1, !1),
+    ], 1785000, [204000, 2907000], 1, !1),
 
     new CustEntry("gpuMaxFreq", "Maximum allowed GPU Frequency (KHz)", CustPlatform.All, 4, [
-        "Default: 1267200",
+        "Default: 921600",
         "This is the maximum frequency for the GPU you can set in sys-clk-ocs2.",
         "The value for this setting is capped at 998mhz for Erista units, and 1305MHz on Mariko units",
-        "The maximum safe value without undervolt is 844MHz for Erista units and 1152MHz for Mariko units"
-    ], 1152000, [76800, 1305600], 1, !1),
+        "The maximum safe value without undervolt is 921MHz for Erista units and 1152MHz for Mariko units",
+        "Higher frequencies via GPU UV3 bypass this setting"
+    ], 921600, [76800, 1305600], 1, !1),
+
+    new CustEntry("gpuVmax", "Mariko Maximum allowed GPU Voltage (mV)", CustPlatform.Mariko, 4, [
+        "Default: 800",
+        "This is the maximum voltage you can use in GPU UV3.",
+        "Anything above 800MV is considered UNSAFE (although it depends per frequency)"
+    ], 800, [480, 1000], 1, !1),
+
 ];
 
 var AdvTable = [
@@ -321,11 +328,17 @@ var GpuTable = [
     new GpuEntry("10", "844.8"),
     new GpuEntry("11", "921.6"),
     new GpuEntry("12", "998.4"),
-    new GpuEntry("13", "1075.2"),
-    new GpuEntry("14", "1152.0"),
-    new GpuEntry("15", "1228.8"),
-    new GpuEntry("16", "1267.2"),
-    new GpuEntry("17", "1305.6 (UNSAFE)")
+    new GpuEntry("13", "1075.2", CustPlatform.Mariko),
+    new GpuEntry("14", "1152.0", CustPlatform.Mariko),
+    new GpuEntry("15", "1228.8 <span style='color:orange; font-weight:bold;'>(UNSAFE)</span>", CustPlatform.Mariko),
+    new GpuEntry("16", "1267.2 <span style='color:orange; font-weight:bold;'>(UNSAFE)</span>", CustPlatform.Mariko),
+    new GpuEntry("17", "1305.6 <span style='color:orange; font-weight:bold;'>(UNSAFE)</span>", CustPlatform.Mariko),
+    new GpuEntry("18", "1344.0 <span style='color:orange; font-weight:bold;'>(UNSAFE)</span>", CustPlatform.Mariko),
+    new GpuEntry("19", "1382.4 <span style='color:orange; font-weight:bold;'>(UNSAFE)</span>", CustPlatform.Mariko),
+    new GpuEntry("20", "1420.8 <span style='color:red; font-weight:bold;'>(DANGEROUS)</span>", CustPlatform.Mariko),
+    new GpuEntry("21", "1459.2 <span style='color:red; font-weight:bold;'>(DANGEROUS)</span>", CustPlatform.Mariko),
+    new GpuEntry("22", "1497.6 <span style='color:red; font-weight:bold;'>(DANGEROUS)</span>", CustPlatform.Mariko),
+    new GpuEntry("23", "1536.0 <span style='color:red; font-weight:bold;'>(DANGEROUS)</span>", CustPlatform.Mariko)
 ];
 
 class ErrorToolTip {

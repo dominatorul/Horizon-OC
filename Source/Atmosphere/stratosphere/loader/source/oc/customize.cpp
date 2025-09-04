@@ -28,7 +28,7 @@ volatile CustomizeTable C = {
  * NO_ADJ_ALL: No timing adjustment for both Erista and Mariko.
  * CUSTOMIZED_ALL: Replace with values in customized table for both Erista and Mariko.
  */
-.mtcConf = CUSTOM_ADJ_ALL,
+.mtcConf = AUTO_ADJ_ALL,
 
 /* Common:
  * - Boost Clock in kHz:
@@ -36,7 +36,7 @@ volatile CustomizeTable C = {
  *   Boost clock will be applied when applications request higher CPU frequency for quicker loading.
  *   This will be set regardless of whether sys-clk is enabled.
  */
-.commonCpuBoostClock = 2295000,
+.commonCpuBoostClock = 1785000,
 /* - EMC Vddq (Erista Only) and RAM Vdd2 Voltage in uV
  *   Range: 1100'000 to 1250'000 uV
  *   Erista Default(HOS): 1125'000 (bootloader: 1100'000)
@@ -66,7 +66,7 @@ volatile CustomizeTable C = {
  * - Max Voltage in mV:
  *   Default voltage: 1120
  */
-.marikoCpuMaxVolt    = 1235,
+.marikoCpuMaxVolt    = 1120,
 
 /* Mariko EMC(RAM):
  * - RAM Clock in kHz:
@@ -85,7 +85,7 @@ volatile CustomizeTable C = {
  *   Not enabled by default.
  *   This will not work without sys-clk-OC.
  */
-.marikoEmcVddqVolt = 640000,
+.marikoEmcVddqVolt = 600000,
 
 .marikoCpuUV = 0,
 
@@ -97,29 +97,29 @@ volatile CustomizeTable C = {
 
 .marikoCpuHighUV = 0,
 
-.cpuMaxFreq = 1963500,
+.cpuMaxFreq = 1785000,
 
-.gpuMaxFreq = 1267200,
+.gpuMaxFreq = 921600,
+
+.gpuVmax = 800,
 
 .marikoEmcDvbShift = 0,
 
-.ramTimingPresetOne = 4, // T1-3 EOS
+.ramTimingPresetOne = 0, // T1-3 EOS
 
-.ramTimingPresetTwo = 2, // T4
+.ramTimingPresetTwo = 0, // T4
 
-.ramTimingPresetThree = 2, // Try all values from 0-6
+.ramTimingPresetThree = 0, // Try all values from 0-6
 
-.ramTimingPresetFour = 2, // EOS T5
+.ramTimingPresetFour = 0, // EOS T5
 
-.ramTimingPresetFive = 2, // EOS T7
+.ramTimingPresetFive = 0, // EOS T7
 
-.ramTimingPresetSix = 2, // EOS T8
+.ramTimingPresetSix = 0, // EOS T8
 
-.ramTimingPresetSeven = 2, 
-
-.marikoGpuVoltArray = {635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 660, 685, 715, 745, 765, 785},
-
-.marikoGpuVoltArray_RAM_OC = {635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 635, 660, 685, 715, 745, 765, 785},
+.ramTimingPresetSeven = 0, 
+ //
+.marikoGpuVoltArray = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 
 
 
@@ -207,7 +207,7 @@ volatile CustomizeTable C = {
     { 2601000, { 1805897,   -36331,      113 }, { 1235000 } },
 	{ 2703000, { 1857394,   -37019,      113 }, { 1235000 } },
 	{ 2805000, { 1908891,   -37707,      113 }, { 1235000 } },
-	{ 2907000, { 1960388,   -38395,      113 }, { 1250000 } },
+	{ 2907000, { 1960388,   -38395,      113 }, { 1235000 } },
 },
 
 /* - Erista GPU DVFS Table:
@@ -294,6 +294,32 @@ volatile CustomizeTable C = {
     	{ 1305600, {},  { 1163644, -12688, -648,    0,   1077,   40 } },
 },
 
+.marikoGpuDvfsTableUv3 = { // This is for manually defined voltages, ignore the 0v, that means freq not enabled
+    {   76800, {},  {  0,                                  } }, 
+    {  153600, {},  {  0,                                  } }, 
+    {  230400, {},  {  0,                                  } }, 
+    {  307200, {},  {  0,                                  } },
+    {  384000, {},  {  0,                                  } },
+    {  460800, {},  {  0,                                  } },
+    {  537600, {},  {  0,                                  } },
+    {  614400, {},  {  0,                                  } },
+    {  691200, {},  {  0,                                  } },
+    {  768000, {},  {  0,                                  } },
+    {  844800, {},  {  0,                                  } },
+    {  921600, {},  {  0,                                  } },
+    {  998400, {},  {  0,                                  } },
+    { 1075200, {},  {  0,                                  } },
+    { 1152000, {},  {  0,                                  } },
+    { 1228800, {},  {  0,                                  } },
+    { 1267200, {},  {  0,                                  } },
+    { 1305600, {},  {  0,                                  } },
+    { 1344000, {},  {  0,                                  } },
+    { 1382400, {},  {  0,                                  } },
+    { 1420800, {},  {  0,                                  } },
+    { 1459200, {},  {  0,                                  } },
+    { 1497600, {},  {  0,                                  } },
+    { 1536000, {},  {  0,                                  } },
+},
 //.eristaMtcTable = const_cast<EristaMtcTable *>(&EristaMtcTablePlaceholder),
 //.marikoMtcTable = const_cast<MarikoMtcTable *>(&MarikoMtcTablePlaceholder),
 .eristaCPUvMax = 1300,
