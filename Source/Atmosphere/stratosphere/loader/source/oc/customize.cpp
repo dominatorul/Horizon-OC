@@ -143,7 +143,7 @@ volatile CustomizeTable C = {
 .tDQS2DQ_max = 0.8,
 // DQS_t, DQS_c to DQ skew total, per group, per access (DBI Disabled)
 .tDQSQ = 0.18,
-z
+
 // Write-to-Read delay
 .tWTR = 10,
 
