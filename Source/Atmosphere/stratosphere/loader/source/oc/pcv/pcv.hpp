@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Switch-OC-Suite
+ * Copyright (C) hanai3bi (meha) and Souldbminer
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms and conditions of the GNU General Public License,
@@ -350,12 +350,14 @@ namespace ams::ldr::oc::pcv
             cvb_entry_t *entry = static_cast<cvb_entry_t *>(gpu_cvb_table_head);
             for (size_t i = 0; i < customize_entry_count; i++)
             {
-                if (C.marikoGpuVoltArray[i] != 0)
+                if (!(C.marikoGpuVoltArray[i] < C.gpuVmin))
                 {
                     u32 patched_voltage = C.marikoGpuVoltArray[i];
+                if(!C.gpuVmax) {
                     if(patched_voltage > C.gpuVmax) {
                         patched_voltage = C.gpuVmax;
                     }
+                }
                     PATCH_OFFSET(&(entry->cvb_pll_param.c0), patched_voltage * 1000);
                     PATCH_OFFSET(&(entry->cvb_pll_param.c1), 0);
                     PATCH_OFFSET(&(entry->cvb_pll_param.c2), 0);

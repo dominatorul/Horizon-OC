@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Switch-OC-Suite
+ * Copyright (C) hanai3bi (meha) and Souldbminer
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms and conditions of the GNU General Public License,
@@ -61,15 +61,42 @@ typedef struct CustomizeTable {
     u32 cpuMaxFreq;
     u32 gpuMaxFreq;
     u32 gpuVmax;
-    // advanced config
+    u32 gpuVmin;
+    
     u32 marikoEmcDvbShift;
-    u32 ramTimingPresetOne;
-    u32 ramTimingPresetTwo;
-    u32 ramTimingPresetThree;
-    u32 ramTimingPresetFour;
-    u32 ramTimingPresetFive;
-    u32 ramTimingPresetSix;
-    u32 ramTimingPresetSeven;
+    // ram timings
+    u32 latency;
+    u32 BL;
+    u32 tRFCpb;
+    u32 tRFCab;
+    u32 tRAS;
+    u32 tRPpb;
+    u32 tRPab;
+    u32 tRC;
+    double tDQSCK_min;
+    double tDQSCK_max;
+    double tWPRE;
+    double tRPST;
+    double tDQSS_max;
+    double tDQS2DQ_max;
+    double tDQSQ;
+    u32 tWTR;
+    double tRTP;
+    u32 tWR;
+    u32 tR2REF;
+    u32 tRCD;
+    double tRRD;
+    u32 tREFpb;
+    double tXP;
+    double tCMDCKE;
+    u32 tMRWCKEL;
+    double tCKELCS;
+    double tCSCKEH;
+    double tXSR;
+    double tCKE;
+    u32 tSR;
+    u32 tFAW;
+    double tCKCKEH;
     //
     u32 marikoGpuVoltArray[24];
 

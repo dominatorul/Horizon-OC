@@ -93,8 +93,11 @@ class AdvEntry extends CustEntry {
         e.value = String(this.value)
     }
 }
+
+
+
 class GpuEntry extends CustEntry {
-    constructor(e, t, i = CustPlatform.Mariko, n = 4, a = ["range: 480 ≤ x ≤ 960 (Zero is disabled)"], r = 480, s = [0, 960], l = 5, o = !1) {
+    constructor(e, t, i = CustPlatform.Mariko, n = 4, a = ["range: vMin ≤ x ≤ 960 (Zero is disabled)"], r = 480, s = [0, 960], l = 5, o = !1) {
         super(e, t, i, n, a, r, s, l, o), this.id = e, this.name = t, this.platform = i, this.size = n, this.desc = a, this.defval = r, this.step = l, this.zeroable = o
     }
     createElement() {
@@ -214,6 +217,13 @@ var CustTable = [
         "Anything above 800MV is considered UNSAFE (although it depends per frequency)"
     ], 800, [480, 1000], 1, !1),
 
+    new CustEntry("gpuVmin", "Mariko Minimum allowed GPU Voltage (mV)", CustPlatform.Mariko, 4, [
+        "Default: 600",
+        "This is the minimum voltage you can use in GPU UV3.",
+        "A higher Vmin is required for a higher max ram clock"
+    ], 600, [480, 1000], 1, !1),
+
+
 ];
 
 var AdvTable = [
@@ -222,96 +232,9 @@ var AdvTable = [
         "Helps with stability at higher memory clock, with the only downside being slightly higher tempratures",
         "Such functionality is completely useless on Erista units",
         "Acceptable range : 0~9"
-    ], 0, [0, 9], 1),
+    ], 0, [0, 9], 1),    
 
-    new AdvEntry("ramTimingPresetOne", "Primary RAM Timing Preset", CustPlatform.All, 4, [
-        "<b>WARNING</b>: Unstable timings can corrupt your nand",
-        "Select Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
-        "Values are : tRCD - tRP - tRAS (tRC = tRP + tRAS)",
-        "<b>0</b> : Do Not Adjust (2400Mhz: 12 - 12 - 28) (CUST_ADJ only)",
-        "<b>1</b> : 18 - 18 - 42 (Default timing)",
-        "<b>2</b> : 17 - 17 - 39",
-        "<b>3</b> : 16 - 16 - 36",
-        "<b>4</b> : 15 - 15 - 34",
-        "<b>5</b> : 14 - 14 - 32",
-        "<b>6</b> : 13 - 13 - 30"
-    ], 1, [0, 6], 1),
-
-    new AdvEntry("ramTimingPresetTwo", "Secondary RAM Timing Preset", CustPlatform.All, 4, [
-        "WARNING: Unstable timings can corrupt your nand",
-        "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
-        "Values are : tRRD - tFAW",
-        "<b>0</b> : Do Not Adjust (2400Mhz: 6.6 - 26.6) (CUST_ADJ only)",
-        "<b>1</b> : 10 - 40 (Default timing) (3733 specs)",
-        "<b>2</b> : 7.5 - 30 (4266 specs)",
-        "<b>3</b> : 6 - 24",
-        "<b>4</b> : 4 - 16",
-        "<b>5</b> : 3 - 12"
-    ], 1, [0, 5], 1),
-
-    new AdvEntry("ramTimingPresetThree", "Secondary RAM Timing Preset", CustPlatform.All, 4, [
-        "WARNING: Unstable timings can corrupt your nand",
-        "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
-        "Values are : tWR - tRTP",
-        "<b>0</b> : Do Not Adjust (2400Mhz: ?? - 5) (CUST_ADJ only)",
-        "<b>1</b> : 18 - 7.5 (Default timing)",
-        "<b>2</b> : 15 - 7.5",
-        "<b>3</b> : 15 - 6",
-        "<b>4</b> : 12 - 6",
-        "<b>5</b> : 12 - 4",
-        "<b>6</b> : 8 - 4"
-    ], 1, [0, 6], 1),
-
-    new AdvEntry("ramTimingPresetFour", "Secondary RAM Timing Preset", CustPlatform.All, 4, [
-        "WARNING: Unstable timings can corrupt your nand",
-        "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
-        "Values are : tRFC",
-        "<b>0</b> : Do Not Adjust (2400Mhz: 93.3) (CUST_ADJ only)",
-        "<b>1</b> : 140 (Default timing)",
-        "<b>2</b> : 120",
-        "<b>3</b> : 100",
-        "<b>4</b> : 80",
-        "<b>5</b> : 70",
-        "<b>6</b> : 60"
-    ], 1, [0, 6], 1),
-
-    new AdvEntry("ramTimingPresetFive", "Secondary RAM Timing Preset", CustPlatform.All, 4, [
-        "WARNING: Unstable timings can corrupt your nand",
-        "Secondary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
-        "Values are : tWTR",
-        "<b>0</b> : Do Not Adjust (2400Mhz: ??) (CUST_ADJ only)",
-        "<b>1</b> : 10 (Default timing)",
-        "<b>2</b> : 8",
-        "<b>3</b> : 6",
-        "<b>4</b> : 4",
-        "<b>5</b> : 2",
-        "<b>6</b> : 1"
-    ], 1, [0, 6], 1),
-
-    new AdvEntry("ramTimingPresetSix", "Tertiary RAM Timing Preset", CustPlatform.All, 4, [
-        "WARNING: Unstable timings can corrupt your nand",
-        "Tertiary Timing Preset for both AUTO_ADJ and CUSTOM_ADJ",
-        "Values are : tREFpb",
-        "<b>0</b> : Do Not Adjust (2400Mhz: 325) (CUST_ADJ only)",
-        "<b>1</b> : 488 (Default timing)",
-        "<b>2</b> : 976",
-        "<b>3</b> : 1952",
-        "<b>4</b> : 3256",
-        "<b>5</b> : MAX"
-    ], 1, [0, 5], 1),
-
-    new AdvEntry("ramTimingPresetSeven", "Latency Decrement", CustPlatform.All, 4, [
-        "WARNING: Unstable timings can corrupt your nand",
-        "Latency decrement for both AUTO_ADJ and CUSTOM_ADJ",
-        "This preset decreases Write/Read related delays. Values are Write - Read",
-        "<b>0</b> : 0 - 0, Do Not Adjust for CUST_ADJ",
-        "<b>1</b> : '-2' - '-4'",
-        "<b>2</b> : '-4' - '-8'",
-        "<b>3</b> : '-6' - '-12'",
-        "<b>4</b> : '-8' - '-16'",
-        "<b>5</b> : '-10' - '-20'",
-        "<b>6</b> : '-12' - '-24'"
-    ], 0, [0, 6], 1)
+    
 ];
 
 var GpuTable = [

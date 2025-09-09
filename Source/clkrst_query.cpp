@@ -99,7 +99,7 @@ double ptoGetMHz(PTO_ID pto_id, u32 divider = 1, u32 presel_reg = 0, u32 presel_
     val &= 0xFFFFFF;
     val *= divider;
 
-    double rate_mhz = (u64)val * 32768. / cycle_count / 1000. / 1000.;
+    double rate_mhz = (u64)val * 32768. / cycle_count / 1000..;
     usleep(10);
     REG(clkrst_base + 0x60) = pre_val;
     usleep(10);

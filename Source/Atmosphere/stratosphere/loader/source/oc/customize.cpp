@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Switch-OC-Suite
+ * Copyright (C) hanai3bi (meha) and Souldbminer
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms and conditions of the GNU General Public License,
@@ -103,22 +103,103 @@ volatile CustomizeTable C = {
 
 .gpuVmax = 800,
 
+.gpuVmin = 600,
+
 .marikoEmcDvbShift = 0,
 
-.ramTimingPresetOne = 0, // T1-3 EOS
+.latency = 0, // Ram latency values. Goes from 0-6. Affects tWL and tRL
 
-.ramTimingPresetTwo = 0, // T4
+.BL = 16, // Keep at 16
 
-.ramTimingPresetThree = 0, // Try all values from 0-6
+// tRFCpb (refresh cycle time per bank) in ns for 8Gb density
+.tRFCpb = 140,
 
-.ramTimingPresetFour = 0, // EOS T5
+// tRFCab (refresh cycle time all banks) in ns for 8Gb density
+.tRFCab = 280, // tRFCpb * 2
 
-.ramTimingPresetFive = 0, // EOS T7
+// tRAS (row active time) in ns
+.tRAS = 42,
 
-.ramTimingPresetSix = 0, // EOS T8
+// tRPpb (row precharge time per bank) in ns
+.tRPpb = 18,
 
-.ramTimingPresetSeven = 0, 
- //
+// tRPab (row precharge time all banks) in ns
+.tRPab = 21, // tRPab + 3
+
+// tRC (ACTIVATE-ACTIVATE command period same bank) in ns
+.tRC = 60, // tRPpb + tRAS
+
+// DQS output access time from CK_t/CK_c
+.tDQSCK_min = 1.5,
+// DQS output access time from CK_t/CK_c
+.tDQSCK_max = 3.5,
+// Write preamble (tCK)
+.tWPRE = 1.8,
+// Read postamble (tCK)
+.tRPST = 0.4,
+// WRITE command to first DQS transition(max) (tCK)
+.tDQSS_max = 1.25,
+// DQ-to-DQS offset(max) (ns)
+.tDQS2DQ_max = 0.8,
+// DQS_t, DQS_c to DQ skew total, per group, per access (DBI Disabled)
+.tDQSQ = 0.18,
+z
+// Write-to-Read delay
+.tWTR = 10,
+
+// Internal READ-to-PRE-CHARGE command delay in ns
+.tRTP = 7.5,
+
+// write recovery time
+.tWR = 18,
+
+// Read to refresh delay
+.tR2REF = 26, // Round down tRTP + tRPpb
+
+// tRCD (RAS-CAS delay) in ns
+.tRCD = 18,
+
+// tRRD (Active bank-A to Active bank-B) in ns
+.tRRD = 10.0,
+
+// tREFpb (average refresh interval per bank) in ns for 8Gb density
+.tREFpb = 488,
+// tREFab (average refresh interval all 8 banks) in ns for 8Gb density
+// const u32 tREFab = tREFpb * 8;
+
+// tPDEX2WR, tPDEX2RD (timing delay from exiting powerdown mode to a write/read command) in ns
+// const u32 tPDEX2 = 10;
+// Exit power-down to next valid command delay
+.tXP = 10,
+
+// Delay from valid command to CKE input LOW in ns
+.tCMDCKE = 1.75,
+
+// tACT2PDEN (timing delay from an activate, MRS or EMRS command to power-down entry) in ns
+// Valid clock and CS requirement after CKE input LOW after MRW command
+.tMRWCKEL = 14,
+
+// Valid CS requirement after CKE input LOW
+.tCKELCS = 5,
+
+// Valid CS requirement before CKE input HIGH
+.tCSCKEH = 1.75,
+
+// tXSR (SELF REFRESH exit to next valid command delay) in ns
+.tXSR = 287.5, // tRFCab + 7.5
+
+// tCKE (minimum pulse width(HIGH and LOW pulse width)) in ns
+.tCKE = 7.5,
+
+// Minimum self refresh time (entry to exit)
+.tSR = 15,
+
+// tFAW (Four-bank Activate Window) in ns
+.tFAW = 40,
+
+// Valid Clock requirement before CKE Input HIGH in ns
+.tCKCKEH = 1.75,
+
 .marikoGpuVoltArray = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 
 
