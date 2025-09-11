@@ -43,12 +43,16 @@ constexpr uint32_t MARIKO_MTC_MAGIC = 0x43544D4D; // MMTC
 
 typedef struct CustomizeTable {
     u8  cust[4] = {'C', 'U', 'S', 'T'};
-    u32 custRev = CUST_REV;
+    u32 custRev;
     u32 mtcConf;
     u32 commonCpuBoostClock;
     u32 commonEmcMemVolt;
+
+    // Erista CPU/EMC
     u32 eristaCpuMaxVolt;
     u32 eristaEmcMaxClock;
+
+    // Mariko CPU/EMC
     u32 marikoCpuMaxVolt;
     u32 marikoEmcMaxClock;
     u32 marikoEmcVddqVolt;
@@ -56,15 +60,16 @@ typedef struct CustomizeTable {
     u32 marikoGpuUV;
     u32 commonGpuVoltOffset;
     u32 marikoCpuHighVoltOffset;
-	u32 marikoCpuHighUV;
+    u32 marikoCpuHighUV;
 
     u32 cpuMaxFreq;
     u32 gpuMaxFreq;
     u32 gpuVmax;
     u32 gpuVmin;
-    
+
     u32 marikoEmcDvbShift;
-    // ram timings
+
+    // RAM timings (u32)
     u32 latency;
     u32 BL;
     u32 tRFCpb;
@@ -73,6 +78,16 @@ typedef struct CustomizeTable {
     u32 tRPpb;
     u32 tRPab;
     u32 tRC;
+    u32 tWTR;
+    u32 tWR;
+    u32 tR2REF;
+    u32 tRCD;
+    u32 tREFpb;
+    u32 tMRWCKEL;
+    u32 tSR;
+    u32 tFAW;
+
+    // RAM timings (double)
     double tDQSCK_min;
     double tDQSCK_max;
     double tWPRE;
@@ -80,24 +95,17 @@ typedef struct CustomizeTable {
     double tDQSS_max;
     double tDQS2DQ_max;
     double tDQSQ;
-    u32 tWTR;
     double tRTP;
-    u32 tWR;
-    u32 tR2REF;
-    u32 tRCD;
     double tRRD;
-    u32 tREFpb;
     double tXP;
     double tCMDCKE;
-    u32 tMRWCKEL;
     double tCKELCS;
     double tCSCKEH;
     double tXSR;
     double tCKE;
-    u32 tSR;
-    u32 tFAW;
     double tCKCKEH;
-    //
+
+    // Mariko GPU voltages
     u32 marikoGpuVoltArray[24];
 
     

@@ -32,9 +32,9 @@ namespace ams::ldr::oc {
         const double tCK_avg = 1000'000. / C.eristaEmcMaxClock;
 
         // Write Latency
-        const u32 WL = 14 - 2*C.latency;
+        const u32 WL = 14 + C.latency;
         // Read Latency
-        const u32 RL = 32 - 4*C.latency;
+        const u32 RL = 32 + C.latency;
 
         // minimum number of cycles from any read command to any write command, irrespective of bank
         const u32 R2W = CEIL (RL + CEIL(C.tDQSCK_max/tCK_avg) + C.BL/2 - WL + C.tWPRE + FLOOR(C.tRPST)) + 6;

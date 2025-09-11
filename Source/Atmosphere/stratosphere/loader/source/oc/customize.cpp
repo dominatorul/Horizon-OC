@@ -22,187 +22,61 @@ namespace ams::ldr::oc {
 //volatile MarikoMtcTable MarikoMtcTablePlaceholder = { .rev = MARIKO_MTC_MAGIC, };
 
 volatile CustomizeTable C = {
-/* DRAM Timing:
- * AUTO_ADJ_ALL: Auto adjust timings for Mariko LPDDR4X ≤3733 Mbps specs, 8Gb density. (Default)
- * CUSTOM_ADJ_ALL: Basically same as NO_ADJ_ALL, with core timing adjustments
- * NO_ADJ_ALL: No timing adjustment for both Erista and Mariko.
- * CUSTOMIZED_ALL: Replace with values in customized table for both Erista and Mariko.
- */
+// --- u32 fields ---
 .mtcConf = AUTO_ADJ_ALL,
-
-/* Common:
- * - Boost Clock in kHz:
- *   Default: 1785000
- *   Boost clock will be applied when applications request higher CPU frequency for quicker loading.
- *   This will be set regardless of whether sys-clk is enabled.
- */
 .commonCpuBoostClock = 1785000,
-/* - EMC Vddq (Erista Only) and RAM Vdd2 Voltage in uV
- *   Range: 1100'000 to 1250'000 uV
- *   Erista Default(HOS): 1125'000 (bootloader: 1100'000)
- *   Mariko Default: 1100'000 (It will not work without sys-clk-OC.)
- *   Value should be divided evenly by 12'500.
- *   Not enabled by default.
- */
 .commonEmcMemVolt  = 1175000,
-
-/* Erista CPU:
- * - Max Voltage in mV
- * - CpuVoltL4T: 1235
- */
 .eristaCpuMaxVolt  = 1235,
-
-/* Erista EMC(RAM):
- * - RAM Clock in kHz
- *   [WARNING]
- *   RAM overclock could be UNSTABLE if timing parameters are not suitable for your DRAM:
- *   - Graphical glitches
- *   - System instabilities
- *   - NAND corruption
- */
 .eristaEmcMaxClock = 1862400,
-
-/* Mariko CPU:
- * - Max Voltage in mV:
- *   Default voltage: 1120
- */
 .marikoCpuMaxVolt    = 1120,
-
-/* Mariko EMC(RAM):
- * - RAM Clock in kHz:
- *   Values should be ≥ 1600000, and divided evenly by 9600.
- *   [WARNING]
- *   RAM overclock could be UNSTABLE if timing parameters are not suitable for your DRAM:
- *   - Graphical glitches
- *   - System instabilities
- *   - NAND corruption
- */
 .marikoEmcMaxClock = 1996800,
-/* - EMC Vddq (Mariko Only) Voltage in uV
- *   Range: 550'000 to 650'000 uV
- *   Value should be divided evenly by 5'000
- *   Default: 600'000
- *   Not enabled by default.
- *   This will not work without sys-clk-OC.
- */
 .marikoEmcVddqVolt = 600000,
-
 .marikoCpuUV = 0,
-
 .marikoGpuUV = 0,
-
 .commonGpuVoltOffset = 0,
-
 .marikoCpuHighVoltOffset = 0,
-
 .marikoCpuHighUV = 0,
-
 .cpuMaxFreq = 1785000,
-
 .gpuMaxFreq = 921600,
-
 .gpuVmax = 800,
-
 .gpuVmin = 600,
-
 .marikoEmcDvbShift = 0,
-
-.latency = 0, // Ram latency values. Goes from 0-6. Affects tWL and tRL
-
-.BL = 16, // Keep at 16
-
-// tRFCpb (refresh cycle time per bank) in ns for 8Gb density
+.latency = 0,
+.BL = 16,
 .tRFCpb = 140,
-
-// tRFCab (refresh cycle time all banks) in ns for 8Gb density
-.tRFCab = 280, // tRFCpb * 2
-
-// tRAS (row active time) in ns
+.tRFCab = 280,
 .tRAS = 42,
-
-// tRPpb (row precharge time per bank) in ns
 .tRPpb = 18,
-
-// tRPab (row precharge time all banks) in ns
-.tRPab = 21, // tRPab + 3
-
-// tRC (ACTIVATE-ACTIVATE command period same bank) in ns
-.tRC = 60, // tRPpb + tRAS
-
-// DQS output access time from CK_t/CK_c
-.tDQSCK_min = 1.5,
-// DQS output access time from CK_t/CK_c
-.tDQSCK_max = 3.5,
-// Write preamble (tCK)
-.tWPRE = 1.8,
-// Read postamble (tCK)
-.tRPST = 0.4,
-// WRITE command to first DQS transition(max) (tCK)
-.tDQSS_max = 1.25,
-// DQ-to-DQS offset(max) (ns)
-.tDQS2DQ_max = 0.8,
-// DQS_t, DQS_c to DQ skew total, per group, per access (DBI Disabled)
-.tDQSQ = 0.18,
-
-// Write-to-Read delay
+.tRPab = 21,
+.tRC = 60,
 .tWTR = 10,
-
-// Internal READ-to-PRE-CHARGE command delay in ns
-.tRTP = 7.5,
-
-// write recovery time
 .tWR = 18,
-
-// Read to refresh delay
-.tR2REF = 26, // Round down tRTP + tRPpb
-
-// tRCD (RAS-CAS delay) in ns
+.tR2REF = 26,
 .tRCD = 18,
-
-// tRRD (Active bank-A to Active bank-B) in ns
-.tRRD = 10.0,
-
-// tREFpb (average refresh interval per bank) in ns for 8Gb density
 .tREFpb = 488,
-// tREFab (average refresh interval all 8 banks) in ns for 8Gb density
-// const u32 tREFab = tREFpb * 8;
-
-// tPDEX2WR, tPDEX2RD (timing delay from exiting powerdown mode to a write/read command) in ns
-// const u32 tPDEX2 = 10;
-// Exit power-down to next valid command delay
-.tXP = 10,
-
-// Delay from valid command to CKE input LOW in ns
-.tCMDCKE = 1.75,
-
-// tACT2PDEN (timing delay from an activate, MRS or EMRS command to power-down entry) in ns
-// Valid clock and CS requirement after CKE input LOW after MRW command
 .tMRWCKEL = 14,
-
-// Valid CS requirement after CKE input LOW
-.tCKELCS = 5,
-
-// Valid CS requirement before CKE input HIGH
-.tCSCKEH = 1.75,
-
-// tXSR (SELF REFRESH exit to next valid command delay) in ns
-.tXSR = 287.5, // tRFCab + 7.5
-
-// tCKE (minimum pulse width(HIGH and LOW pulse width)) in ns
-.tCKE = 7.5,
-
-// Minimum self refresh time (entry to exit)
 .tSR = 15,
-
-// tFAW (Four-bank Activate Window) in ns
 .tFAW = 40,
 
-// Valid Clock requirement before CKE Input HIGH in ns
+// --- double fields ---
+.tDQSCK_min = 1.5,
+.tDQSCK_max = 3.5,
+.tWPRE = 1.8,
+.tRPST = 0.4,
+.tDQSS_max = 1.25,
+.tDQS2DQ_max = 0.8,
+.tDQSQ = 0.18,
+.tRTP = 7.5,
+.tRRD = 10.0,
+.tXP = 10.0,
+.tCMDCKE = 1.75,
+.tCKELCS = 5.0,
+.tCSCKEH = 1.75,
+.tXSR = 287.5,
+.tCKE = 7.5,
 .tCKCKEH = 1.75,
 
 .marikoGpuVoltArray = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-
-
 
 
 /* Advanced Settings:
