@@ -1,6 +1,8 @@
 /*
- * Copyright (C) hanai3bi (meha)
+ * Copyright (C) Switch-OC-Suite
  *
+ * Copyright (c) 2023 hanai3Bi
+ * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms and conditions of the GNU General Public License,
  * version 2, as published by the Free Software Foundation.
@@ -16,7 +18,7 @@
 
 #include "pcv.hpp"
 #include "../mtc_timing_value.hpp"
-
+#include "../customize.hpp"
 namespace ams::ldr::oc::pcv::erista {
 
 Result CpuVoltRange(u32* ptr) {
@@ -156,43 +158,6 @@ void MemMtcTableCustomAdjust(EristaMtcTable* table) {
     table->burst_mc_regs.mc_emem_arb_timing_rc      = CEIL(GET_CYCLE_CEIL(C.tRC) / MC_ARB_DIV - 1);
     table->burst_mc_regs.mc_emem_arb_timing_rp      = CEIL(GET_CYCLE_CEIL(C.tRPpb) / MC_ARB_DIV - 1 + MC_ARB_SFA);
     table->burst_mc_regs.mc_emem_arb_timing_ras     = CEIL(GET_CYCLE_CEIL(C.tRAS) / MC_ARB_DIV - 2);
-
-    WRITE_PARAM_ALL_REG(table, emc_tfaw,     GET_CYCLE_CEIL(C.tFAW));
-    WRITE_PARAM_ALL_REG(table, emc_rrd,      GET_CYCLE_CEIL(C.tRRD));
-
-    table->burst_mc_regs.mc_emem_arb_timing_faw     = CEIL(GET_CYCLE_CEIL(C.tFAW) / MC_ARB_DIV) - 1;
-    table->burst_mc_regs.mc_emem_arb_timing_rrd     = CEIL(GET_CYCLE_CEIL(C.tRRD) / MC_ARB_DIV) - 1;
-
-    WRITE_PARAM_ALL_REG(table, emc_r2p,      GET_CYCLE_CEIL(C.tRTP));
-    WRITE_PARAM_ALL_REG(table, emc_w2p,      WTP);
-    WRITE_PARAM_ALL_REG(table, emc_rw2pden,  WTPDEN);
-
-    table->burst_mc_regs.mc_emem_arb_timing_rap2pre = CEIL(GET_CYCLE_CEIL(C.tRTP) / MC_ARB_DIV);
-    table->burst_mc_regs.mc_emem_arb_timing_wap2pre = CEIL(WTP / MC_ARB_DIV);
-
-    WRITE_PARAM_ALL_REG(table, emc_rfc,      GET_CYCLE_CEIL(C.tRFCab));
-    WRITE_PARAM_ALL_REG(table, emc_rfcpb,    GET_CYCLE_CEIL(C.tRFCpb));
-    WRITE_PARAM_ALL_REG(table, emc_txsr,     MIN(GET_CYCLE_CEIL(C.tXSR), (u32)0x3fe));
-    WRITE_PARAM_ALL_REG(table, emc_txsrdll,  MIN(GET_CYCLE_CEIL(C.tXSR), (u32)0x3fe));
-
-    table->burst_mc_regs.mc_emem_arb_timing_rfcpb   = CEIL(GET_CYCLE_CEIL(C.tRFCpb) / MC_ARB_DIV);
-
-    WRITE_PARAM_ALL_REG(table, emc_w2r, W2R);
-
-    table->burst_mc_regs.mc_emem_arb_timing_w2r     = CEIL(W2R / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-
-    WRITE_PARAM_ALL_REG(table, emc_refresh,  REFRESH);
-    WRITE_PARAM_ALL_REG(table, emc_pre_refresh_req_cnt, REFRESH / 4);
-    WRITE_PARAM_ALL_REG(table, emc_trefbw,   REFBW);
-
-    WRITE_PARAM_ALL_REG(table, emc_r2w,      R2W);
-    WRITE_PARAM_ALL_REG(table, emc_w2r,      W2R);
-    WRITE_PARAM_ALL_REG(table, emc_w2p,      WTP);
-    WRITE_PARAM_ALL_REG(table, emc_rw2pden,  WTPDEN);
-    
-    table->burst_mc_regs.mc_emem_arb_timing_wap2pre = CEIL(WTP / MC_ARB_DIV);
-    table->burst_mc_regs.mc_emem_arb_timing_r2w     = CEIL(R2W / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-    table->burst_mc_regs.mc_emem_arb_timing_w2r     = CEIL(W2R / MC_ARB_DIV) - 1 + MC_ARB_SFA;
 
     u32 DA_TURNS = 0;
     DA_TURNS |= u8(table->burst_mc_regs.mc_emem_arb_timing_r2w / 2) << 16; //R2W TURN

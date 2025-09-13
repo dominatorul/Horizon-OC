@@ -72,6 +72,8 @@ typedef struct CustomizeTable {
     // RAM timings (u32)
     u32 latency;
     u32 BL;
+    u32 WL;
+    u32 RL;
     u32 tRFCpb;
     u32 tRFCab;
     u32 tRAS;
