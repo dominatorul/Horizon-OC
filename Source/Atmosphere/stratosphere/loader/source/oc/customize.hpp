@@ -80,7 +80,6 @@ typedef struct CustomizeTable {
     u32 tRC;
     u32 tWTR;
     u32 tWR;
-    u32 tR2REF;
     u32 tRCD;
     u32 tREFpb;
     u32 tMRWCKEL;
@@ -88,6 +87,7 @@ typedef struct CustomizeTable {
     u32 tFAW;
 
     // RAM timings (double)
+    double tR2REF;
     double tDQSCK_min;
     double tDQSCK_max;
     double tWPRE;

@@ -318,9 +318,6 @@ namespace ams::ldr::oc::pcv
             case 2:
                 customize_table = const_cast<cvb_entry_t *>(C.marikoGpuDvfsTableHiOPT);
                 break;
-            case 3:
-                customize_table = const_cast<cvb_entry_t *>(C.marikoGpuDvfsTableUv3);
-                break;
             default:
                 customize_table = const_cast<cvb_entry_t *>(C.marikoGpuDvfsTable);
                 break;
@@ -350,10 +347,10 @@ namespace ams::ldr::oc::pcv
             cvb_entry_t *entry = static_cast<cvb_entry_t *>(gpu_cvb_table_head);
             for (size_t i = 0; i < customize_entry_count; i++)
             {
-                if (!(C.marikoGpuVoltArray[i] < C.gpuVmin))
+                if (C.marikoGpuVoltArray[i] < C.gpuVmin)
                 {
                     u32 patched_voltage = C.marikoGpuVoltArray[i];
-                if(!C.gpuVmax) {
+                if(C.gpuVmax) {
                     if(patched_voltage > C.gpuVmax) {
                         patched_voltage = C.gpuVmax;
                     }
