@@ -13,7 +13,7 @@
  *
  */
 
-#define __version__ "4.5.1-multithread-ocs2"
+#define __version__ "4.5.1-multithread"
 
 // Include the most common headers from the C standard library
 #include <stddef.h>
@@ -241,10 +241,9 @@ int main(int argc, char* argv[])
     bool isDevKit8GB = false;
 
     printf("MemTesterNX version " __version__ " (%d-bit)\n"\
-           "Based on memtester. Copyright (C) 2001-2020 Charles Cazabon, 2021 KazushiMe, 2025 Souldbminer.\n"\
+           "Based on memtester. Copyright (C) 2001-2020 Charles Cazabon, 2021 KazushiMe.\n"\
            "Licensed under the GNU General Public License version 2 (only).\n\n"\
            "Support full RAM test (up to 8GB) with 3-4 threads.\n"\
-           "Ensure to set your CPU and GPU freq to maximum to get the best result.\n"\
            "It will be looping forever until error occurs or user exits to HOME screen.\n\n"\
            "Press A: long test\n"\
            "Press X: fast test\n"\

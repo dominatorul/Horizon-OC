@@ -1,6 +1,8 @@
 /*
- * Copyright (C) hanai3bi (meha)
+ * Copyright (C) Switch-OC-Suite
  *
+ * Copyright (c) 2023 hanai3Bi
+ * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms and conditions of the GNU General Public License,
  * version 2, as published by the Free Software Foundation.
@@ -93,9 +95,34 @@ void SafetyCheck() {
 
     u32 eristaCpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaCpuDvfsTable)->freq);
     u32 marikoCpuDvfsMaxFreq = static_cast<u32>(C.marikoCpuUV ? GetDvfsTableLastEntry(C.marikoCpuDvfsTableSLT)->freq : GetDvfsTableLastEntry(C.marikoCpuDvfsTable)->freq);
-    u32 eristaGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaGpuDvfsTable)->freq);
+    u32 eristaGpuDvfsMaxFreq;
+    switch (C.eristaGpuUV)
+    {
+    case 0:
+        eristaGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaGpuDvfsTable)->freq);
+        break;
+    case 1:
+        eristaGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaGpuDvfsTableSLT)->freq);
+        break;
+    case 2:
+        eristaGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaGpuDvfsTableHigh)->freq);
+        break;
+    case 3:
+        if(C.enableEristaGpuUnsafeFreqs) 
+        {
+            eristaGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaGpuDvfsTableUv3UnsafeFreqs)->freq);
+        } 
+        else 
+        {
+            eristaGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaGpuDvfsTable)->freq);
+        }
+        break;
+    default:
+        eristaGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaGpuDvfsTable)->freq);
+        break;
+    }
+
     u32 marikoGpuDvfsMaxFreq;
-    u32 temporaryMaxFreqForCalculation = C.gpuMaxFreq;
     switch (C.marikoGpuUV) {
         case 0: 
             marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTable)->freq);
@@ -106,27 +133,23 @@ void SafetyCheck() {
         case 2: 
             marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTableHiOPT)->freq);
             break;
-        case 3: 
-            marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTableUv3)->freq);
-            temporaryMaxFreqForCalculation = 1536'000;
-            break;
         default: 
             marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTable)->freq);
             break;
     }
     
     sValidator validators[] = {
-        { C.commonCpuBoostClock, 1020'000, C.cpuMaxFreq + 1, true },
-        { C.commonEmcMemVolt,    1000'000, C.MemVltMax + 1 },
-        { C.eristaCpuMaxVolt,        1100,     C.eristaCPUvMax + 1 },
-        { C.eristaEmcMaxClock,   1600'000, 2428'800 },
-        { C.marikoCpuMaxVolt,         800,     C.marikoCPUvMax + 1 },
-        { C.marikoEmcMaxClock,   1600'000, 3504'000 },
-        { C.marikoEmcVddqVolt,    550'000,  C.marikoVDDQMax + 1 },
-        { eristaCpuDvfsMaxFreq,  1785'000, C.cpuMaxFreq + 1 },
-        { marikoCpuDvfsMaxFreq,  1785'000, C.cpuMaxFreq + 1 },
-        { eristaGpuDvfsMaxFreq,   76'800, C.gpuMaxFreq + 1 },
-        { marikoGpuDvfsMaxFreq,   76'800, temporaryMaxFreqForCalculation + 1 },
+        { C.commonCpuBoostClock, 1020'000, 3000'000, true },
+        { C.commonEmcMemVolt,    1100'000, 1500'000 }, // Official burst vmax for the RAMs
+        { C.eristaCpuMaxVolt,        1100,     1300 },
+        { C.eristaEmcMaxClock,   1600'000, 2600'200 },
+        { C.marikoCpuMaxVolt,        1100,     1300 },
+        { C.marikoEmcMaxClock,   1600'000, 3500'000 },
+        { C.marikoEmcVddqVolt,    550'000,  650'000 },
+        { eristaCpuDvfsMaxFreq,  1785'000, 3000'000 },
+        { marikoCpuDvfsMaxFreq,  1785'000, 3000'000 },
+        { eristaGpuDvfsMaxFreq,   768'000, 1536'000 },
+        { marikoGpuDvfsMaxFreq,   768'000, 1536'000 },
     };
 
     for (auto& i : validators) {
