@@ -14,17 +14,14 @@
 #include "logo_rgba_bin.h"
 
 
-#define LOGO_WIDTH 110
-#define LOGO_HEIGHT 39
-#define LOGO_X 18
-#define LOGO_Y 21
 
-#define LOGO_LABEL_X (LOGO_X + LOGO_WIDTH + 6)
-#define LOGO_LABEL_Y 50
-#define LOGO_LABEL_FONT_SIZE 28
 
-#define VERSION_X (LOGO_LABEL_X + 110+8)
-#define VERSION_Y LOGO_LABEL_Y-4
+#define LOGO_X 20
+#define LOGO_Y 45
+#define LOGO_LABEL_FONT_SIZE 35
+
+#define VERSION_X (LOGO_X + 250)
+#define VERSION_Y LOGO_Y-40
 #define VERSION_FONT_SIZE 15
 
 std::string getVersionString() {
@@ -38,9 +35,9 @@ std::string getVersionString() {
 
 void BaseGui::preDraw(tsl::gfx::Renderer* renderer)
 {
-    renderer->drawBitmap(LOGO_X, LOGO_Y, LOGO_WIDTH, LOGO_HEIGHT, logo_rgba_bin);
-    renderer->drawString("overlay", false, LOGO_LABEL_X, LOGO_LABEL_Y, LOGO_LABEL_FONT_SIZE, renderer->a(TEXT_COLOR));
-    renderer->drawString(TARGET_VERSION, false, VERSION_X, VERSION_Y, VERSION_FONT_SIZE, tsl::bannerVersionTextColor);
+//    renderer->drawBitmap(LOGO_X, LOGO_Y, LOGO_WIDTH, LOGO_HEIGHT, logo_rgba_bin);
+    renderer->drawString("sys-clk-ocs2 overlay", false, LOGO_X, LOGO_Y, LOGO_LABEL_FONT_SIZE, renderer->a(TEXT_COLOR));
+//    renderer->drawString(TARGET_VERSION, false, VERSION_X, VERSION_Y, VERSION_FONT_SIZE, tsl::bannerVersionTextColor);
 }
 
 tsl::elm::Element* BaseGui::createUI()

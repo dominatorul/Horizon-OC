@@ -115,11 +115,6 @@ Result sysclkIpcSetConfigValues(SysClkConfigValueList* configValues)
     return serviceDispatchIn(&g_sysclkSrv, SysClkIpcCmd_SetConfigValues, *configValues);
 }
 
-Result SysClkIpcToggleUncappedClocks(bool toggled)
-{
-    return serviceDispatchIn(&g_sysclkSrv, SysClkIpcCmd_ToggleUncappedClocks, *toggled);
-}
-
 Result sysclkIpcGetFreqList(SysClkModule module, u32* list, u32 maxCount, u32* outCount)
 {
     SysClkIpc_GetFreqList_Args args = {

@@ -25,14 +25,6 @@ namespace ams::ldr::oc {
 //volatile MarikoMtcTable MarikoMtcTablePlaceholder = { .rev = MARIKO_MTC_MAGIC, };
 
 volatile CustomizeTable C = {
-/* DRAM Timing:
- * AUTO_ADJ_ALL: Auto adjust timings for Mariko LPDDR4X ≤3733 Mbps specs, 8Gb density. (Default)
- * CUSTOM_ADJ_ALL: Basically same as NO_ADJ_ALL, with core timing adjustments
- * NO_ADJ_ALL: No timing adjustment for both Erista and Mariko.
- * CUSTOMIZED_ALL: Replace with values in customized table for both Erista and Mariko.
- */
-.mtcConf = AUTO_ADJ_ALL,
-
 /* Common:
  * - Boost Clock in kHz:
  *   Default: 1785000
@@ -40,6 +32,7 @@ volatile CustomizeTable C = {
  *   This will be set regardless of whether sys-clk is enabled.
  */
 .commonCpuBoostClock = 1785000,
+
 /* - EMC Vddq (Erista Only) and RAM Vdd2 Voltage in uV
  *   Range: 1100'000 to 1250'000 uV
  *   Erista Default(HOS): 1125'000 (bootloader: 1100'000)
@@ -47,13 +40,13 @@ volatile CustomizeTable C = {
  *   Value should be divided evenly by 12'500.
  *   Not enabled by default.
  */
-.commonEmcMemVolt  = 0,
+.commonEmcMemVolt  = 1237500,
 
 /* Erista CPU:
  * - Max Voltage in mV
  * - CpuVoltL4T: 1235
  */
-.eristaCpuMaxVolt  = 1235,
+.eristaCpuMaxVolt  = 1257,
 
 /* Erista EMC(RAM):
  * - RAM Clock in kHz
@@ -63,13 +56,13 @@ volatile CustomizeTable C = {
  *   - System instabilities
  *   - NAND corruption
  */
-.eristaEmcMaxClock = 1862400,
+.eristaEmcMaxClock = 2132640,
 
 /* Mariko CPU:
  * - Max Voltage in mV:
  *   Default voltage: 1120
  */
-.marikoCpuMaxVolt    = 1235,
+.marikoCpuMaxVolt    = 1257,
 
 /* Mariko EMC(RAM):
  * - RAM Clock in kHz:
@@ -96,34 +89,36 @@ volatile CustomizeTable C = {
 
 .eristaCpuUV = 0,
 
-.eristaGpuUV = 1,
+.eristaGpuUV = 3,
 
 .enableMarikoGpuUnsafeFreqs = DISABLED,
 
-.enableEristaGpuUnsafeFreqs = DISABLED,
+.enableEristaGpuUnsafeFreqs = ENABLED,
 
 .enableMarikoCpuUnsafeFreqs = DISABLED,
 
-.enableEristaCpuUnsafeFreqs = DISABLED,
+.enableEristaCpuUnsafeFreqs = ENABLED,
 
-.commonGpuVoltOffset = 0,
+.commonGpuVoltOffset = 0, // TODO: Split tRCD, tRP and tRAS into separate timings
 
-.marikoEmcDvbShift = 0,
+.marikoEmcDvbShift = 4,
 
 .ramTimingPresetOne = 0,
 
-.ramTimingPresetTwo = 0,
+.ramTimingPresetTwo = 1,
 
 .ramTimingPresetThree = 0,
 
-.ramTimingPresetFour = 0,
+.ramTimingPresetFour = 2,
 
-.ramTimingPresetFive = 0,
+.ramTimingPresetFive = 4,
 
-.ramTimingPresetSix = 0,
+.ramTimingPresetSix = 4, // Keep at 4, most optimal
 
 .ramTimingPresetSeven = 0, // Sets the BL of the ram. Change to 2 to get 1866BL and set to 0 to keep the default 1600BL
 
+// Erista default (HB-MGCH ST timing)
+// 
 // NOTE: These tables should NOT BE USED and are only here as placeholders. Always try and find your own optimal tables.
 
 .marikoGpuVoltArray = {
@@ -143,6 +138,7 @@ volatile CustomizeTable C = {
     710  /* 1075 */, 
     735  /* 1152 */, 
     785  /* 1228 */, 
+    0    /* 1267  (Disabled by default) */,
     0    /* 1305  (Disabled by default) */,
     0    /* 1344  (Disabled by default) */,
     0    /* 1382  (Disabled by default) */,
@@ -164,11 +160,11 @@ volatile CustomizeTable C = {
     850  /* 614  */,
     875  /* 691  */,
     900  /* 768  */,
-    950 /* 844  */,
-    975 /* 921  */,
-    0   /* 998   (Disabled by default) */,
-    0   /* 1075 (Disabled by default) */,
-    0   /* 1152 (Disabled by default) */,
+    950  /* 844  */,
+    975  /* 921  */,
+    910    /* 998  (Disabled by default) */,
+    950    /* 1075 (Disabled by default) */,
+    1000    /* 1152 (Disabled by default) */,
 },
 
 /* Advanced Settings:
@@ -191,15 +187,6 @@ volatile CustomizeTable C = {
     { 1581000, { 1130000 }, {  2889664, -122173,  1834 } },
     { 1683000, { 1168000 }, {  5100873, -279186,  4747 } },
     { 1785000, { 1227500 }, {  5100873, -279186,  4747 } },
-    // Appending table
-    { 1887000, { 1235000 }, {  5100873, -279186,  4747 } },
-    { 1963500, { 1235000 }, {  5100873, -279186,  4747 } },
-    { 2091000, { 1235000 }, {  5100873, -279186,  4747 } },
-    { 2193000, { 1235000 }, {  5100873, -279186,  4747 } },
-    { 2295000, { 1235000 }, {  5100873, -279186,  4747 } },
-    { 2397000, { 1235000 }, {  5100873, -279186,  4747 } },
-    { 2499000, { 1235000 }, {  5100873, -279186,  4747 } },
-    { 2602000, { 1235000 }, {  5100873, -279186,  4747 } },
 },
 
 /* - Mariko CPU DVFS Table:
@@ -330,8 +317,8 @@ volatile CustomizeTable C = {
     {  998400, {}, { 1098475, -13529, -497, -179,   3626,   9 } },
     { 1075200, {}, { 1163644, -12688, -648,    0,   1077,  40 } },
     { 1152000, {}, { 1204812,  -9908, -830,    0,   1469, 110 } },
-    { 1228800, {}, { 1277303, -11675, -859,    0,   3722, 313 } },
-    { 1267200, {}, { 1335531, -12567, -867,    0,   3681, 559 } },
+    // { 1228800, {}, { 1277303, -11675, -859,    0,   3722, 313 } },
+    // { 1267200, {}, { 1335531, -12567, -867,    0,   3681, 559 } },
     // Appending table
     //{ 1305600, {}, { 1374130, -13725, -859,    0,   4442, 576 } },
 },
@@ -353,7 +340,7 @@ volatile CustomizeTable C = {
 	{ 1075200, {}, { 1155798, -13465,   -648,      0,    1077,     40 } },
 	{ 1152000, {}, { 1198568, -10904,   -830,      0,    1469,    110 } },
 	{ 1228800, {}, { 1269988, -12707,   -859,      0,    3722,    313 } },
-	{ 1267200, {}, { 1308155, -13694,   -867,      0,    3681,    559 } },
+	// { 1267200, {}, { 1308155, -13694,   -867,      0,    3681,    559 } },
 },
 .marikoGpuDvfsTableHiOPT = {
     {   76800, {}, {  590000,                                  } }, 
@@ -372,7 +359,7 @@ volatile CustomizeTable C = {
 	{ 1075200, {}, { 1132576, -16093, -648,    0,   1077,   40 } }, 
 	{ 1152000, {}, { 1180029, -14534, -830,    0,   1469,  110 } }, 
 	{ 1228800, {}, { 1248293, -16383, -859,    0,   3722,  313 } },
-    { 1267200, {}, { 1286399, -17475, -867,    0,   3681,  559 } },
+    // { 1267200, {}, { 1286399, -17475, -867,    0,   3681,  559 } },
 },
 
 //.eristaMtcTable = const_cast<EristaMtcTable *>(&EristaMtcTablePlaceholder),
@@ -455,9 +442,32 @@ volatile CustomizeTable C = {
     { 2703000, { 1857394,   -37019,      113 }, { 1235000 } },
 	{ 2805000, { 1908891,   -37707,      113 }, { 1235000 } },
 	{ 2907000, { 1960388,   -38395,      113 }, { 1235000 } },
-
 },
-
+.eristaCpuDvfsTableUnsafeFreqs = {
+    {  204000, {  721094 }, {} },
+    {  306000, {  754040 }, {} },
+    {  408000, {  786986 }, {} },
+    {  510000, {  819932 }, {} },
+    {  612000, {  852878 }, {} },
+    {  714000, {  885824 }, {} },
+    {  816000, {  918770 }, {} },
+    {  918000, {  951716 }, {} },
+    { 1020000, {  984662 }, { -2875621,  358099, -8585 } },
+    { 1122000, { 1017608 }, {   -52225,  104159, -2816 } },
+    { 1224000, { 1050554 }, {  1076868,    8356,  -727 } },
+    { 1326000, { 1083500 }, {  2208191,  -84659,  1240 } },
+    { 1428000, { 1116446 }, {  2519460, -105063,  1611 } },
+    { 1581000, { 1130000 }, {  2889664, -122173,  1834 } },
+    { 1683000, { 1168000 }, {  5100873, -279186,  4747 } },
+    { 1785000, { 1227500 }, {  5100873, -279186,  4747 } },
+    // Appending table
+    { 1887000, { 1235000 }, {  5200873, -279186,  4747 } },
+    { 1963500, { 1235000 }, {  5300873, -279186,  4747 } },
+    { 2091000, { 1235000 }, {  5400873, -289186,  4847 } },
+    { 2193000, { 1235000 }, {  5500873, -299186,  4947 } },
+    { 2295000, { 1235000 }, {  5600873, -239186,  5047 } },
+    { 2397000, { 1235000 }, {  5700873, -249186,  5047 } },
+    },
 };
 
 }

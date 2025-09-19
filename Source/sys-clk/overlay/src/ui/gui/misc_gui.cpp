@@ -179,8 +179,6 @@ int MiscGui::getConfigIntValue(const std::string& iniKey, int defaultValue)
     return defaultValue;
 }
 
-SysClkIpcToggleUncappedClocks(SysClkModule_CPU, g_freq_table_hz[SysClkModule_CPU][result])
-
 void MiscGui::setConfigValue(const std::string& iniKey, bool value)
 {
     if(iniKey == "uncapped_clocks") {

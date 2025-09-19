@@ -257,7 +257,7 @@ namespace ams::ldr::oc::pcv
                 ? (C.enableMarikoCpuUnsafeFreqs
                       ? C.marikoCpuDvfsTableUnsafeFreqs
                       : (C.marikoCpuUV ? C.marikoCpuDvfsTableSLT : C.marikoCpuDvfsTable))
-                : C.eristaCpuDvfsTable
+                : (C.enableEristaCpuUnsafeFreqs ? C.eristaCpuDvfsTableUnsafeFreqs : C.eristaCpuDvfsTable)
         );
         u32 cpu_max_volt = isMariko ? C.marikoCpuMaxVolt : C.eristaCpuMaxVolt;
         u32 cpu_freq_threshold = 1020'000;
@@ -383,7 +383,7 @@ namespace ams::ldr::oc::pcv
         std::memcpy(gpu_cvb_table_head, (void *)customize_table, customize_table_size);
 
         // Patch GPU volt
-        if (C.marikoGpuUV == 3 || C.eristaGpuUV == 1)
+        if (C.marikoGpuUV == 3 || C.eristaGpuUV == 3)
         {
             cvb_entry_t *entry = static_cast<cvb_entry_t *>(gpu_cvb_table_head);
             for (size_t i = 0; i < customize_entry_count; i++)

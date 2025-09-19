@@ -46,7 +46,7 @@ constexpr uint32_t MARIKO_MTC_MAGIC = 0x43544D4D; // MMTC
 typedef struct CustomizeTable {
     u8  cust[4] = {'C', 'U', 'S', 'T'};
     u32 custRev = CUST_REV;
-    u32 mtcConf;
+    u32 mtcConf = AUTO_ADJ_ALL;
     u32 commonCpuBoostClock;
     u32 commonEmcMemVolt;
     u32 eristaCpuMaxVolt;
@@ -77,7 +77,7 @@ typedef struct CustomizeTable {
     u32 ramTimingPresetSix;
     u32 ramTimingPresetSeven;
     //
-    u32 marikoGpuVoltArray[23];
+    u32 marikoGpuVoltArray[24];
     u32 eristaGpuVoltArray[15];
 
     CustomizeCpuDvfsTable eristaCpuDvfsTable;
@@ -97,6 +97,8 @@ typedef struct CustomizeTable {
     CustomizeGpuDvfsTable eristaGpuDvfsTableUv3UnsafeFreqs;
     CustomizeGpuDvfsTable marikoGpuDvfsTableUv3UnsafeFreqs;
     CustomizeCpuDvfsTable marikoCpuDvfsTableUnsafeFreqs;
+    CustomizeCpuDvfsTable eristaCpuDvfsTableUnsafeFreqs;
+
 } CustomizeTable;
 //static_assert(sizeof(CustomizeTable) == sizeof(u8) * 4 + sizeof(u32) * 10 + sizeof(CustomizeCpuDvfsTable) * 5 + sizeof(void*) * 2);
 //static_assert(sizeof(CustomizeTable) == 7000);

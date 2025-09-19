@@ -30,8 +30,7 @@ enum SysClkIpcCmd
     SysClkIpcCmd_SetOverride = 8,
     SysClkIpcCmd_GetConfigValues = 9,
     SysClkIpcCmd_SetConfigValues = 10,
-    SysClkIpcCmd_ToggleUncappedClocks = 11,
-    SysClkIpcCmd_GetFreqList = 12,
+    SysClkIpcCmd_GetFreqList = 11,
 };
 
 

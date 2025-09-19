@@ -23,6 +23,10 @@ class Board
     static void Initialize();
     static void Exit();
     static void ResetToStock();
+    static void ResetToStockCpu();
+    static void ResetToStockMem();
+    static void ResetToStockGpu();
+
     static SysClkProfile GetProfile();
     static void SetHz(SysClkModule module, std::uint32_t hz);
     static std::uint32_t GetHz(SysClkModule module);

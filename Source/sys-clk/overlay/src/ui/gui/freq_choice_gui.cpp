@@ -8,60 +8,124 @@
  * --------------------------------------------------------------------------
  */
 
-#include "freq_choice_gui.h"
+ #include "freq_choice_gui.h"
 
-#include "../format.h"
-#include "fatal_gui.h"
+ #include "../format.h"
+ #include "fatal_gui.h"
+ 
+ FreqChoiceGui::FreqChoiceGui(std::uint32_t selectedHz, std::uint32_t *hzList, std::uint32_t hzCount, SysClkModule module, FreqChoiceListener listener)
+ {
+     this->selectedHz = selectedHz;
+     this->hzList = hzList;
+     this->hzCount = hzCount;
+     this->module = module; // Add this
+     this->listener = listener;
+ }
+ 
+ tsl::elm::ListItem* FreqChoiceGui::createFreqListItem(std::uint32_t hz, bool selected, int safety)
+ {
+     std::string text = formatListFreqHz(hz);
+     if (selected) text += " \uE14B";
+ 
+     tsl::elm::ListItem* listItem = new tsl::elm::ListItem(text, "", false);
+ 
+     switch (safety)
+     {
+     case 0:
+         listItem->setTextColor(tsl::Color(255, 255, 255, 255));
+         listItem->setValueColor(tsl::Color(255, 255, 255, 255));
+         break;
+     case 1:
+         listItem->setTextColor(tsl::Color(255, 165, 0, 255));
+         listItem->setValueColor(tsl::Color(255, 165, 0, 255));
+         break;
+     case 2:
+         listItem->setTextColor(tsl::Color(255, 0, 0, 255));
+         listItem->setValueColor(tsl::Color(255, 0, 0, 255));
+         break;
+     }
+ 
+     listItem->setClickListener([this, hz](u64 keys)
+     {
+         if ((keys & HidNpadButton_A) == HidNpadButton_A && this->listener) {
+             if (this->listener(hz)) {
+                 tsl::goBack();
+             }
+             return true;
+         }
+         return false;
+     });
+ 
+     return listItem;
+ }
+ 
+ void FreqChoiceGui::listUI()
+ {
+     // Add CategoryHeader based on module
+     std::string moduleName = sysclkFormatModule(this->module, false);
+     this->listElement->addItem(new tsl::elm::CategoryHeader(moduleName));
+ 
+     this->listElement->addItem(this->createFreqListItem(0, this->selectedHz == 0, false));
+     std::uint32_t hz;
+     for (std::uint32_t i = 0; i < this->hzCount; i++)
+     {
+         hz = this->hzList[i];
+         uint32_t mhz = hz / 1000000;
+         // Skip 204 MHz exactly
+         if (moduleName == "mem" && mhz <= 600)
+         {
+             continue;
+         }
+         uint32_t unsafe_cpu;
+         uint32_t unsafe_gpu;
+         uint32_t danger_cpu;
+         uint32_t danger_gpu;
+         if (IsMariko())
+         {
+             unsafe_cpu = 1964;
+             unsafe_gpu = 1153;
+             danger_cpu = 2398;
+             danger_gpu = 1306;
+         }
+         else
+         {
+             unsafe_cpu = 1786;
+             unsafe_gpu = 922;
+             danger_cpu = 2092;
+             danger_gpu = 999;
+         }
 
-FreqChoiceGui::FreqChoiceGui(std::uint32_t selectedHz, std::uint32_t* hzList, std::uint32_t hzCount, SysClkModule module, FreqChoiceListener listener)
-{
-    this->selectedHz = selectedHz;
-    this->hzList = hzList;
-    this->hzCount = hzCount;
-    this->module = module;  // Add this
-    this->listener = listener;
-}
-
-tsl::elm::ListItem* FreqChoiceGui::createFreqListItem(std::uint32_t hz, bool selected)
-{
-    tsl::elm::ListItem* listItem = new tsl::elm::ListItem(formatListFreqHz(hz), "", true);
-    listItem->setValue(selected ? "\uE14B" : "");
-
-    listItem->setClickListener([this, hz](u64 keys) {
-        if((keys & HidNpadButton_A) == HidNpadButton_A && this->listener)
-        {
-            if(this->listener(hz))
-            {
-                tsl::goBack();
-            }
-            return true;
-        }
-
-        return false;
-    });
-
-    return listItem;
-}
-
-void FreqChoiceGui::listUI()
-{
-    // Add CategoryHeader based on module
-    std::string moduleName = sysclkFormatModule(this->module, true);
-    this->listElement->addItem(new tsl::elm::CategoryHeader(moduleName));
-    
-    this->listElement->addItem(this->createFreqListItem(0, this->selectedHz == 0));
-    std::uint32_t hz;
-    for(std::uint32_t i = 0; i < this->hzCount; i++) {
-        hz = this->hzList[i];
-        // Skip 204 MHz exactly
-        if(moduleName == "Memory" && hz == 204000000) {
+         if (moduleName == "cpu") {
+             if (mhz >= danger_cpu) {
+                 this->listElement->addItem(this->createFreqListItem(hz, mhz == this->selectedHz / 1000000, 2));
+                 continue;
+             }
+             if (mhz >= unsafe_cpu) {
+                 this->listElement->addItem(this->createFreqListItem(hz, mhz == this->selectedHz / 1000000, 1));
+                 continue;
+             }
+             if (mhz <= unsafe_cpu) {
+                this->listElement->addItem(this->createFreqListItem(hz, mhz == this->selectedHz / 1000000, 0));
+                continue;
+             }
+         } else if (moduleName == "gpu") {
+             if (mhz >= danger_gpu) {
+                 this->listElement->addItem(this->createFreqListItem(hz, mhz == this->selectedHz / 1000000, 2));
+                 continue;
+             }
+             if (mhz >= unsafe_gpu) {
+                 this->listElement->addItem(this->createFreqListItem(hz, mhz == this->selectedHz / 1000000, 1));
+                 continue;
+             }
+             if (mhz <= unsafe_gpu) {
+                this->listElement->addItem(this->createFreqListItem(hz, mhz == this->selectedHz / 1000000, 0));
+                continue;
+             }
+         } else if (moduleName == "mem") {
+            this->listElement->addItem(this->createFreqListItem(hz, mhz == this->selectedHz / 1000000, 0));
             continue;
-        }
-        // if(moduleName == "GPU") {
-        //     if(BaseGui::isMariko() && is)
-        //     continue;
-        // }
-        this->listElement->addItem(this->createFreqListItem(hz, (hz / 1000000) == (this->selectedHz / 1000000)));
-    }
-    this->listElement->jumpToItem("", "");
-}
+         }
+         
+     }
+     this->listElement->jumpToItem("", "");
+ }

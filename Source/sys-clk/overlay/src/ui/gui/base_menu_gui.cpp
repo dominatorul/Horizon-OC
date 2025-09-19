@@ -41,7 +41,7 @@ void BaseMenuGui::preDraw(tsl::gfx::Renderer* renderer) {
     
     // All constants pre-calculated and cached
     static constexpr const char* const labels[10] = {
-        "App ID", "Profile", "CPU", "GPU", "MEM", "SOC", "PCB", "Skin", "Now", "Avg"
+        "App ID", "Profile", "CPU", "GPU", "MEM", "SoC", "Board", "Skin", "Now", "Avg"
     };
 
     static constexpr u32 dataPositions[6] = {63-3+3, 200-1, 344-1-3, 200-1, 342-1, 321-1};
@@ -57,7 +57,7 @@ void BaseMenuGui::preDraw(tsl::gfx::Renderer* renderer) {
     }
     static u32 positions[10] = {24-1, 310-labelWidths[1], 24-1, 192-labelWidths[3], 332-labelWidths[4], 24-1, 192 - labelWidths[6], 332-labelWidths[7], 192 - labelWidths[8], 332-labelWidths[9]};
 
-    static u32 maxProfileValueWidth = renderer->getTextDimensions("Official Charger", false, SMALL_TEXT_SIZE).first; // longest word
+    static u32 maxProfileValueWidth = renderer->getTextDimensions("PD Charger", false, SMALL_TEXT_SIZE).first; // longest word
 
     u32 y = 91;
     
@@ -243,9 +243,9 @@ void BaseMenuGui::refresh()
     sprintf(displayStrings[7], "%u.%u MHz", hz / 1000000U, (hz / 100000U) % 10U);
     
     // Voltages
-    sprintf(displayStrings[8], "%u mV", cpuVoltageUv / 1000U);
-    sprintf(displayStrings[9], "%u mV", gpuVoltageUv / 1000U);
-    
+    sprintf(displayStrings[8], "%.1f mV", cpuVoltageUv / 1000.0);
+    sprintf(displayStrings[9], "%.1f mV", gpuVoltageUv / 1000.0);
+
     // Memory voltage (handle VDD case)
     if (emcVoltageUv && vddVoltageUv) {
         //sprintf(displayStrings[10], "%u%u mV", vddVoltageUv / 1000U, emcVoltageUv / 1000U);

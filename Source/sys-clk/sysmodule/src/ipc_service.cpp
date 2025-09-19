@@ -154,12 +154,6 @@ Result IpcService::ServiceHandlerFunc(void* arg, const IpcServerRequest* r, u8* 
                 return ipcSrv->SetConfigValues((SysClkConfigValueList*)r->data.ptr);
             }
             break;
-        case SysClkIpcCmd_ToggleUncappedClocks:
-                if(r->data.size >= sizeof(SysClkConfigValueList))
-                {
-                    return ipcSrv->SetConfigValues((SysClkConfigValueList*)r->data.ptr);
-                }
-            break;
         case SysClkIpcCmd_GetFreqList:
             if(r->data.size >= sizeof(SysClkIpc_GetFreqList_Args) && r->hipc.meta.num_recv_buffers >= 1)
             {

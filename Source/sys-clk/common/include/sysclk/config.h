@@ -20,11 +20,10 @@ typedef enum {
     SysClkConfigValue_PowerLogIntervalMs,
     SysClkConfigValue_CsvWriteIntervalMs,
     SysClkConfigValue_EnumMax,
-    SysClkConfigValue_UncappedClocks,
 } SysClkConfigValue;
 
 typedef struct {
-    uint64_t values[SysClkConfigValue_UncappedClocks];
+    uint64_t values[SysClkConfigValue_EnumMax];
 } SysClkConfigValueList;
 
 static inline const char* sysclkFormatConfigValue(SysClkConfigValue val, bool pretty)

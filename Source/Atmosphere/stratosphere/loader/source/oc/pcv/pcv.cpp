@@ -92,9 +92,18 @@ void SafetyCheck() {
             R_SUCCEED();
         }
     };
-
-    u32 eristaCpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaCpuDvfsTable)->freq);
-    u32 marikoCpuDvfsMaxFreq = static_cast<u32>(C.marikoCpuUV ? GetDvfsTableLastEntry(C.marikoCpuDvfsTableSLT)->freq : GetDvfsTableLastEntry(C.marikoCpuDvfsTable)->freq);
+    u32 eristaCpuDvfsMaxFreq;
+    if (C.enableEristaCpuUnsafeFreqs) {
+        eristaCpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaCpuDvfsTableUnsafeFreqs)->freq);
+    } else {
+        eristaCpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaCpuDvfsTable)->freq);
+    }
+    u32 marikoCpuDvfsMaxFreq;
+    if(C.enableMarikoCpuUnsafeFreqs) {
+        marikoCpuDvfsMaxFreq = static_cast<u32>(C.marikoCpuUV ? GetDvfsTableLastEntry(C.marikoCpuDvfsTableSLT)->freq : GetDvfsTableLastEntry(C.marikoCpuDvfsTable)->freq);
+    } else {
+        marikoCpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoCpuDvfsTableUnsafeFreqs)->freq);
+    }
     u32 eristaGpuDvfsMaxFreq;
     switch (C.eristaGpuUV)
     {
@@ -133,6 +142,16 @@ void SafetyCheck() {
         case 2: 
             marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTableHiOPT)->freq);
             break;
+        case 3:
+            if(C.enableMarikoGpuUnsafeFreqs) 
+            {
+                marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTableUv3UnsafeFreqs)->freq);
+            } 
+            else 
+            {
+                marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTable)->freq);
+            }
+            break;
         default: 
             marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTable)->freq);
             break;
@@ -145,10 +164,10 @@ void SafetyCheck() {
         { C.eristaEmcMaxClock,   1600'000, 2600'200 },
         { C.marikoCpuMaxVolt,        1100,     1300 },
         { C.marikoEmcMaxClock,   1600'000, 3500'000 },
-        { C.marikoEmcVddqVolt,    550'000,  650'000 },
+        { C.marikoEmcVddqVolt,    550'000,  700'000 },
         { eristaCpuDvfsMaxFreq,  1785'000, 3000'000 },
         { marikoCpuDvfsMaxFreq,  1785'000, 3000'000 },
-        { eristaGpuDvfsMaxFreq,   768'000, 1536'000 },
+        { eristaGpuDvfsMaxFreq,   768'000, 1228'000 },
         { marikoGpuDvfsMaxFreq,   768'000, 1536'000 },
     };
 

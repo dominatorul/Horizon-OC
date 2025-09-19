@@ -27,27 +27,27 @@ namespace ams::ldr::oc {
     #define FLOOR(A)    std::floor(A)
 
     //Preset One
-    const std::array<u32, 6> tRCD_values = {18, 17, 16, 15, 14, 13};
-    const std::array<u32, 6> tRP_values  = {18, 17, 16, 15, 14, 13};
-    const std::array<u32, 6> tRAS_values = {42, 39, 36, 34, 32, 30};
-
+    const std::array<u32, 8> tRCD_values  = {18, 17, 16, 15, 14, 13, 12, 11};
+    const std::array<u32, 8> tRP_values   = {18, 17, 16, 15, 14, 13, 12, 11};
+    const std::array<u32, 10> tRAS_values = {42, 36, 34, 32, 30, 28, 26, 24, 22, 20};
+    
     // Preset Two
-    const std::array<double, 5> tRRD_values = {10, 7.5, 6, 4, 3};
+    const std::array<double, 8> tRRD_values = {10, 7.5, 6, 5, 4, 3, 2, 1};
     const std::array<double, 5> tFAW_values = {40, 30, 24, 16, 12};
-
+    
     // Preset Three
     const std::array<u32, 6> tWR_values     = {18, 15, 15, 12, 12, 8};
     const std::array<double, 6> tRTP_values = {7.5, 7.5, 6, 6, 4, 4};
-
+    
     // Preset Four
     const std::array<u32, 6> tRFC_values = {140, 120, 100, 80, 70, 60};
-
+    
     // Preset Five
-    const std::array<u32, 6> tWTR_values = {10, 8, 6, 4, 2, 1};
-
+    const std::array<u32, 10> tWTR_values = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    
     // Preset Six
     const std::array<u32, 5> tREFpb_values = {488, 976, 1952, 3256, 9999};
-
+    
     const u32 TIMING_PRESET_ONE = C.ramTimingPresetOne;
     const u32 TIMING_PRESET_TWO = C.ramTimingPresetTwo;
     const u32 TIMING_PRESET_THREE = C.ramTimingPresetThree;

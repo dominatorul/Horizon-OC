@@ -42,6 +42,5 @@ class IpcService
     LockableMutex threadMutex;
     IpcServer server;
     ClockManager* clockMgr;
-    bool uncappedClocks = 0;
     protected:
 };

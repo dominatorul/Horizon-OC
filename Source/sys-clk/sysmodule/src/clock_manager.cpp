@@ -254,6 +254,17 @@ bool ClockManager::RefreshContext()
             else
             {
                 FileUtils::LogLine("[mgr] %s override disabled", Board::GetModuleName((SysClkModule)module, true));
+                switch(module) {
+                    case SysClkModule_CPU:
+                        Board::ResetToStockCpu();
+                        break;
+                    case SysClkModule_GPU:
+                        Board::ResetToStockGpu();
+                        break;
+                    case SysClkModule_MEM:
+                        Board::ResetToStockMem();
+                        break;
+                }
             }
             this->context->overrideFreqs[module] = hz;
             hasChanged = true;

@@ -292,6 +292,116 @@ void Board::ResetToStock()
     }
 }
 
+void Board::ResetToStockCpu()
+{
+    Result rc = 0;
+    if(hosversionAtLeast(9,0,0))
+    {
+        std::uint32_t confId = 0;
+        rc = apmExtGetCurrentPerformanceConfiguration(&confId);
+        ASSERT_RESULT_OK(rc, "apmExtGetCurrentPerformanceConfiguration");
+
+        SysClkApmConfiguration* apmConfiguration = NULL;
+        for(size_t i = 0; sysclk_g_apm_configurations[i].id; i++)
+        {
+            if(sysclk_g_apm_configurations[i].id == confId)
+            {
+                apmConfiguration = &sysclk_g_apm_configurations[i];
+                break;
+            }
+        }
+
+        if(!apmConfiguration)
+        {
+            ERROR_THROW("Unknown apm configuration: %x", confId);
+        }
+
+        Board::SetHz(SysClkModule_CPU, apmConfiguration->cpu_hz);
+    }
+    else
+    {
+        std::uint32_t mode = 0;
+        rc = apmExtGetPerformanceMode(&mode);
+        ASSERT_RESULT_OK(rc, "apmExtGetPerformanceMode");
+
+        rc = apmExtSysRequestPerformanceMode(mode);
+        ASSERT_RESULT_OK(rc, "apmExtSysRequestPerformanceMode");
+    }
+}
+
+void Board::ResetToStockMem()
+{
+    Result rc = 0;
+    if(hosversionAtLeast(9,0,0))
+    {
+        std::uint32_t confId = 0;
+        rc = apmExtGetCurrentPerformanceConfiguration(&confId);
+        ASSERT_RESULT_OK(rc, "apmExtGetCurrentPerformanceConfiguration");
+
+        SysClkApmConfiguration* apmConfiguration = NULL;
+        for(size_t i = 0; sysclk_g_apm_configurations[i].id; i++)
+        {
+            if(sysclk_g_apm_configurations[i].id == confId)
+            {
+                apmConfiguration = &sysclk_g_apm_configurations[i];
+                break;
+            }
+        }
+
+        if(!apmConfiguration)
+        {
+            ERROR_THROW("Unknown apm configuration: %x", confId);
+        }
+
+        Board::SetHz(SysClkModule_MEM, apmConfiguration->mem_hz);
+    }
+    else
+    {
+        std::uint32_t mode = 0;
+        rc = apmExtGetPerformanceMode(&mode);
+        ASSERT_RESULT_OK(rc, "apmExtGetPerformanceMode");
+
+        rc = apmExtSysRequestPerformanceMode(mode);
+        ASSERT_RESULT_OK(rc, "apmExtSysRequestPerformanceMode");
+    }
+}
+
+void Board::ResetToStockGpu()
+{
+    Result rc = 0;
+    if(hosversionAtLeast(9,0,0))
+    {
+        std::uint32_t confId = 0;
+        rc = apmExtGetCurrentPerformanceConfiguration(&confId);
+        ASSERT_RESULT_OK(rc, "apmExtGetCurrentPerformanceConfiguration");
+
+        SysClkApmConfiguration* apmConfiguration = NULL;
+        for(size_t i = 0; sysclk_g_apm_configurations[i].id; i++)
+        {
+            if(sysclk_g_apm_configurations[i].id == confId)
+            {
+                apmConfiguration = &sysclk_g_apm_configurations[i];
+                break;
+            }
+        }
+
+        if(!apmConfiguration)
+        {
+            ERROR_THROW("Unknown apm configuration: %x", confId);
+        }
+
+        Board::SetHz(SysClkModule_GPU, apmConfiguration->gpu_hz);
+    }
+    else
+    {
+        std::uint32_t mode = 0;
+        rc = apmExtGetPerformanceMode(&mode);
+        ASSERT_RESULT_OK(rc, "apmExtGetPerformanceMode");
+
+        rc = apmExtSysRequestPerformanceMode(mode);
+        ASSERT_RESULT_OK(rc, "apmExtSysRequestPerformanceMode");
+    }
+}
 std::uint32_t Board::GetTemperatureMilli(SysClkThermalSensor sensor)
 {
     std::int32_t millis = 0;

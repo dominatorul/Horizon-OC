@@ -119,7 +119,7 @@ static inline const char* sysclkFormatProfile(SysClkProfile profile, bool pretty
         case SysClkProfile_HandheldChargingUSB:
             return pretty ? "USB Charger" : "handheld_charging_usb";
         case SysClkProfile_HandheldChargingOfficial:
-            return pretty ? "Official Charger" : "handheld_charging_official";
+            return pretty ? "PD Charger" : "handheld_charging_official";
         default:
             return NULL;
     }
