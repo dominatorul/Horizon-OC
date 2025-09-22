@@ -15,7 +15,7 @@ cd build/stratosphere/loader || exit 1
 rm out/nintendo_nx_arm64_armv8a/release/loader.kip
 rm -rf build/
 make -j"$(nproc)"
-hactool -t kip1 out/nintendo_nx_arm64_armv8a/release/loader.kip --uncompress=ocs2.kip
+hactool -t kip1 out/nintendo_nx_arm64_armv8a/release/loader.kip --uncompress=hoc.kip
 rm out/nintendo_nx_arm64_armv8a/release/loader.kip
 rm -rf build/
 

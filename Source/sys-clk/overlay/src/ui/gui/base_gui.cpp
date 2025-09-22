@@ -36,7 +36,7 @@ std::string getVersionString() {
 void BaseGui::preDraw(tsl::gfx::Renderer* renderer)
 {
 //    renderer->drawBitmap(LOGO_X, LOGO_Y, LOGO_WIDTH, LOGO_HEIGHT, logo_rgba_bin);
-    renderer->drawString("sys-clk-ocs2 overlay", false, LOGO_X, LOGO_Y, LOGO_LABEL_FONT_SIZE, renderer->a(TEXT_COLOR));
+    renderer->drawString("Horizon OC overlay", false, LOGO_X, LOGO_Y, LOGO_LABEL_FONT_SIZE, renderer->a(TEXT_COLOR));
 //    renderer->drawString(TARGET_VERSION, false, VERSION_X, VERSION_Y, VERSION_FONT_SIZE, tsl::bannerVersionTextColor);
 }
 

@@ -79,6 +79,8 @@
      // tRC (ACTIVATE-ACTIVATE command period same bank) in ns
      const u32 tRC = tRPpb + tRAS;
      
+
+     const u32 tRTW = !C.t6_tRTW ? 10 : tWTR_values[C.t6_tRTW-1];
      // DQS output access time from CK_t/CK_c
      const double tDQSCK_min = 1.5;
      // DQS output access time from CK_t/CK_c
@@ -197,7 +199,7 @@
          const u32 RL = 32 - C.mem_burst_latency;
  
          // minimum number of cycles from any read command to any write command, irrespective of bank
-         const u32 R2W = CEIL (RL + CEIL(tDQSCK_max/tCK_avg) + BL/2 - WL + tWPRE + FLOOR(tRPST));
+         const u32 R2W = WL + BL/2 + 1 + CEIL(tRTW/tCK_avg);
          
          // Delay Time From WRITE-to-READ
          const u32 W2R = WL + BL/2 + 1 + CEIL(tWTR/tCK_avg);

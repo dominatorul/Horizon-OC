@@ -26,7 +26,7 @@ DATA		:=	data
 INCLUDES	:=	../common/include
 EXEFS_SRC	:=	exefs_src
 
-APP_TITLE	:=	sys-clk-ocs2
+APP_TITLE	:=	Horizon OC
 NO_ICON		:=	1
 
 # This location should reflect where you place the libultrahand directory (lib can vary between projects).

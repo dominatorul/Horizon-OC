@@ -23,7 +23,7 @@ void FatalGui::openWithResultCode(std::string tag, Result rc)
     info.append(rcStr, snprintf(rcStr, sizeof(rcStr), "\n\n[0x%x] %04d-%04d", rc, R_MODULE(rc), R_DESCRIPTION(rc)));
 
     tsl::changeTo<FatalGui>(
-        "Could not connect to sys-clk-ocs2 sysmodule.\n\n"
+        "Could not connect to Horizon OC sysmodule.\n\n"
         "\n"
         "Please make sure everything is\n\n"
         "correctly installed and enabled.",

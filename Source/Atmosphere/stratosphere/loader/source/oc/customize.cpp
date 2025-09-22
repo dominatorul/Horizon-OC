@@ -56,7 +56,7 @@ volatile CustomizeTable C = {
  *   - System instabilities
  *   - NAND corruption
  */
-.eristaEmcMaxClock = 2265280,
+.eristaEmcMaxClock = 2240000,
 
 /* Mariko CPU:
  * - Max Voltage in mV:
