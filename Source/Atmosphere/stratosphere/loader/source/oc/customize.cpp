@@ -56,13 +56,13 @@ volatile CustomizeTable C = {
  *   - System instabilities
  *   - NAND corruption
  */
-.eristaEmcMaxClock = 2132640,
+.eristaEmcMaxClock = 2265280,
 
 /* Mariko CPU:
  * - Max Voltage in mV:
  *   Default voltage: 1120
  */
-.marikoCpuMaxVolt    = 1257,
+.marikoCpuMaxVolt    = 1120,
 
 /* Mariko EMC(RAM):
  * - RAM Clock in kHz:
@@ -99,23 +99,17 @@ volatile CustomizeTable C = {
 
 .enableEristaCpuUnsafeFreqs = ENABLED,
 
-.commonGpuVoltOffset = 0, // TODO: Split tRCD, tRP and tRAS into separate timings
+.commonGpuVoltOffset = 0,
 
-.marikoEmcDvbShift = 4,
-
-.ramTimingPresetOne = 0,
-
-.ramTimingPresetTwo = 1,
-
-.ramTimingPresetThree = 0,
-
-.ramTimingPresetFour = 2,
-
-.ramTimingPresetFive = 4,
-
-.ramTimingPresetSix = 4, // Keep at 4, most optimal
-
-.ramTimingPresetSeven = 0, // Sets the BL of the ram. Change to 2 to get 1866BL and set to 0 to keep the default 1600BL
+.t1_tRCD = 4,
+.t2_tRP = 5,
+.t3_tRAS = 9,
+.t4_tRRD = 1,
+.t5_tRFC = 2,
+.t6_tRTW = 6,
+.t7_tWTR = 4,
+.t8_tREFI = 6,
+.mem_burst_latency = 2,
 
 // Erista default (HB-MGCH ST timing)
 // 
@@ -161,7 +155,7 @@ volatile CustomizeTable C = {
     875  /* 691  */,
     900  /* 768  */,
     950  /* 844  */,
-    975  /* 921  */,
+    900  /* 921  */,
     910    /* 998  (Disabled by default) */,
     950    /* 1075 (Disabled by default) */,
     1000    /* 1152 (Disabled by default) */,
