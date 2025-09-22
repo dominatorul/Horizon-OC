@@ -9,4 +9,4 @@
 
 ## Reporting a Vulnerability
 
-Contact me on discord or email me
+Contact me on discord (soul_9017) or email me (souldbminer@gmail.com)
