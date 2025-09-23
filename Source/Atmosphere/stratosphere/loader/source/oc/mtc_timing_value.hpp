@@ -155,9 +155,9 @@
      // p78 The first valid data is available RL × t CK + t DQSCK + t DQSQ
      //const u32 QUSE = RL + CEIL(tDQSCK_min/tCK_avg + tDQSQ);
  
-     namespace pcv::erista {
+     namespace pcv::erista { // TODO: Adjust timings properly for all freqs
          // tCK_avg (average clock period) in ns
-         const double tCK_avg = 1000'000. / C.eristaEmcMaxClock;
+         const double tCK_avg = 1000'000. / C.eristaEmcClock3;
  
          // Write Latency
          const u32 WL = 14 + C.mem_burst_latency;
@@ -178,7 +178,7 @@
          // {REFRESH, REFRESH_LO} = max[(tREF/#_of_rows) / (emc_clk_period) - 64, (tREF/#_of_rows) / (emc_clk_period) * 97%]
          // emc_clk_period = dram_clk / 2;
          // 1600 MHz: 5894, but N' set to 6176 (~4.8% margin)
-         const u32 REFRESH = MIN((u32)65472, u32(std::ceil((double(tREFpb) * C.eristaEmcMaxClock / numOfRows * 1.048 / 2 - 64))) / 4 * 4);
+         const u32 REFRESH = MIN((u32)65472, u32(std::ceil((double(tREFpb) * C.eristaEmcClock3 / numOfRows * 1.048 / 2 - 64))) / 4 * 4);
          const u32 REFBW = MIN((u32)65536, REFRESH+64);
          
          // Write With Auto Precharge to to Power-Down Entry

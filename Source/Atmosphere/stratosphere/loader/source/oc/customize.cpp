@@ -56,7 +56,13 @@ volatile CustomizeTable C = {
  *   - System instabilities
  *   - NAND corruption
  */
-.eristaEmcMaxClock = 2240000,
+
+.eristaEmcClock1 = 1862400, // Lowest
+
+.eristaEmcClock2 = 1996800, // Middle
+
+.eristaEmcClock3 = 2132640, // Highest
+
 
 /* Mariko CPU:
  * - Max Voltage in mV:

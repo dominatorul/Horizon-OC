@@ -161,7 +161,7 @@ void SafetyCheck() {
         { C.commonCpuBoostClock, 1020'000, 3000'000, true },
         { C.commonEmcMemVolt,    1100'000, 1500'000 }, // Official burst vmax for the RAMs
         { C.eristaCpuMaxVolt,        1100,     1300 },
-        { C.eristaEmcMaxClock,   1600'000, 2600'200 },
+        { C.eristaEmcClock3,   1600'000, 2600'200 },
         { C.marikoCpuMaxVolt,        1100,     1300 },
         { C.marikoEmcMaxClock,   1600'000, 3500'000 },
         { C.marikoEmcVddqVolt,    550'000,  700'000 },
