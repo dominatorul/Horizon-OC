@@ -15,14 +15,15 @@ A open source overclocking tool for Nintendo Switch consoles running Atmosphere 
 
 
 ## Features:
-CPU overclock up to 2601MHz on Mariko units, 2091MHz on Erista units<br>
-GPU up to 1382MHz on Mariko units, 1075MHz on Erista units<br>
-RAM up to 3200MHz on Mariko units, 2250MHz on Erista units<br>
+CPU overclock up to 2397MHz on Mariko units, 2091MHz on Erista units<br>
+GPU up to 1305MHz on Mariko units, 998MHz on Erista units<br>
+RAM up to 3200MHz on Mariko units, 2400MHz on Erista units<br>
 Over/undervolting<br>
 Configurator<br>
 Works with most homebrew<br>
 
 *Higher (potentially dangerous) frequencies are unlockable*<br>
+*The exact maximum overclock varies per console*<br>
 ## Installation
 Grab latest hoc.kip from releases tab<br>
 If using hekate, edit hekate_ipl.ini to include "kip1=atmosphere/kips/*". No need for editing if using fusee<br>
