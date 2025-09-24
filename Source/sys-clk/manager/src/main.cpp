@@ -54,24 +54,24 @@ int main(int argc, char* argv[])
     // Check that sys-clk is running
     if (!sysclkIpcRunning())
     {
-        brls::Logger::error("Horizon OC is not running");
-        brls::Application::crash("Horizon OC does not seem to be running, please check that it is correctly installed and enabled.");
+        brls::Logger::error("sys-clk is not running");
+        brls::Application::crash("sys-clk does not seem to be running, please check that it is correctly installed and enabled.");
     }
     // Initialize sys-clk IPC client
     else if (R_FAILED(sysclkIpcInitialize()) || R_FAILED(sysclkIpcGetAPIVersion(&apiVersion)))
     {
-        brls::Logger::error("Unable to initialize Horizon OC IPC client");
-        brls::Application::crash("Could not connect to Horizon OC, please check that it is correctly installed and enabled.");
+        brls::Logger::error("Unable to initialize sys-clk IPC client");
+        brls::Application::crash("Could not connect to sys-clk, please check that it is correctly installed and enabled.");
     }
     else if (SYSCLK_IPC_API_VERSION != apiVersion)
     {
-        brls::Logger::error("Horizon OC IPC API version mismatch (expected: %u; actual: %u)", SYSCLK_IPC_API_VERSION, apiVersion);
-        brls::Application::crash("The manager is not compatible with the currently running sysmodule of Horizon OC, please check that you have correctly installed the latest version (reboot?).");
+        brls::Logger::error("sys-clk IPC API version mismatch (expected: %u; actual: %u)", SYSCLK_IPC_API_VERSION, apiVersion);
+        brls::Application::crash("The manager is not compatible with the currently running sysmodule of sys-clk, please check that you have correctly installed the latest version (reboot?).");
     }
     else if (R_FAILED(cacheFreqList()))
     {
-        brls::Logger::error("Failed to get the freq list from Horizon OC");
-        brls::Application::crash("Failed to get the freq list from Horizon OC, please check that you have correctly installed the latest version (reboot?).");
+        brls::Logger::error("Failed to get the freq list from sys-clk");
+        brls::Application::crash("Failed to get the freq list from sys-clk, please check that you have correctly installed the latest version (reboot?).");
     }
     else
     {
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
         }
         else
         {
-            brls::Logger::error("Unable to get Horizon OC version string");
+            brls::Logger::error("Unable to get sys-clk version string");
             brls::Application::setCommonFooter("[unknown]");
         }
 

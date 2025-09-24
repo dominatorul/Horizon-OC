@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Horizon OC Contributors
+ * Copyright (C) Switch-OC-Suite
  *
  * Copyright (c) 2023 hanai3Bi
  *

@@ -33,7 +33,7 @@ AboutTab::AboutTab()
     // Subtitle
     brls::Label *subTitle = new brls::Label(
         brls::LabelStyle::REGULAR,
-        "Nittendo Switch Overclocking tool by Souldbminer based on sys-clk by RetroNX", 
+        "Nintendo Switch overclocking / underclocking system module and frontend app by the RetroNX Team", 
         true
     );
     subTitle->setHorizontalAlign(NVG_ALIGN_CENTER);
@@ -42,9 +42,9 @@ AboutTab::AboutTab()
     // Copyright
     brls::Label *copyright = new brls::Label(
         brls::LabelStyle::DESCRIPTION,
-        "System module licensed under the GPLv2\n" \
+        "System module licensed under the Beerware license\n" \
         "Frontend app licensed under GPL-3.0\n" \
-        "\u00A9 2019 - 2020 natinusala, p-sam, m4xw, \u00A9 2025 Souldbminer",
+        "\u00A9 2019 - 2020 natinusala, p-sam, m4xw",
         true
     );
     copyright->setHorizontalAlign(NVG_ALIGN_CENTER);
@@ -54,9 +54,9 @@ AboutTab::AboutTab()
     this->addView(new brls::Header("Links and Resources"));
     brls::Label *links = new brls::Label(
         brls::LabelStyle::SMALL,
-        "\uE016  User guide and code source can be found on my GitHub repository (souldbminersmwc/horizon-oc)\n" \
-        "\uE016  The Horizon OC manager is powered by Borealis, an hardware accelerated UI library\n" \
-        "\uE016  Join the OC Discord server for support, to request features or just hang out!",
+        "\uE016  User guide and code source can be found on our GitHub repository\n" \
+        "\uE016  The sys-clk manager is powered by Borealis, an hardware accelerated UI library\n" \
+        "\uE016  Join the RetroNX Discord server for support, to request features or just hang out!",
         true
     );
     this->addView(links);
