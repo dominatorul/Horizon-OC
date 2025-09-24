@@ -8,7 +8,7 @@
 
 </div>
 
-##### DISCLAIMER: THIS TOOL CAN BE DANGEROUS IF MISUSED. PROCEED WITH CAUTION
+### DISCLAIMER: THIS TOOL CAN BE DANGEROUS IF MISUSED. PROCEED WITH CAUTION
 * Due to the design of Horizon OS, overclocking RAM can cause **NAND DAMAGE**. Ensure to have a NAND Backup<br>
 
 A open source overclocking tool for Nintendo Switch consoles running Atmosphere custom firmware<br>
