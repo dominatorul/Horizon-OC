@@ -80,6 +80,7 @@
          uint32_t unsafe_gpu;
          uint32_t danger_cpu;
          uint32_t danger_gpu;
+
          if (IsMariko())
          {
              unsafe_cpu = 1964;
@@ -92,7 +93,7 @@
              unsafe_cpu = 1786;
              unsafe_gpu = 922;
              danger_cpu = 2092;
-             danger_gpu = 999;
+             danger_gpu = 1076;
          }
 
          if (moduleName == "cpu") {

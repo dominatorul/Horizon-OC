@@ -80,7 +80,7 @@ void MainGui::listUI()
 
         return false;
     });
-    this->listElement->addItem(miscItem);
+    // this->listElement->addItem(miscItem);
     }
 
 void MainGui::refresh()

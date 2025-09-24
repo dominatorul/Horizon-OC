@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Switch-OC-Suite
+ * Copyright (c) Horizon OC Contributors
  *
  * Copyright (c) 2023 hanai3Bi
  * 
@@ -40,7 +40,7 @@ volatile CustomizeTable C = {
  *   Value should be divided evenly by 12'500.
  *   Not enabled by default.
  */
-.commonEmcMemVolt  = 1237500,
+.commonEmcMemVolt  = 1175000,
 
 /* Erista CPU:
  * - Max Voltage in mV
@@ -57,11 +57,11 @@ volatile CustomizeTable C = {
  *   - NAND corruption
  */
 
-.eristaEmcClock1 = 1862400, // Lowest
+.eristaEmcClock1 = 1996800, // Lowest
 
-.eristaEmcClock2 = 1996800, // Middle
+.eristaEmcClock2 = 2032640, // Middle
 
-.eristaEmcClock3 = 2132640, // Highest
+.eristaEmcClock3 = 2232640, // Highest
 
 
 /* Mariko CPU:

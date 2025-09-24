@@ -40,7 +40,7 @@ class AppOverlay : public tsl::Overlay
             if(!sysclkIpcRunning())
             {
                 return initially<FatalGui>(
-                    "sys-clk is not running.\n\n"
+                    "Horizon OC is not running.\n\n"
                     "\n"
                     "Please make sure it is correctly\n\n"
                     "installed and enabled.",
@@ -51,7 +51,7 @@ class AppOverlay : public tsl::Overlay
             if(R_FAILED(sysclkIpcInitialize()) || R_FAILED(sysclkIpcGetAPIVersion(&apiVersion)))
             {
                 return initially<FatalGui>(
-                    "Could not connect to sys-clk.\n\n"
+                    "Could not connect to Horizon OC.\n\n"
                     "\n"
                     "Please make sure it is correctly\n\n"
                     "installed and enabled.",
@@ -63,7 +63,7 @@ class AppOverlay : public tsl::Overlay
             {
                 return initially<FatalGui>(
                     "Overlay not compatible with\n\n"
-                    "the running sys-clk version.\n\n"
+                    "the running Horizon OC version.\n\n"
                     "\n"
                     "Please make sure everything is\n\n"
                     "installed and up to date.",
