@@ -50,9 +50,7 @@
      u32 commonCpuBoostClock;
      u32 commonEmcMemVolt;
      u32 eristaCpuMaxVolt;
-     u32 eristaEmcClock1;
-     u32 eristaEmcClock2;
-     u32 eristaEmcClock3;
+     u32 eristaEmcMaxClock;
      u32 marikoCpuMaxVolt;
      u32 marikoEmcMaxClock;
      u32 marikoEmcVddqVolt;

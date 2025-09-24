@@ -246,7 +246,7 @@
      {
          u32 khz_list[] = {1600000, 1331200, 1065600, 800000, 665600, 408000, 204000, 102000, 68000, 40800};
          u32 khz_list_size = sizeof(khz_list) / sizeof(u32);
-     
+ 
          // Generate list for mtc table pointers
          EristaMtcTable *table_list[khz_list_size];
          for (u32 i = 0; i < khz_list_size; i++)
@@ -256,49 +256,32 @@
              R_UNLESS(table_list[i]->rate_khz == khz_list[i], ldr::ResultInvalidMtcTable());
              R_UNLESS(table_list[i]->rev == MTC_TABLE_REV, ldr::ResultInvalidMtcTable());
          }
-     
-         if (C.eristaEmcClock1 <= EmcClkOSLimit || 
-             C.eristaEmcClock2 <= EmcClkOSLimit || 
-             C.eristaEmcClock3 <= EmcClkOSLimit)
+ 
+         if (C.eristaEmcMaxClock <= EmcClkOSLimit)
              R_SKIP();
-     
-         // Make room for three new mtc tables, discarding useless 40.8, 68.0, and 102 MHz tables
-         for (u32 i = khz_list_size - 1; i > 2; i--)
-             std::memcpy(static_cast<void *>(table_list[i]),
-                         static_cast<void *>(table_list[i - 3]),
-                         sizeof(EristaMtcTable));
-     
-         // Adjust all three new tables
+ 
+         // Make room for new mtc table, discarding useless 40.8 MHz table
+         // 40800 overwritten by 68000, ..., 1331200 overwritten by 1600000, leaving table_list[0] not overwritten
+         for (u32 i = khz_list_size - 1; i > 0; i--)
+             std::memcpy(static_cast<void *>(table_list[i]), static_cast<void *>(table_list[i - 1]), sizeof(EristaMtcTable));
+ 
          MemMtcTableAutoAdjust(table_list[0]);
-         MemMtcTableAutoAdjust(table_list[1]);
-         MemMtcTableAutoAdjust(table_list[2]);
-     
-         // Patch pointers for 3 custom clocks
-         u32 *patch_ptr1 = ptr;
-         u32 *patch_ptr2 = ptr - sizeof(EristaMtcTable) / sizeof(u32);
-         u32 *patch_ptr3 = ptr - 2 * (sizeof(EristaMtcTable) / sizeof(u32));
-     
-         if (C.eristaEmcClock3 > EmcClkOSLimit)
-             PATCH_OFFSET(patch_ptr1, C.eristaEmcClock3);
-         if (C.eristaEmcClock2 > EmcClkOSLimit)
-             PATCH_OFFSET(patch_ptr2, C.eristaEmcClock2);
-         if (C.eristaEmcClock3 > EmcClkOSLimit)
-             PATCH_OFFSET(patch_ptr3, C.eristaEmcClock1);
-     
+         PATCH_OFFSET(ptr, C.eristaEmcMaxClock);
+ 
          // Handle customize table replacement
          // if (C.mtcConf == CUSTOMIZED_ALL) {
          //    MemMtcCustomizeTable(table_list[0], const_cast<EristaMtcTable *>(C.eristaMtcTable));
          //}
-     
+ 
          R_SUCCEED();
-     }         
-          
+     }
+ 
      Result MemFreqMax(u32 *ptr)
      {
-         if (C.eristaEmcClock3 <= EmcClkOSLimit)
+         if (C.eristaEmcMaxClock <= EmcClkOSLimit)
              R_SKIP();
  
-         PATCH_OFFSET(ptr, C.eristaEmcClock3);
+         PATCH_OFFSET(ptr, C.eristaEmcMaxClock);
  
          R_SUCCEED();
      }
