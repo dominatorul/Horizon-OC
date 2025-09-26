@@ -4,7 +4,7 @@
 ![alt text](assets/logo.png "logo")
 
 
-![alt text](https://img.shields.io/badge/GPL--2.0-red?style=for-the-badge "logo") ![alt text](https://img.shields.io/badge/Nintendo_Switch-E60012?style=for-the-badge&logo=nintendo-switch&logoColor=white "logo") [![alt text](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/S3eX47dHsB)  ![alt text](https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white) ![alt text](https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)
+![alt text](https://img.shields.io/badge/GPL--2.0-red?style=for-the-badge "logo") ![alt text](https://img.shields.io/badge/Nintendo_Switch-E60012?style=for-the-badge&logo=nintendo-switch&logoColor=white "logo") [![alt text](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/S3eX47dHsB)  ![alt text](https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white) ![alt text](https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white) [![Github All Releases](https://img.shields.io/github/downloads/souldbminersmwc/Horizon-OC/total.svg)]()
 
 </div>
 
