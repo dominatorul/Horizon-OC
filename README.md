@@ -30,6 +30,8 @@ If using hekate, edit hekate_ipl.ini to include "kip1=atmosphere/kips/*". No nee
 Download latest Horizon OC sysmodule from releases tab<br>
 Extract sysmodule into root of SD card<br>
 
+Alternatively, you can download the configurator and click the two install buttons<br>
+
 Ensure you are using latest Atmosphere, otherwise the console will not boot<br>
 
 ## Configuration
