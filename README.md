@@ -25,6 +25,7 @@ Works with most homebrew<br>
 *Higher (potentially dangerous) frequencies are unlockable*<br>
 *The exact maximum overclock varies per console*<br>
 ## Installation
+Ensure you have the latest version of [Atmosphere](https://github.com/Atmosphere-NX/Atmosphere) and [Ultrahand](https://github.com/ppkantorski/Ultrahand-Overlay) installed before continuing<br>
 Grab latest hoc.kip from releases tab<br>
 If using hekate, edit hekate_ipl.ini to include "kip1=atmosphere/kips/*". No need for editing if using fusee<br>
 Download latest Horizon OC sysmodule from releases tab<br>
@@ -32,7 +33,6 @@ Extract sysmodule into root of SD card<br>
 
 Alternatively, you can download the configurator and click the two install buttons<br>
 
-Ensure you are using latest Atmosphere, otherwise the console will not boot<br>
 
 ## Configuration
 Download the latest configurator on your computer<br>
