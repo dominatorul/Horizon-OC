@@ -32,11 +32,21 @@ Extract sysmodule into root of SD card<br>
 
 Ensure you are using latest Atmosphere, otherwise the console will not boot<br>
 
+## Configuration
+Download the latest configurator on your computer
+Run the file
+Select the drive your SD card or UMS device is mounted as
+Configure the kip to your liking, and in the end, save it
+
 ## Building
 Set up a development enviorment ready to compile Atmosphere<br>
 Git clone Atmosphere, and move the cloned folder into build/<br>
 Insert Source/stratosphere folder into build/<br>
 Run build.sh
+
+To build the configurator, clone it's repo (souldbminersmwc/ocs2-configurator)
+Run build.bat or cd into folder and run "python -m PyInstaller --onefile --add-data "assets;assets" --icon=assets/icon.ico --noconsole src/main.py"
+
 
 ## Credits
 meha for Switch-Oc-Suite<br>
