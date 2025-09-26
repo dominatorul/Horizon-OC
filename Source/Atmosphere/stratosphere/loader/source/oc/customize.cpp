@@ -17,8 +17,10 @@
  */
 
 #include "customize.hpp"
+
 #define ENABLED 1
 #define DISABLED 0
+
 namespace ams::ldr::oc {
 
 //volatile EristaMtcTable EristaMtcTablePlaceholder = { .rev = ERISTA_MTC_MAGIC, };
@@ -40,13 +42,13 @@ volatile CustomizeTable C = {
  *   Value should be divided evenly by 12'500.
  *   Not enabled by default.
  */
-.commonEmcMemVolt  = 1237500,
+.commonEmcMemVolt  = 1175000,
 
 /* Erista CPU:
  * - Max Voltage in mV
  * - CpuVoltL4T: 1235
  */
-.eristaCpuMaxVolt  = 1257,
+.eristaCpuMaxVolt  = 1235,
 
 /* Erista EMC(RAM):
  * - RAM Clock in kHz
@@ -56,7 +58,7 @@ volatile CustomizeTable C = {
  *   - System instabilities
  *   - NAND corruption
  */
-.eristaEmcMaxClock = 2240000,
+.eristaEmcMaxClock = 1862400,
 
 /* Mariko CPU:
  * - Max Voltage in mV:
@@ -89,30 +91,29 @@ volatile CustomizeTable C = {
 
 .eristaCpuUV = 0,
 
-.eristaGpuUV = 3,
+.eristaGpuUV = 0,
 
 .enableMarikoGpuUnsafeFreqs = DISABLED,
 
-.enableEristaGpuUnsafeFreqs = ENABLED,
+.enableEristaGpuUnsafeFreqs = DISABLED,
 
 .enableMarikoCpuUnsafeFreqs = DISABLED,
 
-.enableEristaCpuUnsafeFreqs = ENABLED,
+.enableEristaCpuUnsafeFreqs = DISABLED,
 
 .commonGpuVoltOffset = 0,
 
-.t1_tRCD = 4,
-.t2_tRP = 5,
-.t3_tRAS = 9,
-.t4_tRRD = 1,
-.t5_tRFC = 2,
-.t6_tRTW = 6,
-.t7_tWTR = 4,
-.t8_tREFI = 6,
+.t1_tRCD = 0,
+.t2_tRP = 0,
+.t3_tRAS = 0,
+.t4_tRRD = 0,
+.t5_tRFC = 0,
+.t6_tRTW = 0,
+.t7_tWTR = 0,
+.t8_tREFI = 0,
+
 .mem_burst_latency = 2,
 
-// Erista default (HB-MGCH ST timing)
-// 
 // NOTE: These tables should NOT BE USED and are only here as placeholders. Always try and find your own optimal tables.
 
 .marikoGpuVoltArray = {
@@ -156,9 +157,9 @@ volatile CustomizeTable C = {
     900  /* 768  */,
     950  /* 844  */,
     900  /* 921  */,
-    910    /* 998  (Disabled by default) */,
-    950    /* 1075 (Disabled by default) */,
-    1000    /* 1152 (Disabled by default) */,
+    0    /* 998  (Disabled by default) */,
+    0    /* 1075 (Disabled by default) */,
+    0    /* 1152 (Disabled by default) */,
 },
 
 /* Advanced Settings:
