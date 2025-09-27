@@ -17,7 +17,7 @@ A open source overclocking tool for Nintendo Switch consoles running Atmosphere 
 ## Features:
 CPU overclock up to 2397MHz on Mariko units, 2091MHz on Erista units<br>
 GPU up to 1305MHz on Mariko units, 998MHz on Erista units<br>
-RAM up to 3200MHz on Mariko units, 2400MHz on Erista units<br>
+RAM up to 3200MHz on Mariko units, 2360MHz on Erista units<br>
 Over/undervolting<br>
 Configurator<br>
 Works with most homebrew<br>
