@@ -86,6 +86,7 @@
  
      u32 marikoCpuVmin;
 
+     
      CustomizeCpuDvfsTable eristaCpuDvfsTable;
      CustomizeCpuDvfsTable marikoCpuDvfsTable;
      CustomizeCpuDvfsTable marikoCpuDvfsTableSLT;
