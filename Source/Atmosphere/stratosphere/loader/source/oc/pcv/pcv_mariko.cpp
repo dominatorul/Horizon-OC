@@ -74,7 +74,7 @@
      R_UNLESS(entry->tune0_high == 0x00000000,    ldr::ResultInvalidCpuVoltDfllEntry());
      R_UNLESS(entry->tune1_low == 0x012207FF,   ldr::ResultInvalidCpuVoltDfllEntry());
      R_UNLESS(entry->tune1_high == 0x03FFF7FF,    ldr::ResultInvalidCpuVoltDfllEntry());
-     switch(C.marikoCpuUv) {
+     switch(C.marikoCpuUV) {
         case 0:
             break;
         case 1:
