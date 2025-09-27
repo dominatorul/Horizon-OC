@@ -38,7 +38,52 @@
          }
          R_THROW(ldr::ResultInvalidCpuMinVolt());
      }
- 
+     Result CpuVoltDfll(u32* ptr) {
+        cvb_cpu_dfll_data *entry = reinterpret_cast<cvb_cpu_dfll_data *>(ptr);
+    
+        R_UNLESS(entry->tune0_low == 0x0000FFCF,   ldr::ResultInvalidCpuVoltDfllEntry());
+        R_UNLESS(entry->tune0_high == 0x00000000,    ldr::ResultInvalidCpuVoltDfllEntry());
+        R_UNLESS(entry->tune1_low == 0x012207FF,   ldr::ResultInvalidCpuVoltDfllEntry());
+        R_UNLESS(entry->tune1_high == 0x03FFF7FF,    ldr::ResultInvalidCpuVoltDfllEntry());
+        switch(C.eristaCpuUv) {
+           case 0:
+               break;
+           case 1:
+               PATCH_OFFSET(&(entry->tune0_low), 0x0000FF88); //process_id 0 // EOS UV2
+               PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
+               PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
+               PATCH_OFFSET(&(entry->tune1_high), 0x00000000);
+               break;
+           case 2:
+               PATCH_OFFSET(&(entry->tune0_low), 0x0000FF90); //process_id 1 // EOS Uv2
+               PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
+               PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
+               PATCH_OFFSET(&(entry->tune1_high), 0x00000000);
+               break;
+           case 3:
+               PATCH_OFFSET(&(entry->tune0_low), 0x0000FF98); //process_id 0 // EOS UV3
+               PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
+               PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
+               PATCH_OFFSET(&(entry->tune1_high), 0x00000000);
+               break;
+           case 4:
+               PATCH_OFFSET(&(entry->tune0_low), 0x0000FFA0); //process_id 1 // EOS Uv4
+               PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
+               PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
+               PATCH_OFFSET(&(entry->tune1_high), 0x00000000);
+               break;
+           case 5:
+               PATCH_OFFSET(&(entry->tune0_low), 0x0000FFFF); // EOS UV6
+               PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
+               PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
+               PATCH_OFFSET(&(entry->tune1_high), 0x022217FF);
+               break;
+           default:
+               break;
+        } 
+        R_SUCCEED();
+    }
+   
      Result GpuFreqMaxAsm(u32 *ptr32)
      {
          // Check if both two instructions match the pattern
@@ -294,6 +339,7 @@
          PatcherEntry<u32> patches[] = {
              {"CPU Freq Table", CpuFreqCvbTable<false>, 1, nullptr, CpuCvbDefaultMaxFreq},
              {"CPU Volt Limit", &CpuVoltRange, 0, &CpuMaxVoltPatternFn},
+             { "CPU Volt Dfll",  &CpuVoltDfll,           1, nullptr, 0x0000FFCF },
              {"GPU Freq Table", GpuFreqCvbTable<false>, 1, nullptr, GpuCvbDefaultMaxFreq},
              {"GPU Freq Asm", &GpuFreqMaxAsm, 2, &GpuMaxClockPatternFn},
              {"GPU Freq PLL", &GpuFreqPllLimit, 1, nullptr, GpuClkPllLimit},
