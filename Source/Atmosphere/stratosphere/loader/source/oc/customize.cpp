@@ -162,6 +162,9 @@ volatile CustomizeTable C = {
     0    /* 1152 (Disabled by default) */,
 },
 
+
+.marikoCpuVmin = 600,
+
 /* Advanced Settings:
  * - Erista CPU DVFS Table:
  */
