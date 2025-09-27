@@ -84,6 +84,9 @@
      u32 marikoGpuVoltArray[24];
      u32 eristaGpuVoltArray[15];
  
+     u32 marikoCpuVmin;
+
+     
      CustomizeCpuDvfsTable eristaCpuDvfsTable;
      CustomizeCpuDvfsTable marikoCpuDvfsTable;
      CustomizeCpuDvfsTable marikoCpuDvfsTableSLT;
