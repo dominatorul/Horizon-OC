@@ -55,7 +55,7 @@
          // Patch vmin for slt
          if (C.marikoCpuUV) {
              if (*(ptr-5) == 620) {
-                 PATCH_OFFSET((ptr-5), C.marikoCpuVmin);
+                 PATCH_OFFSET((ptr-5), 600);
              }
              if (*(ptr-1) == 620) {
                  PATCH_OFFSET((ptr-1), 600);
