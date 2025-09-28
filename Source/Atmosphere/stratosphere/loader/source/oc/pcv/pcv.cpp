@@ -99,8 +99,16 @@ void SafetyCheck() {
         eristaCpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaCpuDvfsTable)->freq);
     }
     u32 marikoCpuDvfsMaxFreq;
-    if(C.enableMarikoCpuUnsafeFreqs) {
-        marikoCpuDvfsMaxFreq = static_cast<u32>(C.marikoCpuUV ? GetDvfsTableLastEntry(C.marikoCpuDvfsTableSLT)->freq : GetDvfsTableLastEntry(C.marikoCpuDvfsTable)->freq);
+    if(!C.enableMarikoCpuUnsafeFreqs) {
+        if (C.marikoCpuUV) {
+            marikoCpuDvfsMaxFreq = static_cast<u32>(
+                GetDvfsTableLastEntry(C.marikoCpuDvfsTableSLT)->freq
+            );
+        } else {
+            marikoCpuDvfsMaxFreq = static_cast<u32>(
+                GetDvfsTableLastEntry(C.marikoCpuDvfsTable)->freq
+            );
+        }
     } else {
         marikoCpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoCpuDvfsTableUnsafeFreqs)->freq);
     }
