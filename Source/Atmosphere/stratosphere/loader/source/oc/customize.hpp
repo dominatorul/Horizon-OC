@@ -82,7 +82,7 @@
      u32 mem_burst_latency;
      
      u32 marikoGpuVoltArray[24];
-     u32 eristaGpuVoltArray[15];
+     u32 eristaGpuVoltArray[14];
  
      u32 marikoCpuVmin;
 
