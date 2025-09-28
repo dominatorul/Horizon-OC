@@ -252,13 +252,25 @@ namespace ams::ldr::oc::pcv
     Result CpuFreqCvbTable(u32 *ptr)
     {
         cvb_entry_t *default_table = isMariko ? (cvb_entry_t *)(&mariko::CpuCvbTableDefault) : (cvb_entry_t *)(&erista::CpuCvbTableDefault);
-        cvb_entry_t *customize_table = const_cast<cvb_entry_t *>(
-            isMariko
-                ? (C.enableMarikoCpuUnsafeFreqs
-                      ? C.marikoCpuDvfsTableUnsafeFreqs
-                      : (C.marikoCpuUV ? C.marikoCpuDvfsTableSLT : C.marikoCpuDvfsTable))
-                : (C.enableEristaCpuUnsafeFreqs ? C.eristaCpuDvfsTableUnsafeFreqs : C.eristaCpuDvfsTable)
-        );
+        cvb_entry_t *customize_table = nullptr; // impossible to reach, there will always be a way to set a pointer
+
+        if (isMariko) {
+            if (C.enableMarikoCpuUnsafeFreqs) {
+                customize_table = const_cast<cvb_entry_t *>(C.marikoCpuDvfsTableUnsafeFreqs);
+            } else {
+                if (C.marikoCpuUV) {
+                    customize_table = const_cast<cvb_entry_t *>(C.marikoCpuDvfsTableSLT);
+                } else {
+                    customize_table = const_cast<cvb_entry_t *>(C.marikoCpuDvfsTable);
+                }
+            }
+        } else {
+            if (C.enableEristaCpuUnsafeFreqs) {
+                customize_table = const_cast<cvb_entry_t *>(C.eristaCpuDvfsTableUnsafeFreqs);
+            } else {
+                customize_table = const_cast<cvb_entry_t *>(C.eristaCpuDvfsTable);
+            }
+        }
         u32 cpu_max_volt = isMariko ? C.marikoCpuMaxVolt : C.eristaCpuMaxVolt;
         u32 cpu_freq_threshold = 1020'000;
         if (isMariko)
