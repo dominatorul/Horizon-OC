@@ -35,7 +35,7 @@
      NO_ADJ_ALL = 2,
 
      CUSTOMIZED_ALL = 4,
-     AUTO_ADJ,
+     AUTO_ADJ = 5,
  };
 
  using CustomizeCpuDvfsTable = pcv::cvb_entry_t[pcv::DvfsTableEntryLimit];
