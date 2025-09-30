@@ -65,6 +65,11 @@ def populate():
     voltages_e = [0] + list(range(700, 1100 + 1, 5))  # 0 first for Disabled
     processed_voltages_e = ["Disabled" if v == 0 else f"{v} mV" for v in voltages_e]
     processed_voltages_default = ["Default" if v == 0 else f"{v} mV" for v in voltages]
+    voltages_vmin = [0] + list(range(480, 650 + 1, 5))  # 0 first for Disabled
+    processed_voltages_vmin = ["Disabled" if v == 0 else f"{v} mV" for v in voltages_vmin]
+    voltages_vmin_e = [0] + list(range(700, 850 + 1, 5))  # 0 first for Disabled
+    processed_voltages_vmin_e = ["Disabled" if v == 0 else f"{v} mV" for v in voltages_vmin_e]
+
     freqs_khz = [
         76800, 153600, 230400, 307200, 384000, 460800, 537600, 614400, 691200, 768000,
         844800, 921600, 998400, 1075200, 1152000, 1228800, 1267200, 1305600, 1344000, 1382400, 1420800,
@@ -72,7 +77,7 @@ def populate():
     ]
     freqs_khz_e = [
         76800, 153600, 230400, 307200, 384000, 460800, 537600, 614400, 691200, 768000,
-        844800, 921600, 998400, 1075200, 1152000
+        844800, 921600, 998400, 1075200 #, 1152000, 1228800 # Disabled by default as these freqs can cause board damage
     ]
     freqs_mhz = [
         76.8, 153.6, 230.4, 307.2, 384.0, 460.8, 537.6, 614.4, 691.2, 768.0,
@@ -119,20 +124,28 @@ def populate():
             small=True,
             tag="volt_info"
     )
-    # dpg.add_combo(
-    #     items=processed_voltages,
-    #     default_value="Disabled",
-    #     label="Gpu vMin",
-    #     callback=k.grab_kip_storage_values_no_mult,
-    #     tag="g_vmin"
-    # )
-    # dpg.add_combo(
-    #     items=processed_voltages,
-    #     default_value="Disabled",
-    #     label="Gpu vMax",
-    #     callback=k.grab_kip_storage_values_no_mult,
-    #     tag="g_vmax"
-    # )
+    dpg.add_combo(
+         items=processed_voltages_vmin_e,
+         default_value="Disabled",
+         label="Erista GPU vMin",
+         callback=k.grab_kip_storage_values_no_mult,
+         tag="eristaGpuVmin"
+    )
+    dpg.add_combo(
+        items=processed_voltages_vmin,
+        default_value="Disabled",
+        label="Mariko GPU vMin",
+        callback=k.grab_kip_storage_values_no_mult,
+        tag="marikoGpuVmin"
+    )
+
+    dpg.add_combo(
+        items=processed_voltages,
+        default_value="Disabled",
+        label="Mariko GPU vMax",
+        callback=k.grab_kip_storage_values_no_mult,
+        tag="marikoGpuVmax"
+    )
 
     dpg.add_separator(label="Undervolt")
 

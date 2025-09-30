@@ -86,7 +86,10 @@
  
      u32 marikoCpuVmin;
 
-     
+     u32 eristaGpuVmin;
+     u32 marikoGpuVmin;
+     u32 marikoGpuVmax;
+
      CustomizeCpuDvfsTable eristaCpuDvfsTable;
      CustomizeCpuDvfsTable marikoCpuDvfsTable;
      CustomizeCpuDvfsTable marikoCpuDvfsTableSLT;

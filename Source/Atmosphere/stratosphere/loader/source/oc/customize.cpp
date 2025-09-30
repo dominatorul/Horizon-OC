@@ -89,6 +89,7 @@ volatile CustomizeTable C = {
 
 .marikoGpuUV = 0,
 
+
 .eristaCpuUV = 0,
 
 .eristaGpuUV = 0,
@@ -115,6 +116,7 @@ volatile CustomizeTable C = {
 .mem_burst_latency = 2,
 
 // NOTE: These tables should NOT BE USED and are only here as placeholders. Always try and find your own optimal tables.
+// Ensure the voltages actually increase or stay the sameot
 
 .marikoGpuVoltArray = {
     610  /* 76 */, 
@@ -132,7 +134,7 @@ volatile CustomizeTable C = {
     675  /* 998 */, 
     710  /* 1075 */, 
     735  /* 1152 */, 
-    785  /* 1228 */, 
+    785  /* 1228  (Only safe if GPU Scheduling is on)*/, 
     0    /* 1267  (Disabled by default) */,
     0    /* 1305  (Disabled by default) */,
     0    /* 1344  (Disabled by default) */,
@@ -156,13 +158,19 @@ volatile CustomizeTable C = {
     875  /* 691  */,
     900  /* 768  */,
     950  /* 844  */,
-    900  /* 921  */,
+    975  /* 921  */,
     0    /* 998  (Disabled by default) */,
     0    /* 1075 (Disabled by default) */,
 },
 
 
 .marikoCpuVmin = 600,
+
+.eristaGpuVmin = 810,
+
+.marikoGpuVmin = 610,
+
+.marikoGpuVmax = 800,
 
 /* Advanced Settings:
  * - Erista CPU DVFS Table:

@@ -48,11 +48,16 @@ namespace ams::ldr::oc::pcv
             {1963500, {1675751, -38635, 27}, {1120000}},
             {},
         };
+        
+        constexpr int gpuVmax = 750;
+
+        constexpr int gpuVmin = 610;
 
         constexpr u16 CpuMinVolts[] = {800, 637, 620, 610};
 
         constexpr u32 CpuClkOfficial = 1963'500;
         constexpr u32 CpuVoltOfficial = 1120;
+
 
         constexpr cvb_entry_t GpuCvbTableDefault[] = {
             // GPUB01_NA_CVB_TABLE
@@ -183,6 +188,10 @@ namespace ams::ldr::oc::pcv
             {1785000, {1227500}, {5100873, -279186, 4747}},
             {},
         };
+
+        constexpr int gpuVmin = 810;
+        
+        constexpr u32 CpuVoltOfficial = 1235;
 
         constexpr u32 CpuVoltL4T = 1235'000;
 

@@ -183,7 +183,7 @@ def set_psm_value(sender, app_data):
     value = next((x["value"] for x in PSM_OPTIONS if x["name"] == app_data), None)
     if value:
         ini.set_ini_values(str(ini_path), "psm", {"current_psm_mA": value})
-        common.show_popup("Success", f"PSM set to {app_data}")
+        common.show_popup("Success", f"Charge Limit set to {app_data}")
 
 def remove_tc_entries():
     ini_path = get_ini_path()
@@ -337,7 +337,7 @@ def populate():
         dpg.add_image("coolerhd", width=20, height=20)
 
 def set_white_tiger_clocks(app_data):
-
+    # cooler aah clocks
     # 1400mv emc max
     # 1375mv cpu max
     # 750mv vdd2 mariko max

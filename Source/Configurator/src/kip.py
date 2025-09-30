@@ -82,8 +82,13 @@ variables = [
     ("g_volt_e_921600", "u32"),
     ("g_volt_e_998400", "u32"),
     ("g_volt_e_1075200", "u32"),
-    ("g_volt_e_1152000", "u32"),
+#    ("g_volt_e_1152000", "u32"),
+#    ("g_volt_e_1228800", "u32"),
     ("marikoCpuVmin", "u32"),
+    ("eristaGpuVmin", "u32"),
+    ("marikoGpuVmin", "u32"),
+    ("marikoGpuVmax", "u32"),
+
 ]
 
 fmt_map = {
@@ -141,11 +146,14 @@ def load_all_vars():
 
     for e_freq in [
         "76800", "153600", "230400", "307200", "384000", "460800", "537600",
-        "614400", "691200", "768000", "844800", "921600", "998400", "1075200",
-        "1152000"
+        "614400", "691200", "768000", "844800", "921600", "998400", "1075200"# ,
+        # "1152000", "1228800"
     ]:
         c.load_entry_object(f"g_volt_e_{e_freq}", 3)
     c.load_entry_object("marikoCpuVmin", 3)
+    c.load_entry_object("eristaGpuVmin", 3)
+    c.load_entry_object("marikoGpuVmin", 3)
+    c.load_entry_object("marikoGpuVmax", 3)
 
 def freq_to_label(freq):
     if freq > 1382400:
@@ -240,7 +248,7 @@ def write_kip():
     if not d.autosave:
         c.show_popup("Success", "KIP saved successfully!")
 
-def read_kip(filename, debug=True):
+def read_kip(filename):
     MAGIC = b"CUST"
     struct_fmt = make_struct_format(variables)
     struct_size = struct.calcsize(struct_fmt)
@@ -254,21 +262,20 @@ def read_kip(filename, debug=True):
         values = struct.unpack(struct_fmt, raw)
         for (attr_name, _), val in zip(variables, values):
             setattr(d, attr_name, val)
-        if debug:
-            print("=== debug KIP layout ===")
-            offset = 0
-            for (attr_name, t) in variables:
-                code = fmt_map[t]
-                align = 8 if code == "d" else 4
-                padding = (-offset) % align
-                if padding:
-                    offset += padding
-                size = struct.calcsize(code)
-                raw_bytes = raw[offset:offset + size]
-                val = getattr(d, attr_name)
-                print(f"{attr_name:<20} | type={t:<6} | offset={offset:<4} | size={size:<2} | raw=0x{raw_bytes.hex()} | val={val}")
-                offset += size
-            print("========================")
+        print("=== value layout ===")
+        offset = 0
+        for (attr_name, t) in variables:
+            code = fmt_map[t]
+            align = 8 if code == "d" else 4
+            padding = (-offset) % align
+            if padding:
+                offset += padding
+            size = struct.calcsize(code)
+            raw_bytes = raw[offset:offset + size]
+            val = getattr(d, attr_name)
+            print(f"{attr_name:<20} | type={t:<6} | offset={offset:<4} | size={size:<2} | raw=0x{raw_bytes.hex()} | val={val}")
+            offset += size
+        print("========================")
     dpg.set_value("gpu_sched", g.check_gpu_sched())
     dpg.show_item("gpu_tab")
     dpg.show_item("cpu_tab")

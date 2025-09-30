@@ -21,7 +21,33 @@
  
  namespace ams::ldr::oc::pcv::erista
  {
- 
+    Result CpuFreqVdd(u32* ptr) {
+        dvfs_rail* entry = reinterpret_cast<dvfs_rail *>(reinterpret_cast<u8 *>(ptr) - offsetof(dvfs_rail, freq));
+    
+        R_UNLESS(entry->id == 1,            ldr::ResultInvalidCpuFreqVddEntry());
+        R_UNLESS(entry->min_mv == 250'000,  ldr::ResultInvalidCpuFreqVddEntry());
+        R_UNLESS(entry->step_mv == 5000,    ldr::ResultInvalidCpuFreqVddEntry());
+        R_UNLESS(entry->max_mv == 1525'000, ldr::ResultInvalidCpuFreqVddEntry());
+    
+        if (C.eristaCpuUV) {
+            if(!C.enableEristaCpuUnsafeFreqs) {
+                PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.eristaCpuDvfsTable)->freq);
+            } else {
+                PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.eristaCpuDvfsTableUnsafeFreqs)->freq);
+            }
+        } else {
+            PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.eristaCpuDvfsTable)->freq);
+        }
+        
+        R_SUCCEED();
+    }
+    Result GpuVmin(u32 *ptr)
+    {
+        if (!C.eristaGpuVmin)
+            R_SKIP();
+            PATCH_OFFSET(ptr, (int)C.eristaGpuVmin);
+            R_SUCCEED();
+    }
      Result CpuVoltRange(u32 *ptr)
      {
          u32 min_volt_got = *(ptr - 1);
@@ -41,42 +67,37 @@
      Result CpuVoltDfll(u32* ptr) {
         cvb_cpu_dfll_data *entry = reinterpret_cast<cvb_cpu_dfll_data *>(ptr);
     
-        R_UNLESS(entry->tune0_low == 0x0000FFCF,   ldr::ResultInvalidCpuVoltDfllEntry());
-        R_UNLESS(entry->tune0_high == 0x00000000,    ldr::ResultInvalidCpuVoltDfllEntry());
-        R_UNLESS(entry->tune1_low == 0x012207FF,   ldr::ResultInvalidCpuVoltDfllEntry());
-        R_UNLESS(entry->tune1_high == 0x03FFF7FF,    ldr::ResultInvalidCpuVoltDfllEntry());
+//        R_UNLESS(entry->tune0_low == 0x0000FFCF,   ldr::ResultInvalidCpuVoltDfllEntry());
+//        R_UNLESS(entry->tune0_high == 0x00000000,    ldr::ResultInvalidCpuVoltDfllEntry());
+//        R_UNLESS(entry->tune1_low == 0x012207FF,   ldr::ResultInvalidCpuVoltDfllEntry());
+//        R_UNLESS(entry->tune1_high == 0x03FFF7FF,    ldr::ResultInvalidCpuVoltDfllEntry());
+        if(!C.eristaCpuUV) {
+            R_SKIP();
+        }
+        PATCH_OFFSET(&(entry->dvco_calibration_max), 0x1C);
+        PATCH_OFFSET(&(entry->tune1_high), 0x10);
+        PATCH_OFFSET(&(entry->tune_high_margin_millivolts), 0xc);
+
         switch(C.eristaCpuUV) {
-           case 0:
-               break;
            case 1:
-               PATCH_OFFSET(&(entry->tune0_low), 0x0000FF88); //process_id 0 // EOS UV2
-               PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
-               PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
-               PATCH_OFFSET(&(entry->tune1_high), 0x00000000);
+               PATCH_OFFSET(&(entry->tune0_low), 0x0000FFFF); //process_id 0 // EOS UV1
+               PATCH_OFFSET(&(entry->tune1_low), 0x027007FF);
                break;
            case 2:
-               PATCH_OFFSET(&(entry->tune0_low), 0x0000FF90); //process_id 1 // EOS Uv2
-               PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
-               PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
-               PATCH_OFFSET(&(entry->tune1_high), 0x00000000);
+               PATCH_OFFSET(&(entry->tune0_low), 0x0000EFFF); //process_id 1 // EOS Uv2
+               PATCH_OFFSET(&(entry->tune1_low), 0x027407FF);
                break;
            case 3:
-               PATCH_OFFSET(&(entry->tune0_low), 0x0000FF98); //process_id 0 // EOS UV3
-               PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
-               PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
-               PATCH_OFFSET(&(entry->tune1_high), 0x00000000);
+               PATCH_OFFSET(&(entry->tune0_low), 0x0000DFFF); //process_id 0 // EOS UV3
+               PATCH_OFFSET(&(entry->tune1_low), 0x027807FF);
                break;
            case 4:
-               PATCH_OFFSET(&(entry->tune0_low), 0x0000FFA0); //process_id 1 // EOS Uv4
-               PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
-               PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
-               PATCH_OFFSET(&(entry->tune1_high), 0x00000000);
+               PATCH_OFFSET(&(entry->tune0_low), 0x0000DFDF); //process_id 1 // EOS Uv4
+               PATCH_OFFSET(&(entry->tune1_low), 0x027A07FF);
                break;
            case 5:
-               PATCH_OFFSET(&(entry->tune0_low), 0x0000FFFF); // EOS UV6
-               PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
-               PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
-               PATCH_OFFSET(&(entry->tune1_high), 0x022217FF);
+               PATCH_OFFSET(&(entry->tune0_low), 0x0000CFDF); // EOS UV5
+               PATCH_OFFSET(&(entry->tune1_low), 0x037007FF);
                break;
            default:
                break;
@@ -337,9 +358,10 @@
          u32 GpuCvbDefaultMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(GpuCvbTableDefault)->freq);
  
          PatcherEntry<u32> patches[] = {
+            { "CPU Freq Vdd",   &CpuFreqVdd,            1, nullptr, CpuClkOSLimit },
              {"CPU Freq Table", CpuFreqCvbTable<false>, 1, nullptr, CpuCvbDefaultMaxFreq},
-             {"CPU Volt Limit", &CpuVoltRange, 0, &CpuMaxVoltPatternFn},
-             { "CPU Volt Dfll",  &CpuVoltDfll,           1, nullptr, 0x0000FFCF },
+             { "CPU Volt Limit", &CpuVoltRange,         13, nullptr, CpuVoltOfficial },
+             { "CPU Volt Dfll",  &CpuVoltDfll,           1, nullptr, 0xFFEAD0FF },
              {"GPU Freq Table", GpuFreqCvbTable<false>, 1, nullptr, GpuCvbDefaultMaxFreq},
              {"GPU Freq Asm", &GpuFreqMaxAsm, 2, &GpuMaxClockPatternFn},
              {"GPU Freq PLL", &GpuFreqPllLimit, 1, nullptr, GpuClkPllLimit},
@@ -347,6 +369,7 @@
              {"MEM Freq Max", &MemFreqMax, 0, nullptr, EmcClkOSLimit},
              {"MEM Freq PLLM", &MemFreqPllmLimit, 2, nullptr, EmcClkPllmLimit},
              {"MEM Volt", &MemVoltHandler, 2, nullptr, MemVoltHOS},
+             {"GPU Vmin", &GpuVmin, 0, nullptr, gpuVmin},
          };
  
          for (uintptr_t ptr = mapped_nso;

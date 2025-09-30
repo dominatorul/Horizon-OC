@@ -21,6 +21,22 @@
  
  namespace ams::ldr::oc::pcv::mariko {
  
+Result GpuVmin(u32 *ptr)
+{
+    if (!C.marikoGpuVmin)
+        R_SKIP();
+    PATCH_OFFSET(ptr, (int)C.marikoGpuVmin);
+    R_SUCCEED();
+}
+
+Result GpuVmax(u32 *ptr)
+{
+    if (!C.marikoGpuVmax)
+        R_SKIP();
+    PATCH_OFFSET(ptr, (int)C.marikoGpuVmax);
+    R_SUCCEED();
+}
+
  Result CpuFreqVdd(u32* ptr) {
      dvfs_rail* entry = reinterpret_cast<dvfs_rail *>(reinterpret_cast<u8 *>(ptr) - offsetof(dvfs_rail, freq));
  
@@ -78,31 +94,31 @@
         case 0:
             break;
         case 1:
-            PATCH_OFFSET(&(entry->tune0_low), 0x0000FF88); //process_id 0 // EOS UV2
+            PATCH_OFFSET(&(entry->tune0_low), 0x0000FF88); //process_id 0 // EOS UV1
             PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
             PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
             PATCH_OFFSET(&(entry->tune1_high), 0x00000000);
             break;
         case 2:
-            PATCH_OFFSET(&(entry->tune0_low), 0x0000FF90); //process_id 1 // EOS Uv2
+            PATCH_OFFSET(&(entry->tune0_low), 0x0000FF90); /// EOS Uv2
             PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
             PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
             PATCH_OFFSET(&(entry->tune1_high), 0x00000000);
             break;
         case 3:
-            PATCH_OFFSET(&(entry->tune0_low), 0x0000FF98); //process_id 0 // EOS UV3
+            PATCH_OFFSET(&(entry->tune0_low), 0x0000FF98); // EOS UV3
             PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
             PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
             PATCH_OFFSET(&(entry->tune1_high), 0x00000000);
             break;
         case 4:
-            PATCH_OFFSET(&(entry->tune0_low), 0x0000FFA0); //process_id 1 // EOS Uv4
+            PATCH_OFFSET(&(entry->tune0_low), 0x0000FFA0); // EOS Uv4
             PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
             PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
             PATCH_OFFSET(&(entry->tune1_high), 0x00000000);
             break;
         case 5:
-            PATCH_OFFSET(&(entry->tune0_low), 0x0000FFFF); // EOS UV6
+            PATCH_OFFSET(&(entry->tune0_low), 0x0000FFFF); // EOS UV5
             PATCH_OFFSET(&(entry->tune0_high), 0x0000FFFF);
             PATCH_OFFSET(&(entry->tune1_low), 0x021107FF);
             PATCH_OFFSET(&(entry->tune1_high), 0x022217FF);
@@ -647,7 +663,9 @@
          { "MEM Freq Max",   &MemFreqMax,            0, nullptr, EmcClkOSLimit },
          { "MEM Freq PLLM",  &MemFreqPllmLimit,      2, nullptr, EmcClkPllmLimit },
          { "MEM Vddq",       &EmcVddqVolt,           2, nullptr, EmcVddqDefault },
-         { "MEM Vdd2",       &MemVoltHandler,        2, nullptr, MemVdd2Default }
+         { "MEM Vdd2",       &MemVoltHandler,        2, nullptr, MemVdd2Default },
+         { "GPU Vmin",       &GpuVmin,               0, nullptr, gpuVmin},
+         { "GPU Vmax",       &GpuVmax,               0, nullptr, gpuVmax},
      };
  
      for (uintptr_t ptr = mapped_nso;

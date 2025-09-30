@@ -90,7 +90,9 @@ with dpg.texture_registry(show=False):
 
 with dpg.file_dialog(directory_selector=False, show=False, tag="file_dialog", width=500, height=300, modal=True, callback=k.store):
     dpg.add_file_extension(".kip")
-
+def refresh_drives():
+    setattr(ins, "drive_list", ins.get_drives())
+    dpg.configure_item("drive_select", items=ins.drive_list)
 with dpg.window(label="Configurator", width=400, height=300,id="main_window"):
     with dpg.tab_bar():
         with dpg.tab(label="File"):
@@ -102,9 +104,11 @@ with dpg.window(label="Configurator", width=400, height=300,id="main_window"):
                 callback=lambda: webbrowser.open("https://github.com/souldbminersmwc/Horizon-OC")
             )
             dpg.add_separator(label="Installation")
+            dpg.add_button(label="Refresh Drive List", callback=refresh_drives)
             dpg.add_combo(
                 items=ins.drive_list,
                 default_value="Select a drive!",
+                tag="drive_select",
                 callback=ins.check_atmosphere
             )
             dpg.add_checkbox(label="Autosave", default_value=false, callback=ins.autosave_toggle)
