@@ -1,7 +1,9 @@
 /*
- * Copyright (c) Souldbminer and Horizon OC Contributors
+ * Copyright (C) Switch-OC-Suite
  *
  * Copyright (c) 2023 hanai3Bi
+ *
+ * Copyright (c) Souldbminer and Horizon OC Contributors
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms and conditions of the GNU General Public License,
@@ -48,7 +50,7 @@ namespace ams::ldr::oc::pcv
             {1963500, {1675751, -38635, 27}, {1120000}},
             {},
         };
-        
+
         constexpr int gpuVmax = 750;
 
         constexpr int gpuVmin = 610;
@@ -190,7 +192,7 @@ namespace ams::ldr::oc::pcv
         };
 
         constexpr int gpuVmin = 810;
-        
+
         constexpr u32 CpuVoltOfficial = 1235;
 
         constexpr u32 CpuVoltL4T = 1235'000;
@@ -347,11 +349,11 @@ namespace ams::ldr::oc::pcv
                 customize_table = const_cast<cvb_entry_t *>(C.marikoGpuDvfsTableHiOPT);
                 break;
             case 3:
-                if(C.enableMarikoGpuUnsafeFreqs) 
+                if(C.enableMarikoGpuUnsafeFreqs)
                 {
                 customize_table = const_cast<cvb_entry_t *>(C.marikoGpuDvfsTableUv3UnsafeFreqs);
-                } 
-                else 
+                }
+                else
                 {
                 customize_table = const_cast<cvb_entry_t *>(C.marikoGpuDvfsTable);
                 }
@@ -375,11 +377,11 @@ namespace ams::ldr::oc::pcv
                 customize_table = const_cast<cvb_entry_t *>(C.eristaGpuDvfsTableHigh);
                 break;
             case 3:
-                if(C.enableEristaGpuUnsafeFreqs) 
+                if(C.enableEristaGpuUnsafeFreqs)
                 {
                 customize_table = const_cast<cvb_entry_t *>(C.eristaGpuDvfsTableUv3UnsafeFreqs);
-                } 
-                else 
+                }
+                else
                 {
                 customize_table = const_cast<cvb_entry_t *>(C.eristaGpuDvfsTable);
                 }

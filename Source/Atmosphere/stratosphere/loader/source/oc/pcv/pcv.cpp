@@ -1,8 +1,10 @@
 /*
- * Copyright (c) Souldbminer and Horizon OC Contributors
+ * Copyright (C) Switch-OC-Suite
  *
  * Copyright (c) 2023 hanai3Bi
- * 
+ *
+ * Copyright (c) Souldbminer and Horizon OC Contributors
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms and conditions of the GNU General Public License,
  * version 2, as published by the Free Software Foundation.
@@ -125,11 +127,11 @@ void SafetyCheck() {
         eristaGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaGpuDvfsTableHigh)->freq);
         break;
     case 3:
-        if(C.enableEristaGpuUnsafeFreqs) 
+        if(C.enableEristaGpuUnsafeFreqs)
         {
             eristaGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaGpuDvfsTableUv3UnsafeFreqs)->freq);
-        } 
-        else 
+        }
+        else
         {
             eristaGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.eristaGpuDvfsTable)->freq);
         }
@@ -141,30 +143,30 @@ void SafetyCheck() {
 
     u32 marikoGpuDvfsMaxFreq;
     switch (C.marikoGpuUV) {
-        case 0: 
+        case 0:
             marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTable)->freq);
             break;
-        case 1: 
+        case 1:
             marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTableSLT)->freq);
             break;
-        case 2: 
+        case 2:
             marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTableHiOPT)->freq);
             break;
         case 3:
-            if(C.enableMarikoGpuUnsafeFreqs) 
+            if(C.enableMarikoGpuUnsafeFreqs)
             {
                 marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTableUv3UnsafeFreqs)->freq);
-            } 
-            else 
+            }
+            else
             {
                 marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTable)->freq);
             }
             break;
-        default: 
+        default:
             marikoGpuDvfsMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(C.marikoGpuDvfsTable)->freq);
             break;
     }
-    
+
     sValidator validators[] = {
         { C.commonCpuBoostClock, 1020'000, 3000'000, true },
         { C.commonEmcMemVolt,    1100'000, 1500'000 }, // Official burst vmax for the RAMs
