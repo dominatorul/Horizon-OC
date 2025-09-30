@@ -227,7 +227,7 @@ Result GpuVmax(u32 *ptr)
       * you'd better calculate timings yourself rather than relying on following algorithm.
       */
 
-     if (C.mtcConf != AUTO_ADJ_ALL)
+     if (C.mtcConfMariko != AUTO_ADJ_ALL)
          return;
 
      // scale with linear interpolation
@@ -400,7 +400,7 @@ Result GpuVmax(u32 *ptr)
  }
 
  void MemMtcTableCustomAdjust(MarikoMtcTable* table) {
-     if (C.mtcConf != CUSTOM_ADJ_ALL)
+     if (C.mtcConfMariko != CUSTOM_ADJ_ALL)
          return;
 
      constexpr u32 MC_ARB_DIV = 4;

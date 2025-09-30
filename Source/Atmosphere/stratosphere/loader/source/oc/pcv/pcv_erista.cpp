@@ -160,7 +160,7 @@
      }
 
      void MemMtcTableAutoAdjust(EristaMtcTable *table) {
-         if (C.mtcConf != AUTO_ADJ)
+         if (C.mtcConfErista != AUTO_ADJ)
              return;
 
  #define WRITE_PARAM_ALL_REG(TABLE, PARAM, VALUE) \

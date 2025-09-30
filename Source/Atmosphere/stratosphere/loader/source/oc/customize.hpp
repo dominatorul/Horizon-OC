@@ -30,7 +30,12 @@
  #include "mtc_timing_table.hpp"
 
  enum MtcConfig: u32 {
-     AUTO_ADJ = 0,
+     AUTO_ADJ_ALL = 0,
+     CUSTOM_ADJ_ALL = 1,
+     NO_ADJ_ALL = 2,
+
+     CUSTOMIZED_ALL = 4,
+     AUTO_ADJ,
  };
 
  using CustomizeCpuDvfsTable = pcv::cvb_entry_t[pcv::DvfsTableEntryLimit];
@@ -44,7 +49,8 @@
  typedef struct CustomizeTable {
      u8  cust[4] = {'C', 'U', 'S', 'T'};
      u32 custRev = CUST_REV;
-     u32 mtcConf = AUTO_ADJ_ALL;
+     u32 mtcConfErista = AUTO_ADJ;
+     u32 mtcConfMariko = AUTO_ADJ_ALL; // TODO: Fix mariko and merge into mtcConf
      u32 commonCpuBoostClock;
      u32 commonEmcMemVolt;
      u32 eristaCpuMaxVolt;
