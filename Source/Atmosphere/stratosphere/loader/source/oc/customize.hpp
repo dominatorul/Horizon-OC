@@ -30,11 +30,7 @@
  #include "mtc_timing_table.hpp"
 
  enum MtcConfig: u32 {
-     AUTO_ADJ_ALL = 0,
-     CUSTOM_ADJ_ALL = 1,
-     NO_ADJ_ALL = 2,
-
-     CUSTOMIZED_ALL = 4,
+     AUTO_ADJ = 0,
  };
 
  using CustomizeCpuDvfsTable = pcv::cvb_entry_t[pcv::DvfsTableEntryLimit];

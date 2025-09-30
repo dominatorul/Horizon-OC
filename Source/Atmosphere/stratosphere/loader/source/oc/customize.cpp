@@ -91,7 +91,6 @@ volatile CustomizeTable C = {
 
 .marikoGpuUV = 0,
 
-
 .eristaCpuUV = 0,
 
 .eristaGpuUV = 0,
