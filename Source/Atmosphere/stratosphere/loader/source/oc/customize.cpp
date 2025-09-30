@@ -135,7 +135,7 @@ volatile CustomizeTable C = {
     675  /* 998 */,
     710  /* 1075 */,
     735  /* 1152 */,
-    785  /* 1228  (Only safe if GPU Scheduling is on)*/,
+    785  /* 1228 */,
     0    /* 1267  (Disabled by default) */,
     0    /* 1305  (Disabled by default) */,
     0    /* 1344  (Disabled by default) */,
