@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) Souldbminer & Horizon OC Contributors
+ * 
  * Copyright (c) 2023 hanai3Bi
  *
  * This program is free software; you can redistribute it and/or modify it
