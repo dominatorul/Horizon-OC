@@ -83,7 +83,7 @@
      const u32 tRPab = !C.t2_tRP ? 21 : tRPpb + 3;
 
      // tRC (ACTIVATE-ACTIVATE command period same bank) in ns
-     const u32 tRC = tRPpb + tRAS;
+     const u32 tRC = tRPab + tRAS;
 
      const u32 tPPD = 4;
 

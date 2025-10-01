@@ -279,7 +279,7 @@ void MemMtcTableAutoAdjust(MarikoMtcTable* table) {
     }
 
     WRITE_PARAM_ALL_REG(table, emc_txsr,                MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe));
-//   WRITE_PARAM_ALL_REG(table, emc_txsrdll,             MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe)); // TODO: Test this.
+    WRITE_PARAM_ALL_REG(table, emc_txsrdll,             MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe));
     WRITE_PARAM_ALL_REG(table, emc_tckesr,              GET_CYCLE_CEIL(tSR));
     WRITE_PARAM_ALL_REG(table, emc_tfaw,                GET_CYCLE_CEIL(tFAW));
     WRITE_PARAM_ALL_REG(table, emc_trpab,               GET_CYCLE_CEIL(tRPab));
