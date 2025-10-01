@@ -85,7 +85,7 @@ volatile CustomizeTable C = {
  *   Not enabled by default.
  *   This will not work without sys-clk-OC.
  */
-.marikoEmcVddqVolt = 600000,
+.marikoEmcVddqVolt = 0,
 
 .marikoCpuUV = 0,
 
