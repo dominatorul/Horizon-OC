@@ -105,6 +105,8 @@ volatile CustomizeTable C = {
 
 .commonGpuVoltOffset = 0,
 
+.marikoEmcDvbShift = 0,
+
 .t1_tRCD = 0,
 .t2_tRP = 0,
 .t3_tRAS = 0,
@@ -114,7 +116,7 @@ volatile CustomizeTable C = {
 .t7_tWTR = 0,
 .t8_tREFI = 0,
 
-.mem_burst_latency = 2,
+.mem_burst_latency = 0,
 
 // NOTE: These tables should NOT BE USED and are only here as placeholders. Always try and find your own optimal tables.
 // Ensure the voltages actually increase or stay the sameot
