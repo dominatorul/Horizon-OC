@@ -160,7 +160,7 @@
      }
 
      void MemMtcTableAutoAdjust(EristaMtcTable *table) {
-         if (C.mtcConfErista != AUTO_ADJ)
+         if (C.mtcConf != AUTO_ADJ)
              return;
 
  #define WRITE_PARAM_ALL_REG(TABLE, PARAM, VALUE) \
@@ -190,6 +190,11 @@
          WRITE_PARAM_ALL_REG(table, emc_tfaw, GET_CYCLE_CEIL(tFAW));
          WRITE_PARAM_ALL_REG(table, emc_trpab, GET_CYCLE_CEIL(tRPab));
          WRITE_PARAM_ALL_REG(table, emc_trefbw, REFBW);
+         WRITE_PARAM_ALL_REG(table, emc_tcke, 0x68);
+
+           //       WRITE_PARAM_ALL_REG(table, emc_r2w, R2W);
+            //               WRITE_PARAM_ALL_REG(table, emc_w2r, W2R);
+             //                       WRITE_PARAM_ALL_REG(table, emc_w2p, WTP);
 
  #define WRITE_PARAM_BURST_MC_REG(TABLE, PARAM, VALUE) TABLE->burst_mc_regs.PARAM = VALUE;
 
@@ -203,10 +208,10 @@
          table->burst_mc_regs.mc_emem_arb_timing_rrd = CEIL(GET_CYCLE_CEIL(tRRD) / MC_ARB_DIV) - 1;
          //table->burst_mc_regs.mc_emem_arb_timing_rap2pre = CEIL(GET_CYCLE_CEIL(tRTP) / MC_ARB_DIV);
          //table->burst_mc_regs.mc_emem_arb_timing_wap2pre = CEIL(WTP / MC_ARB_DIV);
-         // table->burst_mc_regs.mc_emem_arb_timing_r2r     = CEIL(table->burst_regs.emc_rext / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-         // table->burst_mc_regs.mc_emem_arb_timing_w2w     = CEIL(table->burst_regs.emc_wext / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+  //        table->burst_mc_regs.mc_emem_arb_timing_r2r     = CEIL(table->burst_regs.emc_rext / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+   //       table->burst_mc_regs.mc_emem_arb_timing_w2w     = CEIL(table->burst_regs.emc_wext / MC_ARB_DIV) - 1 + MC_ARB_SFA;
     //     table->burst_mc_regs.mc_emem_arb_timing_r2w = CEIL(R2W / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-    //     table->burst_mc_regs.mc_emem_arb_timing_w2r = CEIL(W2R / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+     //    table->burst_mc_regs.mc_emem_arb_timing_w2r = CEIL(W2R / MC_ARB_DIV) - 1 + MC_ARB_SFA;
          table->burst_mc_regs.mc_emem_arb_timing_rfcpb = CEIL(GET_CYCLE_CEIL(tRFCpb) / MC_ARB_DIV);
          // table->burst_mc_regs.mc_emem_arb_timing_ccdmw   = CEIL(tCCDMW / MC_ARB_DIV) -1 + MC_ARB_SFA;
      }

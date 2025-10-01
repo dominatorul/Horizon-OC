@@ -85,7 +85,7 @@ volatile CustomizeTable C = {
  *   Not enabled by default.
  *   This will not work without sys-clk-OC.
  */
-.marikoEmcVddqVolt = 0,
+.marikoEmcVddqVolt = 600000,
 
 .marikoCpuUV = 0,
 
@@ -105,6 +105,8 @@ volatile CustomizeTable C = {
 
 .commonGpuVoltOffset = 0,
 
+.marikoEmcDvbShift = 0,
+
 .t1_tRCD = 0,
 .t2_tRP = 0,
 .t3_tRAS = 0,
@@ -114,7 +116,7 @@ volatile CustomizeTable C = {
 .t7_tWTR = 0,
 .t8_tREFI = 0,
 
-.mem_burst_latency = 2,
+.mem_burst_latency = 0,
 
 // NOTE: These tables should NOT BE USED and are only here as placeholders. Always try and find your own optimal tables.
 // Ensure the voltages actually increase or stay the sameot
@@ -386,7 +388,7 @@ volatile CustomizeTable C = {
     {  768000, { }, { 1191317, 8144, -940, 808, -21583, 226 } },
     {  844800, { }, { 1233208, 8144, -940, 808, -21583, 226 } },
     {  921600, { }, { 1275100, 8144, -940, 808, -21583, 226 } },
-    {  998400, { }, { 1316991, 8144, -940, 808, -21583, 226 } }, // UNSAFE
+    {  998400, { }, { 1316991, 8144, -940, 808, -21583, 226 } }, // POTENTIALLY UNSAFE
     {  1075200, { }, { 1358882, 8144, -940, 808, -21583, 226 } }, // UNSAFE
 //    {  1152000, { }, { 1400773, 8144, -940, 808, -21583, 226 } }, // DANGEROUS
 //    {  1228800, { }, { 1440773, 8144, -940, 808, -21583, 226 } }, // DANGEROUS
