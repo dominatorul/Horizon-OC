@@ -53,5 +53,5 @@ Run build.bat or cd into folder and run "python -m PyInstaller --onefile --add-d
 ## Credits
 meha for Switch-Oc-Suite<br>
 sys-clk team for sys-clk<br>
-b0rd2auth for Ultrahand sys-clk fork<br>
-Lightos and Sammybigio2010 for early testing<br>
+b0rd2death for Ultrahand sys-clk fork<br>
+Lightos and Sammybigio2011 for early testing<br>
