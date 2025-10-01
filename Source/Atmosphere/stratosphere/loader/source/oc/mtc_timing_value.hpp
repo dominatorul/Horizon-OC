@@ -48,7 +48,7 @@
      const std::array<u32, 10> tWTR_values = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
      // Preset Six
-     const std::array<u32, 6> tREFpb_values = {488, 976, 1952, 3256, 9999, 9999};
+     const std::array<u32, 6> tREFpb_values = {488, 976, 1952, 3256, 6512, 9999};
 
      // const u32 TIMING_PRESET_ONE = C.ramTimingPresetOne;
      // const u32 TIMING_PRESET_TWO = C.ramTimingPresetTwo;
@@ -64,7 +64,7 @@
     // Write Latency
     const u32 WL = 14 + C.mem_burst_latency;
     // Read Latency
-    const u32 RL = 32 - C.mem_burst_latency;
+    const u32 RL = 32 + C.mem_burst_latency;
 
     // tRFCpb (refresh cycle time per bank) in ns for 8Gb density
     const u32 tRFCpb = !C.t5_tRFC ? 140 : tRFC_values[C.t5_tRFC-1];

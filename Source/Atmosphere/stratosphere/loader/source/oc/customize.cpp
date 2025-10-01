@@ -83,9 +83,8 @@ volatile CustomizeTable C = {
  *   Value should be divided evenly by 5'000
  *   Default: 600'000
  *   Not enabled by default.
- *   This will not work without sys-clk-OC.
  */
-.marikoEmcVddqVolt = 0,
+.marikoEmcVddqVolt = 600000,
 
 .marikoCpuUV = 0,
 
@@ -118,6 +117,13 @@ volatile CustomizeTable C = {
 
 .mem_burst_latency = 0,
 
+.marikoCpuVmin = 600,
+
+.eristaGpuVmin = 810,
+
+.marikoGpuVmin = 610,
+
+.marikoGpuVmax = 800,
 // NOTE: These tables should NOT BE USED and are only here as placeholders. Always try and find your own optimal tables.
 // Ensure the voltages actually increase or stay the sameot
 
@@ -167,13 +173,6 @@ volatile CustomizeTable C = {
 },
 
 
-.marikoCpuVmin = 600,
-
-.eristaGpuVmin = 810,
-
-.marikoGpuVmin = 610,
-
-.marikoGpuVmax = 800,
 
 /* Advanced Settings:
  * - Erista CPU DVFS Table:

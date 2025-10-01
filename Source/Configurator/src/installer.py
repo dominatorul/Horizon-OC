@@ -28,6 +28,7 @@ import urllib.request
 import zipfile
 import kip as k
 from defaults import d
+import settings as s
 
 def autosave_toggle(sender, app_data):
     d.autosave=app_data
@@ -42,9 +43,6 @@ def get_drives():
 
 
 # Change if you plan to fork
-kip_download_link="https://github.com/souldbminersmwc/Horizon-OC/releases/latest/download/loader.kip"
-hoc_clk_download_link="https://github.com/souldbminersmwc/Horizon-OC/releases/latest/download/hoc-clk.zip"
-ams_download_link=""
 
 def download_and_extract_zip(c, download_url, zip_filename="temp.zip", success_message="Installed file!"):
     """
@@ -92,7 +90,7 @@ def downloadLoader(): # This has to be different as it extracts to a custom loca
     else:
         try:
             directory_make = c.drive + "atmosphere/kips/"
-            urllib.request.urlretrieve(kip_download_link, directory_make + "hoc.kip")
+            urllib.request.urlretrieve(s.kip_download_link, directory_make + "hoc.kip")
         except Exception as e:
             c.show_popup(title="Error", content=f"Download failed:\n{e}")
         finally:
@@ -109,7 +107,7 @@ def check_atmosphere(sender, app_data, user_data):
         k.kip_file_path = f"{atmosphere_path}/kips/hoc.kip"
         k.read_kip(c.drive + "atmosphere/kips/hoc.kip")
         print(f"Reading kip from drive {c.drive}")
-        k.load_all_vars()
+        s.load_all_vars()
     elif os.path.isdir(atmosphere_path) and os.path.isfile(package3_path):
         dpg.set_value("status_text", "Atmosphere install found!")
     else:

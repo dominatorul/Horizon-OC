@@ -24,28 +24,20 @@ import dearpygui.dearpygui as dpg
 import common
 import kip as k
 import gpu as g
+import settings as s
 def populate():
-    freqs_hz_cpu = [
-        1020000, 1122000, 1224000, 1326000, 1428000, 1581000, 1683000,
-        1785000, 1887000, 1963500, 2091000, 2193000, 2295000, 2397000,
-        2499000, 2601000, 2703000, 2805000, 2907000
-    ]
-    freqs_mhz_cpu = [
-        1020.0, 1122.0, 1224.0, 1326.0, 1428.0, 1581.0, 1683.0,
-        1785.0, 1887.0, 1963.5, 2091.0, 2193.0, 2295.0, 2397.0,
-        2499.0, 2601.0, 2703.0, 2805.0, 2907.0
-    ]
-    freqs_mhz_cpu_label = [f"{f} MHz" for f in freqs_mhz_cpu]
+
+    freqs_mhz_cpu_label = [f"{f} MHz" for f in s.freqs_mhz_cpu]
     offsets = list(range(0, 101, 5))
     processed_offsets = ["Disabled" if v == 0 else f"-{v}mV" for v in offsets]
-    voltages = [0] + list(range(1000, 1160 + 1, 5))  # 0 first for Disabled
+    voltages = [0] + list(range(1000, 1160 + 1, s.mariko_voltage_step))  # 0 first for Disabled
     processed_voltages = ["Disabled" if v == 0 else f"{v}mV" for v in voltages]
     processed_voltages_default = ["Default" if v == 0 else f"{v}mV" for v in voltages]
-    voltages_e = [0] + list(range(1120, 1255 + 1, 5)) + [1257]  # 0 first for Disabled
+    voltages_e = [0] + list(range(1120, 1255 + 1, s.mariko_voltage_step)) + [1257]  # 0 first for Disabled
     processed_voltages_e = ["Disabled" if v == 0 else f"{v}mV" for v in voltages_e]
     processed_voltages_default_e = ["Default" if v == 0 else f"{v}mV" for v in voltages_e]
 
-    vmin_voltages = list(range(500, 700 + 1, 5))  # 0 first for Disabled
+    vmin_voltages = list(range(s.mariko_cpu_min_vmin, s.mariko_cpu_max_vmin + 1, s.mariko_voltage_step))  # 0 first for Disabled
     vmin_processed_voltages = ["Disabled" if v == 0 else f"{v}mV" for v in vmin_voltages]
 
     dpg.add_separator(label="Frequencies")

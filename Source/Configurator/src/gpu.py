@@ -25,6 +25,7 @@ import kip as k
 import common
 from pathlib import Path
 import ini
+import settings as s
 
 def unimplemented():
     pass
@@ -58,33 +59,19 @@ def toggle_gpu_sched(sender, app_data):
     common.show_popup("Success", f"Set GPU Scheduling to {app_data}")
 
 def populate():
-    offsets = list(range(0, 51, 5))
+    offsets = list(range(0, s.mariko_gpu_offset_max + 1, s.mariko_voltage_step))
     processed_offsets = ["Disabled" if v == 0 else f"-{v} mV" for v in offsets]
-    voltages = [0] + list(range(480, 960 + 1, 5))  # 0 first for Disabled
+    voltages = [0] + list(range(s.mariko_gpu_min_volt, s.mariko_gpu_max_volt + 1, s.mariko_voltage_step))  # 0 first for Disabled
     processed_voltages = ["Disabled" if v == 0 else f"{v} mV" for v in voltages]
-    voltages_e = [0] + list(range(700, 1100 + 1, 5))  # 0 first for Disabled
+    voltages_e = [0] + list(range(s.erista_gpu_min_volt, s.erista_gpu_max_volt + 1, s.mariko_voltage_step))  # 0 first for Disabled
     processed_voltages_e = ["Disabled" if v == 0 else f"{v} mV" for v in voltages_e]
     processed_voltages_default = ["Default" if v == 0 else f"{v} mV" for v in voltages]
-    voltages_vmin = [0] + list(range(480, 650 + 1, 5))  # 0 first for Disabled
+    voltages_vmin = [0] + list(range(s.mariko_gpu_min_volt, s.mariko_gpu_max_vmin + 1, s.mariko_voltage_step))  # 0 first for Disabled
     processed_voltages_vmin = ["Disabled" if v == 0 else f"{v} mV" for v in voltages_vmin]
-    voltages_vmin_e = [0] + list(range(700, 850 + 1, 5))  # 0 first for Disabled
+    voltages_vmin_e = [0] + list(range(s.erista_gpu_min_volt, s.erista_gpu_max_vmin + 1, s.mariko_voltage_step))  # 0 first for Disabled
     processed_voltages_vmin_e = ["Disabled" if v == 0 else f"{v} mV" for v in voltages_vmin_e]
 
-    freqs_khz = [
-        76800, 153600, 230400, 307200, 384000, 460800, 537600, 614400, 691200, 768000,
-        844800, 921600, 998400, 1075200, 1152000, 1228800, 1267200, 1305600, 1344000, 1382400, 1420800,
-        1459200, 1497600, 1536000
-    ]
-    freqs_khz_e = [
-        76800, 153600, 230400, 307200, 384000, 460800, 537600, 614400, 691200, 768000,
-        844800, 921600, 998400, 1075200 #, 1152000, 1228800 # Disabled by default as these freqs can cause board damage
-    ]
-    freqs_mhz = [
-        76.8, 153.6, 230.4, 307.2, 384.0, 460.8, 537.6, 614.4, 691.2, 768.0,
-        844.8, 921.6, 998.4, 1075.2, 1152.0, 1228.8, 1267.2, 1305.6, 1344.0, 1382.4,
-        1420.8, 1459.2, 1497.6, 1536.0
-    ]
-    freqs_mhz_label = [f"{f} MHz" for f in freqs_mhz]
+    freqs_mhz_label = [f"{f} MHz" for f in s.freqs_mhz]
     
     dpg.add_separator(label="Frequencies")
 
@@ -182,51 +169,67 @@ def populate():
 
     dpg.add_separator(label="Custom Table (Mariko)")
 
-    for freq in freqs_khz:
-        if(freq > 1535000):
+    for freq in s.freqs_khz:
+        if(freq > s.mariko_meme_threshold):
+            mhz_color = s.danger_color
             mhz_label = f"{freq / 1000:.1f} MHz"
-        elif(freq > 1382400):
-            mhz_label = f"{freq / 1000:.1f} MHz (DANGEROUS)"
-        elif(freq > 1152000):
-            mhz_label = f"{freq / 1000:.1f} MHz (UNSAFE)"
+            safety_label = ""
+        elif(freq > s.mariko_dangerous_gpu_threshold):
+            mhz_color = s.danger_color
+            mhz_label = f"{freq / 1000:.1f} MHz"
+            safety_label = "(DANGEROUS)"
+        elif(freq > s.mariko_unsafe_gpu_threshold):
+            mhz_color = s.unsafe_color
+            mhz_label = f"{freq / 1000:.1f} MHz"
+            safety_label = "(UNSAFE)"
         else:
             mhz_label = f"{freq / 1000:.1f} MHz"
+            safety_label = ""
+            mhz_color = s.safe_color
+
         mhz_tag = f"combo_{freq}"
-        if freq == 1536000:
+        if freq == s.mariko_meme_threshold:
             with dpg.group(horizontal=True):  # align horizontally
                 dpg.add_combo(
                     items=processed_voltages,
                     default_value="Disabled",
-                    label=mhz_label,
                     tag="g_volt_" + str(freq),
                     callback=k.grab_kip_storage_values_no_mult
                 )
-                dpg.add_text("(")
-                dpg.add_image("coolerhd", width=16, height=16)
-                dpg.add_text(")")
+                dpg.add_text(f"{mhz_label} (", color=mhz_color)
+                dpg.add_image("coolerhd", width=20, height=20)
+                dpg.add_text(")", color=mhz_color)
         else:
-            dpg.add_combo(
-                items=processed_voltages,
-                default_value="Disabled",
-                label=mhz_label,
-                tag="g_volt_" + str(freq),
-                callback=k.grab_kip_storage_values_no_mult
-            )
+            with dpg.group(horizontal=True):
+                dpg.add_combo(
+                    items=processed_voltages,
+                    default_value="Disabled",
+                    tag="g_volt_" + str(freq),
+                    callback=k.grab_kip_storage_values_no_mult
+                )
+                dpg.add_text(default_value=f"{mhz_label} {safety_label}", color=mhz_color)
 
     dpg.add_separator(label="Custom Table (Erista)")
 
-    for freq in freqs_khz_e:
-        if(freq > 1151000):
-            mhz_label = f"{freq / 1000:.1f} MHz (DANGEROUS)"
-        elif(freq > 922000):
-            mhz_label = f"{freq / 1000:.1f} MHz (UNSAFE)"
-        else:
+    for freq in s.freqs_khz_e:
+        if(freq > s.erista_dangerous_gpu_threshold):
             mhz_label = f"{freq / 1000:.1f} MHz"
-        mhz_tag = f"combo_e_{freq}"
-        dpg.add_combo(
-            items=processed_voltages_e,
-            default_value="Disabled",
-            label=mhz_label,
-            tag="g_volt_e_" + str(freq),
-            callback=k.grab_kip_storage_values_no_mult
-        )
+            safety_label = "(DANGEROUS)"
+            mhz_color = s.danger_color
+        elif(freq > s.erista_unsafe_gpu_threshold):
+            mhz_color = s.unsafe_color
+            mhz_label = f"{freq / 1000:.1f} MHz"
+            safety_label = "(UNSAFE)"
+        else:
+            mhz_color = s.safe_color
+            mhz_label = f"{freq / 1000:.1f} MHz"
+            safety_label = ""
+
+        with dpg.group(horizontal=True):
+            dpg.add_combo(
+                items=processed_voltages_e,
+                default_value="Disabled",
+                tag="g_volt_e_" + str(freq),
+                callback=k.grab_kip_storage_values_no_mult
+            )
+            dpg.add_text(default_value=f"{mhz_label} {safety_label}", color=mhz_color)

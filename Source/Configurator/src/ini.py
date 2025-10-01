@@ -2,30 +2,7 @@ import os
 import re
 import common as c
 
-def ensure_dir_exists(path):
-    path_str = str(path)
-    os.makedirs(os.path.dirname(path_str), exist_ok=True)
-
-import os
-import re
-import common as c
-
-def ensure_dir_exists(path):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-
-import os
-import re
-import common as c
-
 def ensure_dir_exists(path: str):
-    """Ensure the parent directory of the INI file exists."""
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-
-import os
-import re
-import common as c
-
-def ensure_dir_exists(path):
     os.makedirs(os.path.dirname(path), exist_ok=True)
 
 def set_ini_values(ini_path, section, entries):

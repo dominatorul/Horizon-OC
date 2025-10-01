@@ -1,5 +1,5 @@
-pip install -U pyinstaller
-pip install dpg
+pip install pyinstaller
+pip install dearpygui
 pip install numpy
 pip install psutil
 pip install pil

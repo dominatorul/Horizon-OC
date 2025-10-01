@@ -25,33 +25,17 @@ import common
 import kip as k
 import preset
 from defaults import d
+import settings as s
 
 def populate():
 
     # Values in kHz
-    adjusted_freqs_khz = [
-    0, 1600000, 1633000, 1666000, 1700000, 1733000, 1766000, 1800000, 1833000, 1866000, 1900000,
-    1933000, 1966000, 2000000, 2033000, 2066000, 2100000, 2133000, 2166000, 2200000, 2233000,
-    2266000, 2300000, 2333000, 2366000, 2400000, 2433000, 2466000, 2500000, 2533000, 2566000,
-    2600000, 2633000, 2666000, 2700000, 2733000, 2766000, 2800000, 2833000, 2866000, 2900000,
-    2933000, 2966000, 3000000, 3033000, 3066000, 3100000, 3133000, 3166000, 3200000, 3233000,
-    3266000, 3300000, 3333000, 3366000, 3400000, 3433000, 3466000, 3500000
-    ]
-    voltages_uv = [
-    0, 1050000, 1062500, 1075000, 1087500, 1100000, 1112500, 1125000,
-    1137500, 1150000, 1162500, 1175000, 1187500, 1200000, 1212500, 1237500
-    ]
-    vddq_uv = [
-    0, 550000, 555000, 560000, 565000, 570000, 575000, 580000, 585000, 590000, 595000,
-    600000, 605000, 610000, 615000, 620000, 625000, 630000, 635000, 640000, 645000,
-    650000
-    ]
-    voltages_mv = [v / 1000 for v in voltages_uv]
+    voltages_mv = [v / 1000 for v in s.voltages_uv]
     voltages_mv_label = ["Default (1175 mV)" if f == 0 else f"{f} mV" for f in voltages_mv]
-    vddq_mv = [v / 1000 for v in vddq_uv]
+    vddq_mv = [v / 1000 for v in s.vddq_uv]
     vddq_mv_label = ["Default (600 mV)" if f == 0 else f"{f} mV" for f in vddq_mv]
     # Values in MHz (converted)
-    values_mhz = [v / 1000 for v in adjusted_freqs_khz]
+    values_mhz = [v / 1000 for v in s.adjusted_freqs_khz]
     values_mhz_label_m = ["Default (1996.8 MHz)" if f == 0 else f"{f} MHz" for f in values_mhz]
     values_mhz_label_e = ["Default (1862.4 MHz)" if f == 0 else f"{f} MHz" for f in values_mhz]
     dvb = [i for i in range(10)]

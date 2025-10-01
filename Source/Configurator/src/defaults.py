@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 
-class Defaults:
+class Defaults: # This almost always never needs to be updated as pulling from the kip takes priority
     def __init__(self):
         self.autosave = 0
         self.custrev = 0

@@ -78,15 +78,15 @@
      u32 t7_tWTR;
      u32 t8_tREFI;
      u32 mem_burst_latency;
-
-     u32 marikoGpuVoltArray[24];
-     u32 eristaGpuVoltArray[14];
-
+     
      u32 marikoCpuVmin;
 
      u32 eristaGpuVmin;
      u32 marikoGpuVmin;
      u32 marikoGpuVmax;
+
+     u32 marikoGpuVoltArray[24];
+     u32 eristaGpuVoltArray[14];
 
      CustomizeCpuDvfsTable eristaCpuDvfsTable;
      CustomizeCpuDvfsTable marikoCpuDvfsTable;
