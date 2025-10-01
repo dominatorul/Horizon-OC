@@ -272,10 +272,14 @@ void MemMtcTableAutoAdjust(MarikoMtcTable* table) {
     WRITE_PARAM_ALL_REG(table, emc_refresh,             REFRESH);
     WRITE_PARAM_ALL_REG(table, emc_pre_refresh_req_cnt, REFRESH / 4);
 
-    /* Do not patch on micron. */
+    WRITE_PARAM_ALL_REG(table, emc_r2w, R2W);
+    WRITE_PARAM_ALL_REG(table, emc_w2r, W2R);
+    WRITE_PARAM_ALL_REG(table, emc_w2p, WTP);
+
+    /* May or may not have to be patched in Micron; let's skip for now. */
     if (!IsMicron()) {
-    WRITE_PARAM_ALL_REG(table, emc_pdex2wr,             GET_CYCLE_CEIL(tXP)); // NOT on micron
-    WRITE_PARAM_ALL_REG(table, emc_pdex2rd,             GET_CYCLE_CEIL(tXP)); // NOT on micron
+        WRITE_PARAM_ALL_REG(table, emc_pdex2wr,             GET_CYCLE_CEIL(tXP));
+        WRITE_PARAM_ALL_REG(table, emc_pdex2rd,             GET_CYCLE_CEIL(tXP));
     }
 
     WRITE_PARAM_ALL_REG(table, emc_txsr,                MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe));
@@ -285,6 +289,7 @@ void MemMtcTableAutoAdjust(MarikoMtcTable* table) {
     WRITE_PARAM_ALL_REG(table, emc_trpab,               GET_CYCLE_CEIL(tRPab));
     WRITE_PARAM_ALL_REG(table, emc_trefbw,              REFBW);
 
+    /* Worth replacing with l4t dumps at some point. */
     // Burst MC Regs
     #define WRITE_PARAM_BURST_MC_REG(TABLE, PARAM, VALUE)   TABLE->burst_mc_regs.PARAM = VALUE;
 

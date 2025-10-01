@@ -58,66 +58,65 @@
      // const u32 TIMING_PRESET_SIX = C.ramTimingPresetSix;
      // const u32 TIMING_PRESET_SEVEN = C.ramTimingPresetSeven;
 
+     // Burst Length
+     const u32 BL = 16;
 
     // Write Latency
     const u32 WL = 14 + C.mem_burst_latency;
     // Read Latency
     const u32 RL = 32 - C.mem_burst_latency;
 
-     // Burst Length
-     const u32 BL = 16;
+    // tRFCpb (refresh cycle time per bank) in ns for 8Gb density
+    const u32 tRFCpb = !C.t5_tRFC ? 140 : tRFC_values[C.t5_tRFC-1];
 
-     // tRFCpb (refresh cycle time per bank) in ns for 8Gb density
-     const u32 tRFCpb = !C.t5_tRFC ? 140 : tRFC_values[C.t5_tRFC-1];
+    // tRFCab (refresh cycle time all banks) in ns for 8Gb density
+    const u32 tRFCab = !C.t5_tRFC ? 280 : 2*tRFCpb;
 
-     // tRFCab (refresh cycle time all banks) in ns for 8Gb density
-     const u32 tRFCab = !C.t5_tRFC ? 280 : 2*tRFCpb;
+    // tRAS (row active time) in ns
+    const u32 tRAS = !C.t3_tRAS ? 42 : tRAS_values[C.t3_tRAS-1];
 
-     // tRAS (row active time) in ns
-     const u32 tRAS = !C.t3_tRAS ? 42 : tRAS_values[C.t3_tRAS-1];
+    // tRPpb (row precharge time per bank) in ns
+    const u32 tRPpb = !C.t2_tRP ? 18 : tRP_values[C.t2_tRP-1];
 
-     // tRPpb (row precharge time per bank) in ns
-     const u32 tRPpb = !C.t2_tRP ? 18 : tRP_values[C.t2_tRP-1];
+    // tRPab (row precharge time all banks) in ns
+    const u32 tRPab = !C.t2_tRP ? 21 : tRPpb + 3;
 
-     // tRPab (row precharge time all banks) in ns
-     const u32 tRPab = !C.t2_tRP ? 21 : tRPpb + 3;
+    // tRC (ACTIVATE-ACTIVATE command period same bank) in ns
+    const u32 tRC = tRPab + tRAS;
 
-     // tRC (ACTIVATE-ACTIVATE command period same bank) in ns
-     const u32 tRC = tRPab + tRAS;
+    const u32 tPPD = 4;
 
-     const u32 tPPD = 4;
+    const u32 tRTW = !C.t6_tRTW ? 10 : tWTR_values[C.t6_tRTW-1];
 
-     const u32 tRTW = !C.t6_tRTW ? 10 : tWTR_values[C.t6_tRTW-1];
+    // Write-to-Read delay
+    const u32 tWTR = !C.t7_tWTR ? 10 : tWTR_values[C.t7_tWTR-1];
 
-     // Write-to-Read delay
-     const u32 tWTR = !C.t7_tWTR ? 10 : tWTR_values[C.t7_tWTR-1];
+    // Internal READ-to-PRE-CHARGE command delay in ns
+    const double tRTP = !TIMING_PRESET_THREE ? 7.5 : tRTP_values[TIMING_PRESET_THREE-1];
 
-     // Internal READ-to-PRE-CHARGE command delay in ns
-     const double tRTP = !TIMING_PRESET_THREE ? 7.5 : tRTP_values[TIMING_PRESET_THREE-1];
+    // write recovery time
+    const u32 tWR = !TIMING_PRESET_THREE ? 18 : tWR_values[TIMING_PRESET_THREE-1];
 
-     // write recovery time
-     const u32 tWR = !TIMING_PRESET_THREE ? 18 : tWR_values[TIMING_PRESET_THREE-1];
+    // tRCD (RAS-CAS delay) in ns
+    const u32 tRCD = !C.t1_tRCD ? 18 : tRCD_values[C.t1_tRCD-1];
 
-     // tRCD (RAS-CAS delay) in ns
-     const u32 tRCD = !C.t1_tRCD ? 18 : tRCD_values[C.t1_tRCD-1];
+    // tRRD (Active bank-A to Active bank-B) in ns
+    const double tRRD = !C.t4_tRRD ? 10. : tRRD_values[C.t4_tRRD-1];
 
-     // tRRD (Active bank-A to Active bank-B) in ns
-     const double tRRD = !C.t4_tRRD ? 10. : tRRD_values[C.t4_tRRD-1];
+    // tREFpb (average refresh interval per bank) in ns for 8Gb density
+    const u32 tREFpb = !C.t8_tREFI ? 488 : tREFpb_values[C.t8_tREFI-1];
 
-     // tREFpb (average refresh interval per bank) in ns for 8Gb density
-     const u32 tREFpb = !C.t8_tREFI ? 488 : tREFpb_values[C.t8_tREFI-1];
+    // Exit power-down to next valid command delay
+    const double tXP = 7.5;
 
-     // Exit power-down to next valid command delay
-     const double tXP = 7.5;
+    // tXSR (SELF REFRESH exit to next valid command delay) in ns
+    const double tXSR = tRFCab + 7.5;
 
-     // tXSR (SELF REFRESH exit to next valid command delay) in ns
-     const double tXSR = tRFCab + 7.5;
+    // Minimum self refresh time (entry to exit)
+    const u32 tSR = 15;
 
-     // Minimum self refresh time (entry to exit)
-     const u32 tSR = 15;
-
-     // tFAW (Four-bank Activate Window) in ns
-     const u32 tFAW = 40;// !TIMING_PRESET_TWO ? 40 : tFAW_values[TIMING_PRESET_TWO-1]; TOGO
+    // tFAW (Four-bank Activate Window) in ns
+    const u32 tFAW = 40;// !TIMING_PRESET_TWO ? 40 : tFAW_values[TIMING_PRESET_TWO-1]; TOGO
 
     // #_of_rows per die for 8Gb density
     const u32 numOfRows = 131072;
@@ -128,13 +127,38 @@
     const u32 REFRESH = MIN((u32)65472, u32(std::ceil((double(tREFpb) * C.marikoEmcMaxClock / numOfRows * 1.048 / 2 - 64))) / 4 * 4);
     const u32 REFBW = MIN((u32)65536, REFRESH+64);
 
-     namespace pcv::erista {
-         // tCK_avg (average clock period) in ns
-         const double tCK_avg = 1000'000. / C.eristaEmcMaxClock;
-     }
+    // DQS output access time from CK_t/CK_c
+    const double tDQSCK_min = 1.5;
+    const double tDQSCK_max = 3.5;
+    // Write preamble (tCK)
+    const double tWPRE = 1.8;
+    // Read postamble (tCK)
+    const double tRPST = 0.4;
 
-     namespace pcv::mariko {
-         // tCK_avg (average clock period) in ns
-         const double tCK_avg = 1000'000. / C.marikoEmcMaxClock;
-     }
- }
+    namespace pcv::erista {
+        // tCK_avg (average clock period) in ns
+        const double tCK_avg = 1000'000. / C.eristaEmcMaxClock;
+
+        // minimum number of cycles from any read command to any write command, irrespective of bank
+        const u32 R2W = CEIL (RL + CEIL(tDQSCK_max/tCK_avg) + BL/2 - WL + tWPRE + FLOOR(tRPST)) + 6;
+
+        // Delay Time From WRITE-to-READ
+        const u32 W2R = WL + BL/2 + 1 + CEIL(tWTR/tCK_avg) - 6;
+
+        // write-to-precharge time for commands to the same bank in cycles
+        const u32 WTP = WL + BL/2 + 1 + CEIL(tWR/tCK_avg) - 8;
+    }
+
+    namespace pcv::mariko {
+        // tCK_avg (average clock period) in ns
+        const double tCK_avg = 1000'000. / C.marikoEmcMaxClock;
+
+        const u32 R2W = CEIL (RL + CEIL(tDQSCK_max/tCK_avg) + BL/2 - WL + tWPRE + FLOOR(tRPST)) + 6;
+
+        // Delay Time From WRITE-to-READ
+        const u32 W2R = WL + BL/2 + 1 + CEIL(tWTR/tCK_avg) - 6;
+
+        // write-to-precharge time for commands to the same bank in cycles
+        const u32 WTP = WL + BL/2 + 1 + CEIL(tWR/tCK_avg) - 8;
+    }
+}

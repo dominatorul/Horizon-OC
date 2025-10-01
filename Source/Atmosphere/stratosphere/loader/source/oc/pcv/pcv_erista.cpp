@@ -21,271 +21,274 @@
  #include "pcv.hpp"
  #include "../mtc_timing_value.hpp"
 
- namespace ams::ldr::oc::pcv::erista {
-    Result CpuFreqVdd(u32* ptr) {
-        dvfs_rail* entry = reinterpret_cast<dvfs_rail *>(reinterpret_cast<u8 *>(ptr) - offsetof(dvfs_rail, freq));
+namespace ams::ldr::oc::pcv::erista {
+Result CpuFreqVdd(u32* ptr) {
+    dvfs_rail* entry = reinterpret_cast<dvfs_rail *>(reinterpret_cast<u8 *>(ptr) - offsetof(dvfs_rail, freq));
 
-        R_UNLESS(entry->id == 1,            ldr::ResultInvalidCpuFreqVddEntry());
-        R_UNLESS(entry->min_mv == 250'000,  ldr::ResultInvalidCpuFreqVddEntry());
-        R_UNLESS(entry->step_mv == 5000,    ldr::ResultInvalidCpuFreqVddEntry());
-        R_UNLESS(entry->max_mv == 1525'000, ldr::ResultInvalidCpuFreqVddEntry());
+    R_UNLESS(entry->id == 1,            ldr::ResultInvalidCpuFreqVddEntry());
+    R_UNLESS(entry->min_mv == 250'000,  ldr::ResultInvalidCpuFreqVddEntry());
+    R_UNLESS(entry->step_mv == 5000,    ldr::ResultInvalidCpuFreqVddEntry());
+    R_UNLESS(entry->max_mv == 1525'000, ldr::ResultInvalidCpuFreqVddEntry());
 
-        if (C.eristaCpuUV) {
-            if(!C.enableEristaCpuUnsafeFreqs) {
-                PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.eristaCpuDvfsTable)->freq);
-            } else {
-                PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.eristaCpuDvfsTableUnsafeFreqs)->freq);
-            }
-        } else {
+    if (C.eristaCpuUV) {
+        if(!C.enableEristaCpuUnsafeFreqs) {
             PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.eristaCpuDvfsTable)->freq);
+        } else {
+            PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.eristaCpuDvfsTableUnsafeFreqs)->freq);
         }
+    } else {
+        PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.eristaCpuDvfsTable)->freq);
+    }
 
+    R_SUCCEED();
+}
+Result GpuVmin(u32 *ptr) {
+    if (!C.eristaGpuVmin)
+        R_SKIP();
+        PATCH_OFFSET(ptr, (int)C.eristaGpuVmin);
         R_SUCCEED();
-    }
-    Result GpuVmin(u32 *ptr) {
-        if (!C.eristaGpuVmin)
-            R_SKIP();
-            PATCH_OFFSET(ptr, (int)C.eristaGpuVmin);
+}
+    Result CpuVoltRange(u32 *ptr) {
+        u32 min_volt_got = *(ptr - 1);
+        for (const auto &mv : CpuMinVolts) {
+            if (min_volt_got != mv)
+                continue;
+
+            if (!C.eristaCpuMaxVolt)
+                R_SKIP();
+
+            PATCH_OFFSET(ptr, C.eristaCpuMaxVolt);
             R_SUCCEED();
+        }
+        R_THROW(ldr::ResultInvalidCpuMinVolt());
     }
-     Result CpuVoltRange(u32 *ptr) {
-         u32 min_volt_got = *(ptr - 1);
-         for (const auto &mv : CpuMinVolts) {
-             if (min_volt_got != mv)
-                 continue;
+    Result CpuVoltDfll(u32* ptr) {
+    cvb_cpu_dfll_data *entry = reinterpret_cast<cvb_cpu_dfll_data *>(ptr);
 
-             if (!C.eristaCpuMaxVolt)
-                 R_SKIP();
-
-             PATCH_OFFSET(ptr, C.eristaCpuMaxVolt);
-             R_SUCCEED();
-         }
-         R_THROW(ldr::ResultInvalidCpuMinVolt());
-     }
-     Result CpuVoltDfll(u32* ptr) {
-        cvb_cpu_dfll_data *entry = reinterpret_cast<cvb_cpu_dfll_data *>(ptr);
-
-//        R_UNLESS(entry->tune0_low == 0x0000FFCF,   ldr::ResultInvalidCpuVoltDfllEntry());
+// R_UNLESS(entry->tune0_low == 0x0000FFCF,   ldr::ResultInvalidCpuVoltDfllEntry());
 //        R_UNLESS(entry->tune0_high == 0x00000000,    ldr::ResultInvalidCpuVoltDfllEntry());
 //        R_UNLESS(entry->tune1_low == 0x012207FF,   ldr::ResultInvalidCpuVoltDfllEntry());
 //        R_UNLESS(entry->tune1_high == 0x03FFF7FF,    ldr::ResultInvalidCpuVoltDfllEntry());
-        if(!C.eristaCpuUV) {
-            R_SKIP();
-        }
-        PATCH_OFFSET(&(entry->dvco_calibration_max), 0x1C);
-        PATCH_OFFSET(&(entry->tune1_high), 0x10);
-        PATCH_OFFSET(&(entry->tune_high_margin_millivolts), 0xc);
+    if(!C.eristaCpuUV) {
+        R_SKIP();
+    }
+    PATCH_OFFSET(&(entry->dvco_calibration_max), 0x1C);
+    PATCH_OFFSET(&(entry->tune1_high), 0x10);
+    PATCH_OFFSET(&(entry->tune_high_margin_millivolts), 0xc);
 
-        switch(C.eristaCpuUV) {
-           case 1:
-               PATCH_OFFSET(&(entry->tune0_low), 0x0000FFFF); //process_id 0 // EOS UV1
-               PATCH_OFFSET(&(entry->tune1_low), 0x027007FF);
-               break;
-           case 2:
-               PATCH_OFFSET(&(entry->tune0_low), 0x0000EFFF); //process_id 1 // EOS Uv2
-               PATCH_OFFSET(&(entry->tune1_low), 0x027407FF);
-               break;
-           case 3:
-               PATCH_OFFSET(&(entry->tune0_low), 0x0000DFFF); //process_id 0 // EOS UV3
-               PATCH_OFFSET(&(entry->tune1_low), 0x027807FF);
-               break;
-           case 4:
-               PATCH_OFFSET(&(entry->tune0_low), 0x0000DFDF); //process_id 1 // EOS Uv4
-               PATCH_OFFSET(&(entry->tune1_low), 0x027A07FF);
-               break;
-           case 5:
-               PATCH_OFFSET(&(entry->tune0_low), 0x0000CFDF); // EOS UV5
-               PATCH_OFFSET(&(entry->tune1_low), 0x037007FF);
-               break;
-           default:
-               break;
+    switch(C.eristaCpuUV) {
+        case 1:
+            PATCH_OFFSET(&(entry->tune0_low), 0x0000FFFF); //process_id 0 // EOS UV1
+            PATCH_OFFSET(&(entry->tune1_low), 0x027007FF);
+            break;
+        case 2:
+            PATCH_OFFSET(&(entry->tune0_low), 0x0000EFFF); //process_id 1 // EOS Uv2
+            PATCH_OFFSET(&(entry->tune1_low), 0x027407FF);
+            break;
+        case 3:
+            PATCH_OFFSET(&(entry->tune0_low), 0x0000DFFF); //process_id 0 // EOS UV3
+            PATCH_OFFSET(&(entry->tune1_low), 0x027807FF);
+            break;
+        case 4:
+            PATCH_OFFSET(&(entry->tune0_low), 0x0000DFDF); //process_id 1 // EOS Uv4
+            PATCH_OFFSET(&(entry->tune1_low), 0x027A07FF);
+            break;
+        case 5:
+            PATCH_OFFSET(&(entry->tune0_low), 0x0000CFDF); // EOS UV5
+            PATCH_OFFSET(&(entry->tune1_low), 0x037007FF);
+            break;
+        default:
+            break;
+    }
+    R_SUCCEED();
+}
+
+    Result GpuFreqMaxAsm(u32 *ptr32) {
+        // Check if both two instructions match the pattern
+        u32 ins1 = *ptr32, ins2 = *(ptr32 + 1);
+        if (!(asm_compare_no_rd(ins1, asm_pattern[0]) && asm_compare_no_rd(ins2, asm_pattern[1])))
+            R_THROW(ldr::ResultInvalidGpuFreqMaxPattern());
+
+        // Both instructions should operate on the same register
+        u8 rd = asm_get_rd(ins1);
+        if (rd != asm_get_rd(ins2))
+            R_THROW(ldr::ResultInvalidGpuFreqMaxPattern());
+
+        u32 max_clock;
+        switch (C.eristaGpuUV) {
+        case 0:
+            max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTable)->freq;
+            break;
+        case 1:
+            max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTableSLT)->freq;
+            break;
+        case 2:
+            max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTableHigh)->freq;
+            break;
+        case 3:
+            if(C.enableEristaGpuUnsafeFreqs) {
+                max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTableUv3UnsafeFreqs)->freq;
+            } else {
+                max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTable)->freq;
+            }
+            break;
+        default:
+            max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTable)->freq;
+            break;
         }
+        u32 asm_patch[2] = {
+            asm_set_rd(asm_set_imm16(asm_pattern[0], max_clock), rd),
+            asm_set_rd(asm_set_imm16(asm_pattern[1], max_clock >> 16), rd)};
+        PATCH_OFFSET(ptr32, asm_patch[0]);
+        PATCH_OFFSET(ptr32 + 1, asm_patch[1]);
+
         R_SUCCEED();
     }
 
-     Result GpuFreqMaxAsm(u32 *ptr32) {
-         // Check if both two instructions match the pattern
-         u32 ins1 = *ptr32, ins2 = *(ptr32 + 1);
-         if (!(asm_compare_no_rd(ins1, asm_pattern[0]) && asm_compare_no_rd(ins2, asm_pattern[1])))
-             R_THROW(ldr::ResultInvalidGpuFreqMaxPattern());
+    Result GpuFreqPllLimit(u32 *ptr) {
+        clk_pll_param *entry = reinterpret_cast<clk_pll_param *>(ptr);
 
-         // Both instructions should operate on the same register
-         u8 rd = asm_get_rd(ins1);
-         if (rd != asm_get_rd(ins2))
-             R_THROW(ldr::ResultInvalidGpuFreqMaxPattern());
+        // All zero except for freq
+        for (size_t i = 1; i < sizeof(clk_pll_param) / sizeof(u32); i++) {
+            R_UNLESS(*(ptr + i) == 0, ldr::ResultInvalidGpuPllEntry());
+        }
 
-         u32 max_clock;
-         switch (C.eristaGpuUV) {
-         case 0:
-             max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTable)->freq;
-             break;
-         case 1:
-             max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTableSLT)->freq;
-             break;
-         case 2:
-             max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTableHigh)->freq;
-             break;
-         case 3:
-             if(C.enableEristaGpuUnsafeFreqs) {
-                 max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTableUv3UnsafeFreqs)->freq;
-             } else {
-                 max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTable)->freq;
-             }
-             break;
-         default:
-             max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTable)->freq;
-             break;
-         }
-         u32 asm_patch[2] = {
-             asm_set_rd(asm_set_imm16(asm_pattern[0], max_clock), rd),
-             asm_set_rd(asm_set_imm16(asm_pattern[1], max_clock >> 16), rd)};
-         PATCH_OFFSET(ptr32, asm_patch[0]);
-         PATCH_OFFSET(ptr32 + 1, asm_patch[1]);
+        // Double the max clk simply
+        u32 max_clk = entry->freq * 2;
+        entry->freq = max_clk;
+        R_SUCCEED();
+    }
 
-         R_SUCCEED();
-     }
+    void MemMtcTableAutoAdjust(EristaMtcTable *table) {
+        if (C.mtcConf != AUTO_ADJ)
+            return;
 
-     Result GpuFreqPllLimit(u32 *ptr) {
-         clk_pll_param *entry = reinterpret_cast<clk_pll_param *>(ptr);
+#define WRITE_PARAM_ALL_REG(TABLE, PARAM, VALUE) \
+    TABLE->burst_regs.PARAM = VALUE;             \
+    TABLE->shadow_regs_ca_train.PARAM = VALUE;   \
+    TABLE->shadow_regs_quse_train.PARAM = VALUE; \
+    TABLE->shadow_regs_rdwr_train.PARAM = VALUE;
 
-         // All zero except for freq
-         for (size_t i = 1; i < sizeof(clk_pll_param) / sizeof(u32); i++) {
-             R_UNLESS(*(ptr + i) == 0, ldr::ResultInvalidGpuPllEntry());
-         }
+#define GET_CYCLE_CEIL(PARAM) u32(CEIL(double(PARAM) / tCK_avg))
 
-         // Double the max clk simply
-         u32 max_clk = entry->freq * 2;
-         entry->freq = max_clk;
-         R_SUCCEED();
-     }
+        WRITE_PARAM_ALL_REG(table, emc_rc, GET_CYCLE_CEIL(tRC));
+        WRITE_PARAM_ALL_REG(table, emc_rfc, GET_CYCLE_CEIL(tRFCab));
+        WRITE_PARAM_ALL_REG(table, emc_rfcpb, GET_CYCLE_CEIL(tRFCpb));
+        WRITE_PARAM_ALL_REG(table, emc_ras, GET_CYCLE_CEIL(tRAS));
+        WRITE_PARAM_ALL_REG(table, emc_rp, GET_CYCLE_CEIL(tRPpb));
+        WRITE_PARAM_ALL_REG(table, emc_r2p, GET_CYCLE_CEIL(tRTP));
+        WRITE_PARAM_ALL_REG(table, emc_r2w, R2W);
+        WRITE_PARAM_ALL_REG(table, emc_w2r, W2R);
+        WRITE_PARAM_ALL_REG(table, emc_w2p, WTP);
+        WRITE_PARAM_ALL_REG(table, emc_rd_rcd, GET_CYCLE_CEIL(tRCD));
+        WRITE_PARAM_ALL_REG(table, emc_wr_rcd, GET_CYCLE_CEIL(tRCD));
+        WRITE_PARAM_ALL_REG(table, emc_rrd, GET_CYCLE_CEIL(tRRD));
+        WRITE_PARAM_ALL_REG(table, emc_refresh, REFRESH);
+        WRITE_PARAM_ALL_REG(table, emc_pre_refresh_req_cnt, REFRESH / 4);
+        WRITE_PARAM_ALL_REG(table, emc_pdex2wr, GET_CYCLE_CEIL(tXP));
+        WRITE_PARAM_ALL_REG(table, emc_pdex2rd, GET_CYCLE_CEIL(tXP));
+        WRITE_PARAM_ALL_REG(table, emc_txsr, MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe));
+        WRITE_PARAM_ALL_REG(table, emc_txsrdll, MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe));
+        WRITE_PARAM_ALL_REG(table, emc_tckesr, GET_CYCLE_CEIL(tSR));
+        WRITE_PARAM_ALL_REG(table, emc_tfaw, GET_CYCLE_CEIL(tFAW));
+        WRITE_PARAM_ALL_REG(table, emc_trpab, GET_CYCLE_CEIL(tRPab));
+        WRITE_PARAM_ALL_REG(table, emc_trefbw, REFBW);
 
-     void MemMtcTableAutoAdjust(EristaMtcTable *table) {
-         if (C.mtcConf != AUTO_ADJ)
-             return;
+#define WRITE_PARAM_BURST_MC_REG(TABLE, PARAM, VALUE) TABLE->burst_mc_regs.PARAM = VALUE;
 
- #define WRITE_PARAM_ALL_REG(TABLE, PARAM, VALUE) \
-     TABLE->burst_regs.PARAM = VALUE;             \
-     TABLE->shadow_regs_ca_train.PARAM = VALUE;   \
-     TABLE->shadow_regs_quse_train.PARAM = VALUE; \
-     TABLE->shadow_regs_rdwr_train.PARAM = VALUE;
+        constexpr u32 MC_ARB_DIV = 4;
+        constexpr u32 MC_ARB_SFA = 2;
+        table->burst_mc_regs.mc_emem_arb_timing_rcd = CEIL(GET_CYCLE_CEIL(tRCD) / MC_ARB_DIV) - 2;
+        table->burst_mc_regs.mc_emem_arb_timing_rp = CEIL(GET_CYCLE_CEIL(tRPpb) / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+        table->burst_mc_regs.mc_emem_arb_timing_rc = CEIL(GET_CYCLE_CEIL(tRC) / MC_ARB_DIV) - 1;
+        table->burst_mc_regs.mc_emem_arb_timing_ras = CEIL(GET_CYCLE_CEIL(tRAS) / MC_ARB_DIV) - 2;
+        table->burst_mc_regs.mc_emem_arb_timing_faw = CEIL(GET_CYCLE_CEIL(tFAW) / MC_ARB_DIV) - 1;
+        table->burst_mc_regs.mc_emem_arb_timing_rrd = CEIL(GET_CYCLE_CEIL(tRRD) / MC_ARB_DIV) - 1;
+        //table->burst_mc_regs.mc_emem_arb_timing_rap2pre = CEIL(GET_CYCLE_CEIL(tRTP) / MC_ARB_DIV);
+        //table->burst_mc_regs.mc_emem_arb_timing_wap2pre = CEIL(WTP / MC_ARB_DIV);
+        // table->burst_mc_regs.mc_emem_arb_timing_r2r     = CEIL(table->burst_regs.emc_rext / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+        // table->burst_mc_regs.mc_emem_arb_timing_w2w     = CEIL(table->burst_regs.emc_wext / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+//     table->burst_mc_regs.mc_emem_arb_timing_r2w = CEIL(R2W / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+//     table->burst_mc_regs.mc_emem_arb_timing_w2r = CEIL(W2R / MC_ARB_DIV) - 1 + MC_ARB_SFA;
+        table->burst_mc_regs.mc_emem_arb_timing_rfcpb = CEIL(GET_CYCLE_CEIL(tRFCpb) / MC_ARB_DIV);
+        // table->burst_mc_regs.mc_emem_arb_timing_ccdmw   = CEIL(tCCDMW / MC_ARB_DIV) -1 + MC_ARB_SFA;
+    }
 
- #define GET_CYCLE_CEIL(PARAM) u32(CEIL(double(PARAM) / tCK_avg))
+    Result MemFreqMtcTable(u32 *ptr) {
+        u32 khz_list[] = {1600000, 1331200, 1065600, 800000, 665600, 408000, 204000, 102000, 68000, 40800};
+        u32 khz_list_size = sizeof(khz_list) / sizeof(u32);
 
-         WRITE_PARAM_ALL_REG(table, emc_rc, GET_CYCLE_CEIL(tRC));
-         WRITE_PARAM_ALL_REG(table, emc_rfc, GET_CYCLE_CEIL(tRFCab));
-         WRITE_PARAM_ALL_REG(table, emc_rfcpb, GET_CYCLE_CEIL(tRFCpb));
-         WRITE_PARAM_ALL_REG(table, emc_ras, GET_CYCLE_CEIL(tRAS));
-         WRITE_PARAM_ALL_REG(table, emc_rp, GET_CYCLE_CEIL(tRPpb));
-         WRITE_PARAM_ALL_REG(table, emc_r2p, GET_CYCLE_CEIL(tRTP));
-         WRITE_PARAM_ALL_REG(table, emc_rd_rcd, GET_CYCLE_CEIL(tRCD));
-         WRITE_PARAM_ALL_REG(table, emc_wr_rcd, GET_CYCLE_CEIL(tRCD));
-         WRITE_PARAM_ALL_REG(table, emc_rrd, GET_CYCLE_CEIL(tRRD));
-         WRITE_PARAM_ALL_REG(table, emc_refresh, REFRESH);
-         WRITE_PARAM_ALL_REG(table, emc_pre_refresh_req_cnt, REFRESH / 4);
-         WRITE_PARAM_ALL_REG(table, emc_pdex2wr, GET_CYCLE_CEIL(tXP));
-         WRITE_PARAM_ALL_REG(table, emc_pdex2rd, GET_CYCLE_CEIL(tXP));
-         WRITE_PARAM_ALL_REG(table, emc_txsr, MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe));
-         WRITE_PARAM_ALL_REG(table, emc_txsrdll, MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe));
-         WRITE_PARAM_ALL_REG(table, emc_tckesr, GET_CYCLE_CEIL(tSR));
-         WRITE_PARAM_ALL_REG(table, emc_tfaw, GET_CYCLE_CEIL(tFAW));
-         WRITE_PARAM_ALL_REG(table, emc_trpab, GET_CYCLE_CEIL(tRPab));
-         WRITE_PARAM_ALL_REG(table, emc_trefbw, REFBW);
+        // Generate list for mtc table pointers
+        EristaMtcTable *table_list[khz_list_size];
+        for (u32 i = 0; i < khz_list_size; i++) {
+            u8 *table = reinterpret_cast<u8 *>(ptr) - offsetof(EristaMtcTable, rate_khz) - i * sizeof(EristaMtcTable);
+            table_list[i] = reinterpret_cast<EristaMtcTable *>(table);
+            R_UNLESS(table_list[i]->rate_khz == khz_list[i], ldr::ResultInvalidMtcTable());
+            R_UNLESS(table_list[i]->rev == MTC_TABLE_REV, ldr::ResultInvalidMtcTable());
+        }
 
- #define WRITE_PARAM_BURST_MC_REG(TABLE, PARAM, VALUE) TABLE->burst_mc_regs.PARAM = VALUE;
+        if (C.eristaEmcMaxClock <= EmcClkOSLimit)
+            R_SKIP();
 
-         constexpr u32 MC_ARB_DIV = 4;
-         constexpr u32 MC_ARB_SFA = 2;
-         table->burst_mc_regs.mc_emem_arb_timing_rcd = CEIL(GET_CYCLE_CEIL(tRCD) / MC_ARB_DIV) - 2;
-         table->burst_mc_regs.mc_emem_arb_timing_rp = CEIL(GET_CYCLE_CEIL(tRPpb) / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-         table->burst_mc_regs.mc_emem_arb_timing_rc = CEIL(GET_CYCLE_CEIL(tRC) / MC_ARB_DIV) - 1;
-         table->burst_mc_regs.mc_emem_arb_timing_ras = CEIL(GET_CYCLE_CEIL(tRAS) / MC_ARB_DIV) - 2;
-         table->burst_mc_regs.mc_emem_arb_timing_faw = CEIL(GET_CYCLE_CEIL(tFAW) / MC_ARB_DIV) - 1;
-         table->burst_mc_regs.mc_emem_arb_timing_rrd = CEIL(GET_CYCLE_CEIL(tRRD) / MC_ARB_DIV) - 1;
-         //table->burst_mc_regs.mc_emem_arb_timing_rap2pre = CEIL(GET_CYCLE_CEIL(tRTP) / MC_ARB_DIV);
-         //table->burst_mc_regs.mc_emem_arb_timing_wap2pre = CEIL(WTP / MC_ARB_DIV);
-         // table->burst_mc_regs.mc_emem_arb_timing_r2r     = CEIL(table->burst_regs.emc_rext / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-         // table->burst_mc_regs.mc_emem_arb_timing_w2w     = CEIL(table->burst_regs.emc_wext / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-    //     table->burst_mc_regs.mc_emem_arb_timing_r2w = CEIL(R2W / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-    //     table->burst_mc_regs.mc_emem_arb_timing_w2r = CEIL(W2R / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-         table->burst_mc_regs.mc_emem_arb_timing_rfcpb = CEIL(GET_CYCLE_CEIL(tRFCpb) / MC_ARB_DIV);
-         // table->burst_mc_regs.mc_emem_arb_timing_ccdmw   = CEIL(tCCDMW / MC_ARB_DIV) -1 + MC_ARB_SFA;
-     }
+        // Make room for new mtc table, discarding useless 40.8 MHz table
+        // 40800 overwritten by 68000, ..., 1331200 overwritten by 1600000, leaving table_list[0] not overwritten
+        for (u32 i = khz_list_size - 1; i > 0; i--)
+            std::memcpy(static_cast<void *>(table_list[i]), static_cast<void *>(table_list[i - 1]), sizeof(EristaMtcTable));
 
-     Result MemFreqMtcTable(u32 *ptr) {
-         u32 khz_list[] = {1600000, 1331200, 1065600, 800000, 665600, 408000, 204000, 102000, 68000, 40800};
-         u32 khz_list_size = sizeof(khz_list) / sizeof(u32);
+        MemMtcTableAutoAdjust(table_list[0]);
+        PATCH_OFFSET(ptr, C.eristaEmcMaxClock);
 
-         // Generate list for mtc table pointers
-         EristaMtcTable *table_list[khz_list_size];
-         for (u32 i = 0; i < khz_list_size; i++) {
-             u8 *table = reinterpret_cast<u8 *>(ptr) - offsetof(EristaMtcTable, rate_khz) - i * sizeof(EristaMtcTable);
-             table_list[i] = reinterpret_cast<EristaMtcTable *>(table);
-             R_UNLESS(table_list[i]->rate_khz == khz_list[i], ldr::ResultInvalidMtcTable());
-             R_UNLESS(table_list[i]->rev == MTC_TABLE_REV, ldr::ResultInvalidMtcTable());
-         }
+        // Handle customize table replacement
+        // if (C.mtcConf == CUSTOMIZED_ALL) {
+        //    MemMtcCustomizeTable(table_list[0], const_cast<EristaMtcTable *>(C.eristaMtcTable));
+        //}
 
-         if (C.eristaEmcMaxClock <= EmcClkOSLimit)
-             R_SKIP();
+        R_SUCCEED();
+    }
 
-         // Make room for new mtc table, discarding useless 40.8 MHz table
-         // 40800 overwritten by 68000, ..., 1331200 overwritten by 1600000, leaving table_list[0] not overwritten
-         for (u32 i = khz_list_size - 1; i > 0; i--)
-             std::memcpy(static_cast<void *>(table_list[i]), static_cast<void *>(table_list[i - 1]), sizeof(EristaMtcTable));
+    Result MemFreqMax(u32 *ptr) {
+        if (C.eristaEmcMaxClock <= EmcClkOSLimit)
+            R_SKIP();
 
-         MemMtcTableAutoAdjust(table_list[0]);
-         PATCH_OFFSET(ptr, C.eristaEmcMaxClock);
+        PATCH_OFFSET(ptr, C.eristaEmcMaxClock);
 
-         // Handle customize table replacement
-         // if (C.mtcConf == CUSTOMIZED_ALL) {
-         //    MemMtcCustomizeTable(table_list[0], const_cast<EristaMtcTable *>(C.eristaMtcTable));
-         //}
+        R_SUCCEED();
+    }
 
-         R_SUCCEED();
-     }
+    void Patch(uintptr_t mapped_nso, size_t nso_size) {
+        u32 CpuCvbDefaultMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(CpuCvbTableDefault)->freq);
+        u32 GpuCvbDefaultMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(GpuCvbTableDefault)->freq);
 
-     Result MemFreqMax(u32 *ptr) {
-         if (C.eristaEmcMaxClock <= EmcClkOSLimit)
-             R_SKIP();
+        PatcherEntry<u32> patches[] = {
+            {"CPU Freq Vdd",   &CpuFreqVdd,            1, nullptr, CpuClkOSLimit },
+            {"CPU Freq Table", CpuFreqCvbTable<false>, 1, nullptr, CpuCvbDefaultMaxFreq},
+            {"CPU Volt Limit", &CpuVoltRange,         13, nullptr, CpuVoltOfficial },
+            {"CPU Volt Dfll",  &CpuVoltDfll,           1, nullptr, 0xFFEAD0FF },
+            {"GPU Freq Table", GpuFreqCvbTable<false>, 1, nullptr, GpuCvbDefaultMaxFreq},
+            {"GPU Freq Asm", &GpuFreqMaxAsm, 2, &GpuMaxClockPatternFn},
+            {"GPU Freq PLL", &GpuFreqPllLimit, 1, nullptr, GpuClkPllLimit},
+            {"MEM Freq Mtc", &MemFreqMtcTable, 0, nullptr, EmcClkOSLimit},
+            {"MEM Freq Max", &MemFreqMax, 0, nullptr, EmcClkOSLimit},
+            {"MEM Freq PLLM", &MemFreqPllmLimit, 2, nullptr, EmcClkPllmLimit},
+            {"MEM Volt", &MemVoltHandler, 2, nullptr, MemVoltHOS},
+            {"GPU Vmin", &GpuVmin, 0, nullptr, gpuVmin},
+        };
 
-         PATCH_OFFSET(ptr, C.eristaEmcMaxClock);
+        for (uintptr_t ptr = mapped_nso;
+            ptr <= mapped_nso + nso_size - sizeof(EristaMtcTable);
+            ptr += sizeof(u32)) {
+            u32 *ptr32 = reinterpret_cast<u32 *>(ptr);
+            for (auto &entry : patches) {
+                if (R_SUCCEEDED(entry.SearchAndApply(ptr32)))
+                    break;
+            }
+        }
 
-         R_SUCCEED();
-     }
+        for (auto &entry : patches) {
+            LOGGING("%s Count: %zu", entry.description, entry.patched_count);
+            if (R_FAILED(entry.CheckResult()))
+                CRASH(entry.description);
+        }
+    }
 
-     void Patch(uintptr_t mapped_nso, size_t nso_size) {
-         u32 CpuCvbDefaultMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(CpuCvbTableDefault)->freq);
-         u32 GpuCvbDefaultMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(GpuCvbTableDefault)->freq);
-
-         PatcherEntry<u32> patches[] = {
-             {"CPU Freq Vdd",   &CpuFreqVdd,            1, nullptr, CpuClkOSLimit },
-             {"CPU Freq Table", CpuFreqCvbTable<false>, 1, nullptr, CpuCvbDefaultMaxFreq},
-             {"CPU Volt Limit", &CpuVoltRange,         13, nullptr, CpuVoltOfficial },
-             {"CPU Volt Dfll",  &CpuVoltDfll,           1, nullptr, 0xFFEAD0FF },
-             {"GPU Freq Table", GpuFreqCvbTable<false>, 1, nullptr, GpuCvbDefaultMaxFreq},
-             {"GPU Freq Asm", &GpuFreqMaxAsm, 2, &GpuMaxClockPatternFn},
-             {"GPU Freq PLL", &GpuFreqPllLimit, 1, nullptr, GpuClkPllLimit},
-             {"MEM Freq Mtc", &MemFreqMtcTable, 0, nullptr, EmcClkOSLimit},
-             {"MEM Freq Max", &MemFreqMax, 0, nullptr, EmcClkOSLimit},
-             {"MEM Freq PLLM", &MemFreqPllmLimit, 2, nullptr, EmcClkPllmLimit},
-             {"MEM Volt", &MemVoltHandler, 2, nullptr, MemVoltHOS},
-             {"GPU Vmin", &GpuVmin, 0, nullptr, gpuVmin},
-         };
-
-         for (uintptr_t ptr = mapped_nso;
-              ptr <= mapped_nso + nso_size - sizeof(EristaMtcTable);
-              ptr += sizeof(u32)) {
-             u32 *ptr32 = reinterpret_cast<u32 *>(ptr);
-             for (auto &entry : patches) {
-                 if (R_SUCCEEDED(entry.SearchAndApply(ptr32)))
-                     break;
-             }
-         }
-
-         for (auto &entry : patches) {
-             LOGGING("%s Count: %zu", entry.description, entry.patched_count);
-             if (R_FAILED(entry.CheckResult()))
-                 CRASH(entry.description);
-         }
-     }
-
- }
+}
