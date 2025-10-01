@@ -190,8 +190,6 @@
          WRITE_PARAM_ALL_REG(table, emc_tfaw, GET_CYCLE_CEIL(tFAW));
          WRITE_PARAM_ALL_REG(table, emc_trpab, GET_CYCLE_CEIL(tRPab));
          WRITE_PARAM_ALL_REG(table, emc_trefbw, REFBW);
-         WRITE_PARAM_ALL_REG(table, emc_tcke, 0x68);
-
            //       WRITE_PARAM_ALL_REG(table, emc_r2w, R2W);
             //               WRITE_PARAM_ALL_REG(table, emc_w2r, W2R);
              //                       WRITE_PARAM_ALL_REG(table, emc_w2p, WTP);
