@@ -46,11 +46,12 @@ Git clone Atmosphere, and move the cloned folder into build/<br>
 Insert Source/stratosphere folder into build/<br>
 Run build.sh
 
-To build the configurator, clone it's repo (souldbminersmwc/ocs2-configurator)<br>
-Run build.bat or cd into folder and run "python -m PyInstaller --onefile --add-data "assets;assets" --icon=assets/icon.ico --noconsole src/main.py"<br>
+To build the configurator, cd into Source/Configurator<br>
+Run build.bat or  run "python -m PyInstaller --onefile --add-data "assets;assets" --icon=assets/icon.ico --noconsole src/main.py"<br>
 
 
 ## Credits
+Lightos for RAM timings<br>
 meha for Switch-Oc-Suite<br>
 sys-clk team for sys-clk<br>
 b0rd2death for Ultrahand sys-clk fork<br>

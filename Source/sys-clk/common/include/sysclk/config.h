@@ -19,6 +19,8 @@ typedef enum {
     SysClkConfigValue_FreqLogIntervalMs,
     SysClkConfigValue_PowerLogIntervalMs,
     SysClkConfigValue_CsvWriteIntervalMs,
+    HocClkConfigValue_UncappedClocks,
+    HocClkConfigValue_OverwriteBoostMode,
     SysClkConfigValue_EnumMax,
 } SysClkConfigValue;
 
@@ -40,6 +42,10 @@ static inline const char* sysclkFormatConfigValue(SysClkConfigValue val, bool pr
             return pretty ? "Power logging interval (ms)" : "power_log_interval_ms";
         case SysClkConfigValue_CsvWriteIntervalMs:
             return pretty ? "CSV write interval (ms)" : "csv_write_interval_ms";
+        case HocClkConfigValue_UncappedClocks:
+            return pretty ? "Uncapped Clocks" : "uncapped_clocks";
+        case HocClkConfigValue_OverwriteBoostMode:
+            return pretty ? "Overwrite Boost Mode" : "ow_boost";
         default:
             return NULL;
     }
@@ -55,6 +61,8 @@ static inline uint64_t sysclkDefaultConfigValue(SysClkConfigValue val)
         case SysClkConfigValue_FreqLogIntervalMs:
         case SysClkConfigValue_PowerLogIntervalMs:
         case SysClkConfigValue_CsvWriteIntervalMs:
+        case HocClkConfigValue_UncappedClocks:
+        case HocClkConfigValue_OverwriteBoostMode:
             return 0ULL;
         default:
             return 0ULL;
@@ -72,6 +80,9 @@ static inline uint64_t sysclkValidConfigValue(SysClkConfigValue val, uint64_t in
         case SysClkConfigValue_PowerLogIntervalMs:
         case SysClkConfigValue_CsvWriteIntervalMs:
             return input >= 0;
+        case HocClkConfigValue_OverwriteBoostMode:
+        case HocClkConfigValue_UncappedClocks:
+            return (input & 0x1) == input;
         default:
             return false;
     }

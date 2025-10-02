@@ -9,22 +9,17 @@ class MiscGui : public BaseMenuGui
     public:
         MiscGui();
         ~MiscGui();
+
         void listUI() override;
         void refresh() override;
     protected:
+        SysClkConfigValueList* configList;
         
-        std::unordered_map<std::string, tsl::elm::ToggleListItem*> configToggles;
-        std::unordered_map<std::string, bool> configValues;
-        
-        void addConfigToggle(const std::string& iniKey, const char* displayName);
+        std::map<SysClkConfigValue, tsl::elm::ToggleListItem*> configToggles;
+        void addConfigToggle(SysClkConfigValue, const char*);
         void updateConfigToggles();
-        bool getConfigValue(const std::string& iniKey);
-        void setConfigValue(const std::string& iniKey, bool value);
-        int getConfigIntValue(const std::string& iniKey, int defaultValue);
-        void setConfigIntValue(const std::string& iniKey, int value);
         
         tsl::elm::ToggleListItem* enabledToggle;
-        tsl::elm::NamedStepTrackBar* gpuDvfsTrackbar;  // Add this line
         
         u8 frameCounter = 60;
 };

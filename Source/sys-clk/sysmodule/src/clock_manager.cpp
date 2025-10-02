@@ -86,7 +86,25 @@ bool ClockManager::IsAssignableHz(SysClkModule module, std::uint32_t hz)
 
 std::uint32_t ClockManager::GetMaxAllowedHz(SysClkModule module, SysClkProfile profile)
 {
-    return 4294967294; // Integer limit, uncapped clocks ON
+    if (this->config->GetConfigValue(HocClkConfigValue_UncappedClocks))
+    {
+        return 4294967294; // Integer limit, uncapped clocks ON
+    }
+    else
+    {
+        if(module == SysClkModule_GPU)
+        {
+            if(profile < SysClkProfile_HandheldCharging)
+            {
+                return Board::GetSocType() == SysClkSocType_Mariko ? 614400000 : 460800000;
+            }
+            else if(profile <= SysClkProfile_HandheldChargingUSB)
+            {
+                return 768000000;
+            }
+        }
+    }
+    return 0;
 }
 
 std::uint32_t ClockManager::GetNearestHz(SysClkModule module, std::uint32_t inHz, std::uint32_t maxHz)
@@ -177,7 +195,7 @@ void ClockManager::Tick()
                 maxHz = this->GetMaxAllowedHz((SysClkModule)module, this->context->profile);
                 nearestHz = this->GetNearestHz((SysClkModule)module, targetHz, maxHz);
 
-                if (nearestHz != this->context->freqs[module] && this->context->enabled)
+                if (nearestHz != this->context->freqs[module] && this->context->enabled && !apmExtIsBoostMode(this->context->perfConfId) && this->config->GetConfigValue(HocClkConfigValue_OverwriteBoostMode))
                 {
                     FileUtils::LogLine(
                         "[mgr] %s clock set : %u.%u MHz (target = %u.%u MHz)",
@@ -187,6 +205,9 @@ void ClockManager::Tick()
 
                     Board::SetHz((SysClkModule)module, nearestHz);
                     this->context->freqs[module] = nearestHz;
+                } else {
+                    Board::ResetToStockCpu();
+                    Board::ResetToStockGpu();
                 }
             }
         }
@@ -254,16 +275,17 @@ bool ClockManager::RefreshContext()
             else
             {
                 FileUtils::LogLine("[mgr] %s override disabled", Board::GetModuleName((SysClkModule)module, true));
-                switch(module) {
-                    case SysClkModule_CPU:
-                        Board::ResetToStockCpu();
-                        break;
-                    case SysClkModule_GPU:
-                        Board::ResetToStockGpu();
-                        break;
-                    case SysClkModule_MEM:
-                        Board::ResetToStockMem();
-                        break;
+                switch (module)
+                {
+                case SysClkModule_CPU:
+                    Board::ResetToStockCpu();
+                    break;
+                case SysClkModule_GPU:
+                    Board::ResetToStockGpu();
+                    break;
+                case SysClkModule_MEM:
+                    Board::ResetToStockMem();
+                    break;
                 }
             }
             this->context->overrideFreqs[module] = hz;

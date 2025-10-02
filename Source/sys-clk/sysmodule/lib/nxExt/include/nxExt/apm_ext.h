@@ -23,6 +23,18 @@ void apmExtExit(void);
 Result apmExtGetPerformanceMode(u32* out_mode);
 Result apmExtSysRequestPerformanceMode(u32 mode);
 Result apmExtGetCurrentPerformanceConfiguration(u32* out_conf);
+Result apmExtSysRequestPerformanceMode(u32 mode);
+Result apmExtSysSetCpuBoostMode(u32 mode);
+
+Result apmExtGetPerformanceMode(u32 *out_mode);
+Result apmExtGetCurrentPerformanceConfiguration(u32 *out_conf);
+
+inline bool apmExtIsCPUBoosted(u32 conf_id) { // CPU boosted to 1785 MHz
+    return (conf_id == 0x92220009 || conf_id == 0x9222000A);
+};
+inline bool apmExtIsBoostMode(u32 conf_id)  { // GPU throttled to 76.8 MHz
+    return (conf_id >= 0x92220009 && conf_id <= 0x9222000C);
+};
 
 #ifdef __cplusplus
 }
