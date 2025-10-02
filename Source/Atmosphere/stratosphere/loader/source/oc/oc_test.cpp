@@ -76,6 +76,7 @@ Result Test_PcvDvfsTable() {
     cvb_entry_t last_mariko_cpu_cvb_entry_default = { 1963500, { 1675751, -38635, 27 }, { 1120000 } };
     assert(memcmp(GetDvfsTableLastEntry((cvb_entry_t *)(&mariko::CpuCvbTableDefault)), (void *)&last_mariko_cpu_cvb_entry_default, sizeof(last_mariko_cpu_cvb_entry_default)) == 0);
     assert(GetDvfsTableLastEntry((cvb_entry_t *)(&erista::GpuCvbTableDefault))->freq == 921600);
+    assert(GetDvfsTableEntryCount((cvb_entry_t *)(&ams::ldr::oc::C.marikoCpuDvfsTableSLT)) == 25);
 
     // Customized table default
     assert(GetDvfsTableEntryCount((cvb_entry_t *)(&ams::ldr::oc::C.eristaCpuDvfsTable)) == 19);
