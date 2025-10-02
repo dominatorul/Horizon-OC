@@ -13,7 +13,7 @@
 #include <switch.h>
 #include "file_utils.h"
 #include "errors.h"
-
+#include "clock_manager.h"
 IpcService::IpcService(ClockManager* clockMgr)
 {
     std::int32_t priority;
@@ -166,7 +166,12 @@ Result IpcService::ServiceHandlerFunc(void* arg, const IpcServerRequest* r, u8* 
                 );
             }
             break;
-
+        case SysClkIpcCmd_SetReverseNXRTMode:
+            if (r->data.size >= sizeof(ReverseNXMode)) {
+                ReverseNXMode mode = *((ReverseNXMode*)r->data.ptr);
+                return ipcSrv->SetReverseNXRTMode(mode);
+            }
+            break;
     }
 
     return SYSCLK_ERROR(Generic);
@@ -316,5 +321,10 @@ Result IpcService::GetFreqList(SysClkIpc_GetFreqList_Args* args, std::uint32_t* 
 
     this->clockMgr->GetFreqList(args->module, out_list, args->maxCount, out_count);
 
+    return 0;
+}
+
+Result IpcService::SetReverseNXRTMode(ReverseNXMode mode) {
+    ClockManager::GetInstance()->SetRNXRTMode(mode);
     return 0;
 }

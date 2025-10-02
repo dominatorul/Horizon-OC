@@ -126,3 +126,8 @@ Result sysclkIpcGetFreqList(SysClkModule module, u32* list, u32 maxCount, u32* o
         .buffers = {{list, maxCount * sizeof(u32)}},
     );
 }
+
+Result sysclkIpcSetReverseNXRTMode(ReverseNXMode mode)
+{
+    return serviceDispatchIn(&g_sysclkSrv, SysClkIpcCmd_SetReverseNXRTMode, mode);
+}

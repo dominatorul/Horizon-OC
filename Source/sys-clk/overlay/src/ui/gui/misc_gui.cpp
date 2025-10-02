@@ -43,7 +43,7 @@ void MiscGui::listUI()
     this->listElement->addItem(new tsl::elm::CategoryHeader("Config"));
     addConfigToggle(HocClkConfigValue_UncappedClocks);
     addConfigToggle(HocClkConfigValue_OverwriteBoostMode);
-
+    addConfigToggle(HocClkConfigValue_SyncReverseNXMode);
 }
 
 void MiscGui::refresh() {

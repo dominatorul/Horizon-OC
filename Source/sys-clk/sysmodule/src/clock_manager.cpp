@@ -15,6 +15,30 @@
 #include "process_management.h"
 #include "errors.h"
 #include "ipc_service.h"
+
+ClockManager* ClockManager::instance = NULL;
+
+ClockManager* ClockManager::GetInstance()
+{
+    return instance;
+}
+
+void ClockManager::Exit()
+{
+    if(instance)
+    {
+        delete instance;
+    }
+}
+
+void ClockManager::Initialize()
+{
+    if(!instance)
+    {
+        instance = new ClockManager();
+    }
+}
+
 ClockManager::ClockManager()
 {
     this->config = Config::CreateDefault();
@@ -34,6 +58,9 @@ ClockManager::ClockManager()
     this->running = false;
     this->lastTempLogNs = 0;
     this->lastCsvWriteNs = 0;
+
+    this->rnxSync = new ReverseNXSync;
+
 }
 
 ClockManager::~ClockManager()
@@ -237,6 +264,8 @@ bool ClockManager::RefreshContext()
         FileUtils::LogLine("[mgr] TitleID change: %016lX", applicationId);
         this->context->applicationId = applicationId;
         hasChanged = true;
+        this->rnxSync->Reset(applicationId);
+
     }
 
     SysClkProfile profile = Board::GetProfile();
@@ -250,6 +279,7 @@ bool ClockManager::RefreshContext()
     // restore clocks to stock values on app or profile change
     if (hasChanged)
     {
+        this->rnxSync->ToggleSync(this->GetConfig()->GetConfigValue(HocClkConfigValue_SyncReverseNXMode));
         Board::ResetToStock();
         this->WaitForNextTick();
     }
@@ -346,4 +376,8 @@ bool ClockManager::RefreshContext()
     }
 
     return hasChanged;
+}
+
+void ClockManager::SetRNXRTMode(ReverseNXMode mode) {
+    this->rnxSync->SetRTMode(mode);
 }

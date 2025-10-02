@@ -23,6 +23,7 @@
 #include "ipc.h"
 
 #if defined(__SWITCH__) && defined(__cplusplus)
+#include "cpp_util.hpp"
 extern "C" {
 #endif
 

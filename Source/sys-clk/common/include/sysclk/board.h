@@ -61,6 +61,15 @@ typedef enum
     SysClkRamLoad_EnumMax
 } SysClkRamLoad;
 
+typedef enum
+{
+    ReverseNX_NotFound = 0,
+    ReverseNX_SystemDefault = 0,
+    ReverseNX_Handheld,
+    ReverseNX_Docked,
+} ReverseNXMode;
+
+
 #define SYSCLK_ENUM_VALID(n, v) ((v) < n##_EnumMax)
 
 static inline const char* sysclkFormatModule(SysClkModule module, bool pretty)

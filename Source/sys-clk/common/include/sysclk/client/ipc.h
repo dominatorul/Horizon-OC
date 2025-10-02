@@ -31,6 +31,7 @@ Result sysclkIpcSetProfiles(u64 tid, SysClkTitleProfileList* profiles);
 Result sysclkIpcGetConfigValues(SysClkConfigValueList* out_configValues);
 Result sysclkIpcSetConfigValues(SysClkConfigValueList* configValues);
 Result sysclkIpcGetFreqList(SysClkModule module, u32* list, u32 maxCount, u32* outCount);
+Result sysclkIpcSetReverseNXRTMode(ReverseNXMode mode);
 
 static inline Result sysclkIpcRemoveOverride(SysClkModule module)
 {

@@ -21,6 +21,7 @@ typedef enum {
     SysClkConfigValue_CsvWriteIntervalMs,
     HocClkConfigValue_UncappedClocks,
     HocClkConfigValue_OverwriteBoostMode,
+    HocClkConfigValue_SyncReverseNXMode,
     SysClkConfigValue_EnumMax,
 } SysClkConfigValue;
 
@@ -46,6 +47,8 @@ static inline const char* sysclkFormatConfigValue(SysClkConfigValue val, bool pr
             return pretty ? "Uncapped Clocks" : "uncapped_clocks";
         case HocClkConfigValue_OverwriteBoostMode:
             return pretty ? "Overwrite Boost Mode" : "ow_boost";
+        case HocClkConfigValue_SyncReverseNXMode:
+            return pretty ? "ReverseNX Sync" : "rnx_sync";
         default:
             return NULL;
     }
@@ -63,6 +66,7 @@ static inline uint64_t sysclkDefaultConfigValue(SysClkConfigValue val)
         case SysClkConfigValue_CsvWriteIntervalMs:
         case HocClkConfigValue_UncappedClocks:
         case HocClkConfigValue_OverwriteBoostMode:
+        case HocClkConfigValue_SyncReverseNXMode:
             return 0ULL;
         default:
             return 0ULL;
@@ -82,6 +86,7 @@ static inline uint64_t sysclkValidConfigValue(SysClkConfigValue val, uint64_t in
             return input >= 0;
         case HocClkConfigValue_OverwriteBoostMode:
         case HocClkConfigValue_UncappedClocks:
+        case HocClkConfigValue_SyncReverseNXMode:
             return (input & 0x1) == input;
         default:
             return false;

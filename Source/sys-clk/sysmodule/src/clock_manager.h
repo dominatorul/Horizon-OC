@@ -16,10 +16,18 @@
 #include "config.h"
 #include "board.h"
 #include <nxExt/cpp/lockable_mutex.h>
+#include "integrations.h"
+
+class ReverseNXSync;
 
 class ClockManager
 {
   public:
+    static ClockManager* GetInstance();
+    static void Initialize();
+    static void Exit();
+
+
     ClockManager();
     virtual ~ClockManager();
 
@@ -30,6 +38,7 @@ class ClockManager
     void GetFreqList(SysClkModule module, std::uint32_t* list, std::uint32_t maxCount, std::uint32_t* outCount);
     void Tick();
     void WaitForNextTick();
+    void SetRNXRTMode(ReverseNXMode mode);
 
   protected:
     bool IsAssignableHz(SysClkModule module, std::uint32_t hz);
@@ -38,6 +47,8 @@ class ClockManager
     bool ConfigIntervalTimeout(SysClkConfigValue intervalMsConfigValue, std::uint64_t ns, std::uint64_t* lastLogNs);
     void RefreshFreqTableRow(SysClkModule module);
     bool RefreshContext();
+
+    static ClockManager *instance;
 
     std::atomic_bool running;
     LockableMutex contextMutex;
@@ -51,4 +62,5 @@ class ClockManager
     std::uint64_t lastFreqLogNs;
     std::uint64_t lastPowerLogNs;
     std::uint64_t lastCsvWriteNs;
+    ReverseNXSync *rnxSync;
 };
