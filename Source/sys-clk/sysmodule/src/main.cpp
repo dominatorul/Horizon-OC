@@ -20,7 +20,7 @@
 #include "process_management.h"
 #include "clock_manager.h"
 #include "ipc_service.h"
-
+#include "fancontrol.h"
 #define INNER_HEAP_SIZE 0x30000
 
 extern "C"
@@ -63,12 +63,24 @@ extern "C"
                 hosversionSet(MAKEHOSVERSION(fw.major, fw.minor, fw.micro));
             setsysExit();
         }
+        
+        rc = fanInitialize();
+        if (R_FAILED(rc))
+            diagAbortWithResult(MAKERESULT(Module_Libnx, LibnxError_ShouldNotHappen));
+    
+        rc = i2cInitialize();
+        if (R_FAILED(rc))
+            diagAbortWithResult(MAKERESULT(Module_Libnx, LibnxError_ShouldNotHappen));
     }
 
     void __appExit(void)
     {
-        smExit();
-    }
+        CloseFanControllerThread();
+        fanExit();
+        i2cExit();
+        fsExit();
+        fsdevUnmountAll();    
+        }
 }
 
 int main(int argc, char** argv)
@@ -95,6 +107,10 @@ int main(int argc, char** argv)
         clockMgr->SetRunning(true);
         clockMgr->GetConfig()->SetEnabled(true);
         ipcSrv->SetRunning(true);
+        TemperaturePoint *table;
+        ReadConfigFile(&table);
+        InitFanController(table);
+        StartFanControllerThread();
 
         while (clockMgr->Running())
         {
@@ -121,5 +137,6 @@ int main(int argc, char** argv)
     FileUtils::LogLine("Exit");
     svcSleepThread(1000000ULL);
     FileUtils::Exit();
+    
     return 0;
 }

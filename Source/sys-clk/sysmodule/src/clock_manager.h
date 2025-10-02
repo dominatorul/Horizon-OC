@@ -39,6 +39,10 @@ class ClockManager
     void Tick();
     void WaitForNextTick();
     void SetRNXRTMode(ReverseNXMode mode);
+    struct {
+      std::uint32_t count;
+      std::uint32_t list[SYSCLK_FREQ_LIST_MAX];
+    } freqTable[SysClkModule_EnumMax];
 
   protected:
     bool IsAssignableHz(SysClkModule module, std::uint32_t hz);
@@ -52,10 +56,6 @@ class ClockManager
 
     std::atomic_bool running;
     LockableMutex contextMutex;
-    struct {
-      std::uint32_t count;
-      std::uint32_t list[SYSCLK_FREQ_LIST_MAX];
-    } freqTable[SysClkModule_EnumMax];
     Config* config;
     SysClkContext* context;
     std::uint64_t lastTempLogNs;

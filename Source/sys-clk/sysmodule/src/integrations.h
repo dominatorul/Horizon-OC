@@ -9,6 +9,8 @@
 #include "errors.h"
 #include "file_utils.h"
 
+#include "clock_manager.h"
+
 class ReverseNXSync {
 public:
     ReverseNXSync ();

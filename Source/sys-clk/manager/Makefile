@@ -37,14 +37,14 @@ include $(DEVKITPRO)/libnx/switch_rules
 #   of a homebrew executable (.nro). This is intended to be used for sysmodules.
 #   NACP building is skipped as well.
 #---------------------------------------------------------------------------------
-TARGET		:=	sys-clk-manager
+TARGET		:=	horizon-oc-manager
 BUILD		:=	build.nx
 SOURCES		:=	src ../common/src ../common/src/client
 RESOURCES	:=	resources
 DATA		:=	data
 INCLUDES	:=	../common/include
 APP_TITLE	:=	Horizon OC Manager
-APP_AUTHOR	:=	Souldbminer, meha, b0rd2dEAth and RetroNX Team
+APP_AUTHOR	:=	Souldbminer and RetroNX Team
 
 ROMFS				:=	$(BUILD)/romfs
 BOREALIS_PATH		:=	lib/borealis

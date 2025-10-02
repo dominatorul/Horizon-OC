@@ -22,6 +22,8 @@ typedef enum {
     HocClkConfigValue_UncappedClocks,
     HocClkConfigValue_OverwriteBoostMode,
     HocClkConfigValue_SyncReverseNXMode,
+    HocClkConfigValue_DockedGovernor,
+    HocClkConfigValue_HandheldGovernor,
     SysClkConfigValue_EnumMax,
 } SysClkConfigValue;
 
@@ -49,6 +51,10 @@ static inline const char* sysclkFormatConfigValue(SysClkConfigValue val, bool pr
             return pretty ? "Overwrite Boost Mode" : "ow_boost";
         case HocClkConfigValue_SyncReverseNXMode:
             return pretty ? "ReverseNX Sync" : "rnx_sync";
+        case HocClkConfigValue_DockedGovernor:
+            return pretty ? "Docked Governor" : "governor_d";
+        case HocClkConfigValue_HandheldGovernor:
+            return pretty ? "Handheld Governor" : "governor_hh";
         default:
             return NULL;
     }
