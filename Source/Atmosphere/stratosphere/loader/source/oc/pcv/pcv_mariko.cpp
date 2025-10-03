@@ -324,18 +324,18 @@ namespace ams::ldr::oc::pcv::mariko
         constexpr u32 MC_ARB_DIV = 4;
         constexpr u32 MC_ARB_SFA = 2;
 
-        //  WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_cfg,            C.marikoEmcMaxClock / (33.3 * 1000) / MC_ARB_DIV); //CYCLES_PER_UPDATE: The number of mcclk cycles per deadline timer update
+        WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_cfg,            C.marikoEmcMaxClock / (33.3 * 1000) / MC_ARB_DIV); //CYCLES_PER_UPDATE: The number of mcclk cycles per deadline timer update
         WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_rcd, CEIL(GET_CYCLE_CEIL(tRCD) / MC_ARB_DIV) - 2)
         WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_rp, CEIL(GET_CYCLE_CEIL(tRPpb) / MC_ARB_DIV) - 1 + MC_ARB_SFA)
         WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_rc, CEIL(GET_CYCLE_CEIL(tRC) / MC_ARB_DIV) - 1)
         WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_ras, CEIL(GET_CYCLE_CEIL(tRAS) / MC_ARB_DIV) - 2)
         WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_faw, CEIL(GET_CYCLE_CEIL(tFAW) / MC_ARB_DIV) - 1)
         WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_rrd, CEIL(GET_CYCLE_CEIL(tRRD) / MC_ARB_DIV) - 1)
-        //  WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_rap2pre, CEIL(GET_CYCLE_CEIL(tRTP) / MC_ARB_DIV))
-        // WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_wap2pre, CEIL((WTP) / MC_ARB_DIV))
-        //   WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_r2r,     CEIL(table->burst_regs.emc_rext / MC_ARB_DIV) - 1 + MC_ARB_SFA)
-        //  WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_r2w,     CEIL((R2W) / MC_ARB_DIV) - 1 + MC_ARB_SFA)
-        // WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_w2r,     CEIL((W2R) / MC_ARB_DIV) - 1 + MC_ARB_SFA)
+        WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_rap2pre, CEIL(GET_CYCLE_CEIL(tRTP) / MC_ARB_DIV))
+        WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_wap2pre, CEIL((WTP) / MC_ARB_DIV))
+        WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_r2r,     CEIL(table->burst_regs.emc_rext / MC_ARB_DIV) - 1 + MC_ARB_SFA)
+        WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_r2w,     CEIL((R2W) / MC_ARB_DIV) - 1 + MC_ARB_SFA)
+        WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_w2r,     CEIL((W2R) / MC_ARB_DIV) - 1 + MC_ARB_SFA)
         WRITE_PARAM_BURST_MC_REG(table, mc_emem_arb_timing_rfcpb, CEIL(GET_CYCLE_CEIL(tRFCpb) / MC_ARB_DIV))
     }
 
