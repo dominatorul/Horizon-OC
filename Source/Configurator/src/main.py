@@ -30,6 +30,7 @@ import common as c
 import sys
 import os
 import webbrowser
+import ctypes
 
 import kip as k
 import gpu
@@ -43,10 +44,10 @@ import misc
 true = True
 false = False
 
-if getattr(sys, 'frozen', False):
-    assets_path = os.path.join(sys._MEIPASS, 'assets/')
-else:
-    assets_path = os.path.join(os.path.dirname(__file__), '../assets/')
+# if getattr(sys, 'frozen', False):
+assets_path = os.path.join(sys._MEIPASS, 'assets/')
+# else:
+    # assets_path = os.path.join(os.path.dirname(__file__), '../assets/')
 
 cooler_image_path = assets_path + "coolerhd.png" # coolerHD Emoji from OC server
 cooler_image = Image.open(cooler_image_path).convert("RGBA")
