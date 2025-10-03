@@ -222,7 +222,7 @@ void ClockManager::Tick()
                     maxHz = this->GetMaxAllowedHz((SysClkModule)module, this->context->profile);
                     nearestHz = this->GetNearestHz((SysClkModule)module, targetHz, maxHz);
 
-                    if (nearestHz != this->context->freqs[module] && this->context->enabled && !apmExtIsBoostMode(this->context->perfConfId) && this->config->GetConfigValue(HocClkConfigValue_OverwriteBoostMode))
+                    if (nearestHz != this->context->freqs[module] && this->context->enabled && !apmExtIsBoostMode(this->context->perfConfId) && !this->config->GetConfigValue(HocClkConfigValue_OverwriteBoostMode))
                     {
                         FileUtils::LogLine(
                             "[mgr] %s clock set : %u.%u MHz (target = %u.%u MHz)",
