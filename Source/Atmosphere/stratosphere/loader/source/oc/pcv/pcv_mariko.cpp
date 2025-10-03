@@ -412,78 +412,48 @@ namespace ams::ldr::oc::pcv::mariko
         R_SUCCEED();
     }
 
-    Result MemFreqDvbTable(u32 *ptr)
-    {
-        emc_dvb_dvfs_table_t *default_end = reinterpret_cast<emc_dvb_dvfs_table_t *>(ptr);
-        emc_dvb_dvfs_table_t *new_start = default_end + 1;
-
+    Result MemFreqDvbTable(u32* ptr) {
+        emc_dvb_dvfs_table_t* default_end  = reinterpret_cast<emc_dvb_dvfs_table_t *>(ptr);
+        emc_dvb_dvfs_table_t* new_start = default_end + 1;
+    
         // Validate existing table
-        void *mem_dvb_table_head = reinterpret_cast<u8 *>(new_start) - sizeof(EmcDvbTableDefault);
+        void* mem_dvb_table_head = reinterpret_cast<u8 *>(new_start) - sizeof(EmcDvbTableDefault);
         bool validated = std::memcmp(mem_dvb_table_head, EmcDvbTableDefault, sizeof(EmcDvbTableDefault)) == 0;
         R_UNLESS(validated, ldr::ResultInvalidDvbTable());
-
+    
         if (C.marikoEmcMaxClock <= EmcClkOSLimit)
             R_SKIP();
-
-        int32_t voltAdd = 25 * C.marikoEmcDvbShift;
-
-#define DVB_VOLT(zero, one, two) std::min(zero + voltAdd, 1050), std::min(one + voltAdd, 1025), std::min(two + voltAdd, 1000),
-
-        if (C.marikoEmcMaxClock < 1862400)
-        {
+    
+        int32_t voltAdd = 25*C.marikoEmcDvbShift;
+    
+        #define DVB_VOLT(zero, one, two)    std::min(zero+voltAdd, 1050), std::min(one+voltAdd, 1025), std::min(two+voltAdd, 1000),
+    
+        if (C.marikoEmcMaxClock < 1862400) {
             std::memcpy(new_start, default_end, sizeof(emc_dvb_dvfs_table_t));
-        }
-        if (C.marikoEmcMaxClock < 2131200)
-        {
-            emc_dvb_dvfs_table_t oc_table = {1866000, {700, 675, 637,}};
+        } else if (C.marikoEmcMaxClock < 2131200){
+            emc_dvb_dvfs_table_t oc_table = { 1862400, { 700, 675, 650, } };
+            std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
+        } else if (C.marikoEmcMaxClock < 2400000){
+            emc_dvb_dvfs_table_t oc_table = { 2131200, { 725, 700, 675, } };
+            std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
+        } else if (C.marikoEmcMaxClock < 2665600){
+            emc_dvb_dvfs_table_t oc_table = { 2400000, { DVB_VOLT(750, 725, 700) } };
+            std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
+        } else if (C.marikoEmcMaxClock < 2931200){
+            emc_dvb_dvfs_table_t oc_table = { 2665600, { DVB_VOLT(775, 750, 725) } };
+            std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
+        } else if (C.marikoEmcMaxClock < 3200000){
+            emc_dvb_dvfs_table_t oc_table = { 2931200, { DVB_VOLT(800, 775, 750) } };
+            std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
+        } else {
+            emc_dvb_dvfs_table_t oc_table = { 3200000, { DVB_VOLT(800, 800, 775) } };
             std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
         }
-        else if (C.marikoEmcMaxClock < 2400000)
-        {
-            emc_dvb_dvfs_table_t oc_table = {2133000, {725, 700, 650,}};
-            std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
-        }
-        else if (C.marikoEmcMaxClock < 2533000)
-        {
-            emc_dvb_dvfs_table_t oc_table = {2400000, {DVB_VOLT(750, 725, 675)}};
-            std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
-        }
-        else if (C.marikoEmcMaxClock < 2666000)
-        {
-            emc_dvb_dvfs_table_t oc_table = {2533000, {DVB_VOLT(800, 775, 725)}};
-            std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
-        }
-        else if (C.marikoEmcMaxClock < 2800000)
-        {
-            emc_dvb_dvfs_table_t oc_table = {2666000, {DVB_VOLT(850, 825, 775)}};
-            std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
-        }
-        else if (C.marikoEmcMaxClock < 2933000)
-        {
-            emc_dvb_dvfs_table_t oc_table = {2800000, {DVB_VOLT(925, 850, 800)}};
-            std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
-        }
-        else if (C.marikoEmcMaxClock < 3066000)
-        {
-            emc_dvb_dvfs_table_t oc_table = {2933000, {DVB_VOLT(1000, 900, 875)}};
-            std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
-        }
-        else if (C.marikoEmcMaxClock < 3200000)
-        {
-            emc_dvb_dvfs_table_t oc_table = {3066000, {DVB_VOLT(1025, 950, 925)}};
-            std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
-        }
-        else
-        {
-            emc_dvb_dvfs_table_t oc_table = {3200000, {DVB_VOLT(1050, 1025, 1000)}};
-            std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
-        }
-
         new_start->freq = C.marikoEmcMaxClock;
         /* Max dvfs entry is 32, but HOS doesn't seem to boot if exact freq doesn't exist in dvb table,
-        reason why it's like this
-        */
-
+           reason why it's like this 
+        */ 
+    
         R_SUCCEED();
     }
 
