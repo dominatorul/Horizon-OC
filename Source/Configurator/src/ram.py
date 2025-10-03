@@ -112,7 +112,7 @@ def populate():
     dpg.add_separator(label="Primary Timings")
 
     dpg.add_combo(
-        items=["0 (1600bl)", "2 (1333bl/1866bl)", "4 (2133bl)"],
+        items=["0 (1600bl)", "2 (1866bl)", "4 (2133bl)"],
         default_value="2",
         label="Base Latency",
         callback=k.grab_kip_storage_values_no_mult,
