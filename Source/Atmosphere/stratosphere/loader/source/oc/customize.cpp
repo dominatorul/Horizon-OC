@@ -44,7 +44,7 @@ volatile CustomizeTable C = {
  *   Value should be divided evenly by 12'500.
  *   Not enabled by default.
  */
-.commonEmcMemVolt  = 1237500,
+.commonEmcMemVolt  = 1175000,
 
 /* Erista CPU:
  * - Max Voltage in mV
@@ -60,7 +60,7 @@ volatile CustomizeTable C = {
  *   - System instabilities
  *   - NAND corruption
  */
-.eristaEmcMaxClock = 2227000,
+.eristaEmcMaxClock = 1862400,
 
 /* Mariko CPU:
  * - Max Voltage in mV:
@@ -92,15 +92,15 @@ volatile CustomizeTable C = {
 
 .eristaCpuUV = 0,
 
-.eristaGpuUV = 3,
+.eristaGpuUV = 0,
 
 .enableMarikoGpuUnsafeFreqs = DISABLED,
 
-.enableEristaGpuUnsafeFreqs = 1,
+.enableEristaGpuUnsafeFreqs = DISABLED,
 
 .enableMarikoCpuUnsafeFreqs = DISABLED,
 
-.enableEristaCpuUnsafeFreqs = 1,
+.enableEristaCpuUnsafeFreqs = DISABLED,
 
 .commonGpuVoltOffset = 0,
 
@@ -115,11 +115,11 @@ volatile CustomizeTable C = {
 .t7_tWTR = 0,
 .t8_tREFI = 0,
 
-.mem_burst_latency = 2,
+.mem_burst_latency = 0,
 
 .marikoCpuVmin = 600,
 
-.eristaGpuVmin = 750,
+.eristaGpuVmin = 810,
 
 .marikoGpuVmin = 610,
 
@@ -144,7 +144,7 @@ volatile CustomizeTable C = {
     710  /* 1075 */,
     735  /* 1152 */,
     785  /* 1228 */,
-    800  /* 1267 */,
+    0    /* 1267  (Disabled by default) */,
     0    /* 1305  (Disabled by default) */,
     0    /* 1344  (Disabled by default) */,
     0    /* 1382  (Disabled by default) */,
@@ -168,8 +168,8 @@ volatile CustomizeTable C = {
     900  /* 768  */,
     950  /* 844  */,
     975  /* 921  */,
-    920    /* 998  (Disabled by default) */,
-    975    /* 1075 (Disabled by default) */,
+    0    /* 998  (Disabled by default) */,
+    0    /* 1075 (Disabled by default) */,
 },
 
 
