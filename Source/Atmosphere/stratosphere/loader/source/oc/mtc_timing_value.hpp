@@ -147,6 +147,15 @@
 
         // write-to-precharge time for commands to the same bank in cycles
         const u32 WTP = WL + BL/2 + 1 + CEIL(tWR/tCK_avg) - 8;
+
+        const u32 numOfRows = 65536;
+
+        // {REFRESH, REFRESH_LO} = max[(tREF/#_of_rows) / (emc_clk_period) - 64, (tREF/#_of_rows) / (emc_clk_period) * 97%]
+        // emc_clk_period = dram_clk / 2;
+        // 1600 MHz: 5894, but N' set to 6176 (~4.8% margin)
+        const u32 REFRESH = MIN((u32)65472, u32(std::ceil((double(tREFpb) * C.eristaEmcMaxClock / numOfRows * 1.048 / 2 - 64))) / 4 * 4);
+        const u32 REFBW = MIN((u32)65536, REFRESH+64);
+    
     }
 
     namespace pcv::mariko {
@@ -160,5 +169,14 @@
 
         // write-to-precharge time for commands to the same bank in cycles
         const u32 WTP = WL + BL/2 + 1 + CEIL(tWR/tCK_avg) - 8;
+
+        const u32 numOfRows = 131072;
+
+        // {REFRESH, REFRESH_LO} = max[(tREF/#_of_rows) / (emc_clk_period) - 64, (tREF/#_of_rows) / (emc_clk_period) * 97%]
+        // emc_clk_period = dram_clk / 2;
+        // 1600 MHz: 5894, but N' set to 6176 (~4.8% margin)
+        const u32 REFRESH = MIN((u32)65472, u32(std::ceil((double(tREFpb) * C.marikoEmcMaxClock / numOfRows * 1.048 / 2 - 64))) / 4 * 4);
+        const u32 REFBW = MIN((u32)130944, REFRESH+64);
+    
     }
 }

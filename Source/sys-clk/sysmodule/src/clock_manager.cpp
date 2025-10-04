@@ -222,7 +222,7 @@ void ClockManager::Tick()
                     maxHz = this->GetMaxAllowedHz((SysClkModule)module, this->context->profile);
                     nearestHz = this->GetNearestHz((SysClkModule)module, targetHz, maxHz);
 
-                    if (nearestHz != this->context->freqs[module] && this->context->enabled && !apmExtIsBoostMode(this->context->perfConfId) && !this->config->GetConfigValue(HocClkConfigValue_OverwriteBoostMode))
+                    if (nearestHz != this->context->freqs[module] && this->context->enabled/* && !apmExtIsBoostMode(this->context->perfConfId) && !this->config->GetConfigValue(HocClkConfigValue_OverwriteBoostMode)*/)
                     {
                         FileUtils::LogLine(
                             "[mgr] %s clock set : %u.%u MHz (target = %u.%u MHz)",
@@ -232,12 +232,12 @@ void ClockManager::Tick()
 
                         Board::SetHz((SysClkModule)module, nearestHz);
                         this->context->freqs[module] = nearestHz;
-                    }
-                    else
-                    {
-                        Board::ResetToStockCpu();
-                        Board::ResetToStockGpu();
-                    }
+                        }
+                    // else
+                    // {
+                    //     Board::ResetToStockCpu();
+                    //     Board::ResetToStockGpu();
+                    // }
             //     }
             // } else {
             //     #define GOVERNOR_LOAD_THRESHOLD 80
