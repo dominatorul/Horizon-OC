@@ -6,7 +6,7 @@ kip_download_link="https://github.com/souldbminersmwc/Horizon-OC/releases/latest
 hoc_clk_download_link="https://github.com/souldbminersmwc/Horizon-OC/releases/latest/download/hoc-clk.zip"
 nx_ovlloader_link = "https://github.com/ppkantorski/nx-ovlloader/releases/latest/download/nx-ovlloader+.zip"
 ultrahand_link = "https://github.com/ppkantorski/Ultrahand-Overlay/releases/latest/download/ovlmenu.ovl"
-status_monitor_link = "https://github.com/ppkantorski/Status-Monitor-Overlay/releases/latest/download/ Status-Monitor-Overlay.ovl "
+status_monitor_link = "https://github.com/ppkantorski/Status-Monitor-Overlay/releases/latest/download/Status-Monitor-Overlay.ovl "
 saltynx_link = "https://github.com/masagrator/SaltyNX/releases/latest/download/SaltyNX.zip"
 reversenx_link = "https://github.com/masagrator/ReverseNX-RT/releases/latest/download/ReverseNX-RT-ovl.ovl"
 

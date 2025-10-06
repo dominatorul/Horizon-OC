@@ -52,7 +52,7 @@ Run build.bat or  run "python -m PyInstaller --onefile --add-data "assets;assets
 
 ## Credits
 Lightos for RAM timings<br>
-meha for Switch-Oc-Suite<br>
+KazushiMe and meha for Switch-Oc-Suite<br>
 sys-clk team for sys-clk<br>
 b0rd2death for Ultrahand sys-clk fork<br>
 Lightos and Sammybigio2011 for early testing<br>

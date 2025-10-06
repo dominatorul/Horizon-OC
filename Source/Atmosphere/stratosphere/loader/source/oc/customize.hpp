@@ -66,7 +66,7 @@
 
      u32 commonGpuVoltOffset;
 
-     u32 marikoEmcDvbShift;
+     u32 EmcDvbShift;
 
      // advanced config
      u32 t1_tRCD;

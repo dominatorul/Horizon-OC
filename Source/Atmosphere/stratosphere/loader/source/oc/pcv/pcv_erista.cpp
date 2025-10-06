@@ -65,10 +65,10 @@ Result GpuVmin(u32 *ptr) {
     Result CpuVoltDfll(u32* ptr) {
     cvb_cpu_dfll_data *entry = reinterpret_cast<cvb_cpu_dfll_data *>(ptr);
 
-// R_UNLESS(entry->tune0_low == 0x0000FFCF,   ldr::ResultInvalidCpuVoltDfllEntry());
-//        R_UNLESS(entry->tune0_high == 0x00000000,    ldr::ResultInvalidCpuVoltDfllEntry());
-//        R_UNLESS(entry->tune1_low == 0x012207FF,   ldr::ResultInvalidCpuVoltDfllEntry());
-//        R_UNLESS(entry->tune1_high == 0x03FFF7FF,    ldr::ResultInvalidCpuVoltDfllEntry());
+    R_UNLESS(entry->tune0_low == 0x152f01,   ldr::ResultInvalidCpuVoltDfllEntry());
+    R_UNLESS(entry->tune0_high == 0x00000000,    ldr::ResultInvalidCpuVoltDfllEntry());
+    R_UNLESS(entry->tune1_low == 0x00000000,   ldr::ResultInvalidCpuVoltDfllEntry());
+    R_UNLESS(entry->tune1_high == 0x00000000,    ldr::ResultInvalidCpuVoltDfllEntry());
     if(!C.eristaCpuUV) {
         R_SKIP();
     }
@@ -78,24 +78,24 @@ Result GpuVmin(u32 *ptr) {
 
     switch(C.eristaCpuUV) {
         case 1:
-            PATCH_OFFSET(&(entry->tune0_low), 0x0000FFFF); //process_id 0 // EOS UV1
-            PATCH_OFFSET(&(entry->tune1_low), 0x027007FF);
+            PATCH_OFFSET(&(entry->tune0_high), 0xFFFF); //process_id 0 // EOS UV1
+            PATCH_OFFSET(&(entry->tune1_high), 0x027007FF);
             break;
         case 2:
-            PATCH_OFFSET(&(entry->tune0_low), 0x0000EFFF); //process_id 1 // EOS Uv2
-            PATCH_OFFSET(&(entry->tune1_low), 0x027407FF);
+            PATCH_OFFSET(&(entry->tune0_high), 0x0000EFFF); //process_id 1 // EOS Uv2
+            PATCH_OFFSET(&(entry->tune1_high), 0x027407FF);
             break;
         case 3:
-            PATCH_OFFSET(&(entry->tune0_low), 0x0000DFFF); //process_id 0 // EOS UV3
-            PATCH_OFFSET(&(entry->tune1_low), 0x027807FF);
+            PATCH_OFFSET(&(entry->tune0_high), 0x0000DFFF); //process_id 0 // EOS UV3
+            PATCH_OFFSET(&(entry->tune1_high), 0x027807FF);
             break;
         case 4:
-            PATCH_OFFSET(&(entry->tune0_low), 0x0000DFDF); //process_id 1 // EOS Uv4
-            PATCH_OFFSET(&(entry->tune1_low), 0x027A07FF);
+            PATCH_OFFSET(&(entry->tune0_high), 0x0000DFDF); //process_id 1 // EOS Uv4
+            PATCH_OFFSET(&(entry->tune1_high), 0x027A07FF);
             break;
         case 5:
-            PATCH_OFFSET(&(entry->tune0_low), 0x0000CFDF); // EOS UV5
-            PATCH_OFFSET(&(entry->tune1_low), 0x037007FF);
+            PATCH_OFFSET(&(entry->tune0_high), 0x0000CFDF); // EOS UV5
+            PATCH_OFFSET(&(entry->tune1_high), 0x037007FF);
             break;
         default:
             break;
@@ -159,91 +159,97 @@ Result GpuVmin(u32 *ptr) {
         R_SUCCEED();
     }
 
-    void MemMtcTableAutoAdjust(EristaMtcTable *table) {
-        if (C.mtcConf != AUTO_ADJ)
-            return;
+void MemMtcTableAutoAdjust(EristaMtcTable *table) {
+    if (C.mtcConf != AUTO_ADJ)
+        return;
 
-#define WRITE_PARAM_ALL_REG(TABLE, PARAM, VALUE) \
-    TABLE->burst_regs.PARAM = VALUE;             \
-    TABLE->shadow_regs_ca_train.PARAM = VALUE;   \
-    TABLE->shadow_regs_quse_train.PARAM = VALUE; \
-    TABLE->shadow_regs_rdwr_train.PARAM = VALUE;
+    using namespace pcv::erista;
 
-#define GET_CYCLE_CEIL(PARAM) u32(CEIL(double(PARAM) / tCK_avg))
+    #define WRITE_PARAM_ALL_REG(TABLE, PARAM, VALUE) \
+        TABLE->burst_regs.PARAM = VALUE;             \
+        TABLE->shadow_regs_ca_train.PARAM = VALUE;   \
+        TABLE->shadow_regs_quse_train.PARAM = VALUE; \
+        TABLE->shadow_regs_rdwr_train.PARAM = VALUE;
 
-        WRITE_PARAM_ALL_REG(table, emc_rc, GET_CYCLE_CEIL(tRC));
-        WRITE_PARAM_ALL_REG(table, emc_rfc, GET_CYCLE_CEIL(tRFCab));
-        WRITE_PARAM_ALL_REG(table, emc_rfcpb, GET_CYCLE_CEIL(tRFCpb));
-        WRITE_PARAM_ALL_REG(table, emc_ras, GET_CYCLE_CEIL(tRAS));
-        WRITE_PARAM_ALL_REG(table, emc_rp, GET_CYCLE_CEIL(tRPpb));
-        WRITE_PARAM_ALL_REG(table, emc_r2p, GET_CYCLE_CEIL(tRTP));
-        WRITE_PARAM_ALL_REG(table, emc_r2w, R2W);
-        WRITE_PARAM_ALL_REG(table, emc_w2r, W2R);
-        WRITE_PARAM_ALL_REG(table, emc_w2p, WTP);
-        WRITE_PARAM_ALL_REG(table, emc_rd_rcd, GET_CYCLE_CEIL(tRCD));
-        WRITE_PARAM_ALL_REG(table, emc_wr_rcd, GET_CYCLE_CEIL(tRCD));
-        WRITE_PARAM_ALL_REG(table, emc_rrd, GET_CYCLE_CEIL(tRRD));
-        WRITE_PARAM_ALL_REG(table, emc_refresh, REFRESH);
-        WRITE_PARAM_ALL_REG(table, emc_pre_refresh_req_cnt, REFRESH / 4);
-        WRITE_PARAM_ALL_REG(table, emc_pdex2wr, GET_CYCLE_CEIL(tXP));
-        WRITE_PARAM_ALL_REG(table, emc_pdex2rd, GET_CYCLE_CEIL(tXP));
-        WRITE_PARAM_ALL_REG(table, emc_txsr, MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe));
-        WRITE_PARAM_ALL_REG(table, emc_txsrdll, MIN(GET_CYCLE_CEIL(tXSR), (u32)0x3fe));
-        WRITE_PARAM_ALL_REG(table, emc_tckesr, GET_CYCLE_CEIL(tSR));
-        WRITE_PARAM_ALL_REG(table, emc_tfaw, GET_CYCLE_CEIL(tFAW));
-        WRITE_PARAM_ALL_REG(table, emc_trpab, GET_CYCLE_CEIL(tRPab));
-        WRITE_PARAM_ALL_REG(table, emc_trefbw, REFBW);
+    #define GET_CYCLE_CEIL(PARAM) u32(CEIL(double(PARAM) / tCK_avg))
 
-#define WRITE_PARAM_BURST_MC_REG(TABLE, PARAM, VALUE) TABLE->burst_mc_regs.PARAM = VALUE;
+    /* Primary timings. */
+//    WRITE_PARAM_ALL_REG(table, emc_tckesr, GET_CYCLE_CEIL(tCK_avg));
+    WRITE_PARAM_ALL_REG(table, emc_rd_rcd, GET_CYCLE_CEIL(tRCD));
+    WRITE_PARAM_ALL_REG(table, emc_wr_rcd, GET_CYCLE_CEIL(tRCD));
+    WRITE_PARAM_ALL_REG(table, emc_ras,    GET_CYCLE_CEIL(tRAS));
+    WRITE_PARAM_ALL_REG(table, emc_rp,     GET_CYCLE_CEIL(tRPpb));
 
-        constexpr u32 MC_ARB_DIV = 4;
-        constexpr u32 MC_ARB_SFA = 2;
-        table->burst_mc_regs.mc_emem_arb_timing_rcd = CEIL(GET_CYCLE_CEIL(tRCD) / MC_ARB_DIV) - 2;
-        table->burst_mc_regs.mc_emem_arb_timing_rp = CEIL(GET_CYCLE_CEIL(tRPpb) / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-        table->burst_mc_regs.mc_emem_arb_timing_rc = CEIL(GET_CYCLE_CEIL(tRC) / MC_ARB_DIV) - 1;
-        table->burst_mc_regs.mc_emem_arb_timing_ras = CEIL(GET_CYCLE_CEIL(tRAS) / MC_ARB_DIV) - 2;
-        table->burst_mc_regs.mc_emem_arb_timing_faw = CEIL(GET_CYCLE_CEIL(tFAW) / MC_ARB_DIV) - 1;
-        table->burst_mc_regs.mc_emem_arb_timing_rrd = CEIL(GET_CYCLE_CEIL(tRRD) / MC_ARB_DIV) - 1;
-        table->burst_mc_regs.mc_emem_arb_timing_rap2pre = CEIL(GET_CYCLE_CEIL(tRTP) / MC_ARB_DIV);
-        table->burst_mc_regs.mc_emem_arb_timing_wap2pre = CEIL(WTP / MC_ARB_DIV);
-        table->burst_mc_regs.mc_emem_arb_timing_r2r     = CEIL(table->burst_regs.emc_rext / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-        table->burst_mc_regs.mc_emem_arb_timing_w2w     = CEIL(table->burst_regs.emc_wext / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-        table->burst_mc_regs.mc_emem_arb_timing_r2w = CEIL(R2W / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-        table->burst_mc_regs.mc_emem_arb_timing_w2r = CEIL(W2R / MC_ARB_DIV) - 1 + MC_ARB_SFA;
-        table->burst_mc_regs.mc_emem_arb_timing_rfcpb = CEIL(GET_CYCLE_CEIL(tRFCpb) / MC_ARB_DIV);
-        // table->burst_mc_regs.mc_emem_arb_timing_ccdmw   = CEIL(tCCDMW / MC_ARB_DIV) -1 + MC_ARB_SFA;
-    }
+    /* Secondary timings. */
+    WRITE_PARAM_ALL_REG(table, emc_rrd,    GET_CYCLE_CEIL(tRRD));
+    WRITE_PARAM_ALL_REG(table, emc_rfcpb,  GET_CYCLE_CEIL(tRFCpb));
+    WRITE_PARAM_ALL_REG(table, emc_r2w,    R2W);
+    WRITE_PARAM_ALL_REG(table, emc_w2r,    W2R);
+    WRITE_PARAM_ALL_REG(table, emc_trefbw, REFBW);
+
+    WRITE_PARAM_ALL_REG(table, emc_rfc,    GET_CYCLE_CEIL(tRFCab));
+    WRITE_PARAM_ALL_REG(table, emc_tppd,   tPPD);
+    WRITE_PARAM_ALL_REG(table, emc_tfaw,   GET_CYCLE_CEIL(tFAW));
+    WRITE_PARAM_ALL_REG(table, emc_rc,     GET_CYCLE_CEIL(tRC));
+    WRITE_PARAM_ALL_REG(table, emc_tckesr, GET_CYCLE_CEIL(tSR));
+
+    WRITE_PARAM_ALL_REG(table, emc_tcke,    MAX(4u, GET_CYCLE_CEIL(7.5)));
+    WRITE_PARAM_ALL_REG(table, emc_txsr,    GET_CYCLE_CEIL(tXSR));
+    WRITE_PARAM_ALL_REG(table, emc_r2p,     GET_CYCLE_CEIL(tRTP));
+    WRITE_PARAM_ALL_REG(table, emc_w2p,     WTP);
+    WRITE_PARAM_ALL_REG(table, emc_pdex2wr, GET_CYCLE_CEIL(tXP));
+    WRITE_PARAM_ALL_REG(table, emc_pdex2rd, GET_CYCLE_CEIL(tXP));
+
+    constexpr u32 MC_ARB_DIV = 4;
+    constexpr u32 MC_ARB_SFA = 2;
+
+    table->burst_mc_regs.mc_emem_arb_timing_rcd     = u32(CEIL(GET_CYCLE_CEIL(tRCD)  / double(MC_ARB_DIV))) - 2;
+    table->burst_mc_regs.mc_emem_arb_timing_rp      = u32(CEIL(GET_CYCLE_CEIL(tRPpb) / double(MC_ARB_DIV))) - 1 + MC_ARB_SFA;
+    table->burst_mc_regs.mc_emem_arb_timing_rc      = u32(CEIL(GET_CYCLE_CEIL(tRC)   / double(MC_ARB_DIV))) - 1;
+    table->burst_mc_regs.mc_emem_arb_timing_ras     = u32(CEIL(GET_CYCLE_CEIL(tRAS)  / double(MC_ARB_DIV))) - 2;
+    table->burst_mc_regs.mc_emem_arb_timing_faw     = u32(CEIL(GET_CYCLE_CEIL(tFAW)  / double(MC_ARB_DIV))) - 1;
+    table->burst_mc_regs.mc_emem_arb_timing_rrd     = u32(CEIL(GET_CYCLE_CEIL(tRRD)  / double(MC_ARB_DIV))) - 1;
+    table->burst_mc_regs.mc_emem_arb_timing_rap2pre = u32(CEIL(GET_CYCLE_CEIL(tRTP)  / double(MC_ARB_DIV)));
+    table->burst_mc_regs.mc_emem_arb_timing_r2w     = u32(CEIL(R2W                   / double(MC_ARB_DIV)));
+    table->burst_mc_regs.mc_emem_arb_timing_w2r     = u32(CEIL(W2R                   / double(MC_ARB_DIV)));
+    #undef GET_CYCLE_CEIL
+}
 
     Result MemFreqMtcTable(u32 *ptr) {
-        u32 khz_list[] = {1600000, 1331200, 1065600, 800000, 665600, 408000, 204000, 102000, 68000, 40800};
-        u32 khz_list_size = sizeof(khz_list) / sizeof(u32);
+        if(C.eristaEmcMaxClock != EmcClkOSLimit) {
+            u32 khz_list[] = {1600000, 1331200, 1065600, 800000, 665600, 408000, 204000, 102000, 68000, 40800};
+            u32 khz_list_size = sizeof(khz_list) / sizeof(u32);
 
-        // Generate list for mtc table pointers
-        EristaMtcTable *table_list[khz_list_size];
-        for (u32 i = 0; i < khz_list_size; i++) {
-            u8 *table = reinterpret_cast<u8 *>(ptr) - offsetof(EristaMtcTable, rate_khz) - i * sizeof(EristaMtcTable);
-            table_list[i] = reinterpret_cast<EristaMtcTable *>(table);
-            R_UNLESS(table_list[i]->rate_khz == khz_list[i], ldr::ResultInvalidMtcTable());
-            R_UNLESS(table_list[i]->rev == MTC_TABLE_REV, ldr::ResultInvalidMtcTable());
+            // Generate list for mtc table pointers
+            EristaMtcTable *table_list[khz_list_size];
+            for (u32 i = 0; i < khz_list_size; i++) {
+                u8 *table = reinterpret_cast<u8 *>(ptr) - offsetof(EristaMtcTable, rate_khz) - i * sizeof(EristaMtcTable);
+                table_list[i] = reinterpret_cast<EristaMtcTable *>(table);
+                R_UNLESS(table_list[i]->rate_khz == khz_list[i], ldr::ResultInvalidMtcTable());
+                R_UNLESS(table_list[i]->rev == MTC_TABLE_REV, ldr::ResultInvalidMtcTable());
+
+            }
+
+            if (C.eristaEmcMaxClock <= EmcClkOSLimit)
+                R_SKIP();
+
+            // Make room for new mtc table, discarding useless 40.8 MHz table
+            // 40800 overwritten by 68000, ..., 1331200 overwritten by 1600000, leaving table_list[0] not overwritten
+            for (u32 i = khz_list_size - 1; i > 0; i--)
+                std::memcpy(static_cast<void *>(table_list[i]), static_cast<void *>(table_list[i - 1]), sizeof(EristaMtcTable));
+        
+            MemMtcTableAutoAdjust(table_list[0]);
+            PATCH_OFFSET(ptr, C.eristaEmcMaxClock);
+
+            // Handle customize table replacement
+            // if (C.mtcConf == CUSTOMIZED_ALL) {
+            //    MemMtcCustomizeTable(table_list[0], const_cast<EristaMtcTable *>(C.eristaMtcTable));
+            //}
+
+            R_SUCCEED();
+        } else {
+            R_SUCCEED(); // Skip changing table on default freq
         }
-
-        if (C.eristaEmcMaxClock <= EmcClkOSLimit)
-            R_SKIP();
-
-        // Make room for new mtc table, discarding useless 40.8 MHz table
-        // 40800 overwritten by 68000, ..., 1331200 overwritten by 1600000, leaving table_list[0] not overwritten
-        for (u32 i = khz_list_size - 1; i > 0; i--)
-            std::memcpy(static_cast<void *>(table_list[i]), static_cast<void *>(table_list[i - 1]), sizeof(EristaMtcTable));
-
-        MemMtcTableAutoAdjust(table_list[0]);
-        PATCH_OFFSET(ptr, C.eristaEmcMaxClock);
-
-        // Handle customize table replacement
-        // if (C.mtcConf == CUSTOMIZED_ALL) {
-        //    MemMtcCustomizeTable(table_list[0], const_cast<EristaMtcTable *>(C.eristaMtcTable));
-        //}
-
-        R_SUCCEED();
     }
 
     Result MemFreqMax(u32 *ptr) {
@@ -254,6 +260,42 @@ Result GpuVmin(u32 *ptr) {
 
         R_SUCCEED();
     }
+
+    // Result MemFreqDvbTable(u32* ptr) {
+    //     emc_dvb_dvfs_table_t* default_end  = reinterpret_cast<emc_dvb_dvfs_table_t *>(ptr);
+    //     emc_dvb_dvfs_table_t* new_start = default_end + 1;
+    
+    //     // Validate existing table
+    //     void* mem_dvb_table_head = reinterpret_cast<u8 *>(new_start) - sizeof(EmcDvbTableDefault);
+    //     bool validated = std::memcmp(mem_dvb_table_head, EmcDvbTableDefault, sizeof(EmcDvbTableDefault)) == 0;
+    //     R_UNLESS(validated, ldr::ResultInvalidDvbTable());
+    
+    //     if (C.eristaEmcMaxClock <= EmcClkOSLimit)
+    //         R_SKIP();
+    
+    //     int32_t voltAdd = 25*C.EmcDvbShift;
+    
+    //     #define DVB_VOLT(zero, one, two)    std::min(zero+voltAdd, 1050), std::min(one+voltAdd, 1025), std::min(two+voltAdd, 1000),
+    
+    //     if (C.marikoEmcMaxClock < 1862400) {
+    //         std::memcpy(new_start, default_end, sizeof(emc_dvb_dvfs_table_t));
+    //     } else if (C.marikoEmcMaxClock < 2131200){
+    //         emc_dvb_dvfs_table_t oc_table = { 1862400, { 950, 925, 900, } };
+    //         std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
+    //     } else if (C.marikoEmcMaxClock < 2227000){
+    //         emc_dvb_dvfs_table_t oc_table = { 2131200, { 975, 950, 925, } };
+    //         std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
+    //     } else {
+    //         emc_dvb_dvfs_table_t oc_table = { 2227000, { DVB_VOLT(1000, 975, 950) } };
+    //         std::memcpy(new_start, &oc_table, sizeof(emc_dvb_dvfs_table_t));
+    //     }
+    //     new_start->freq = C.eristaEmcMaxClock;
+    //     /* Max dvfs entry is 32, but HOS doesn't seem to boot if exact freq doesn't exist in dvb table,
+    //        reason why it's like this 
+    //     */ 
+    
+    //     R_SUCCEED();
+    // }
 
     void Patch(uintptr_t mapped_nso, size_t nso_size) {
         u32 CpuCvbDefaultMaxFreq = static_cast<u32>(GetDvfsTableLastEntry(CpuCvbTableDefault)->freq);
@@ -270,6 +312,7 @@ Result GpuVmin(u32 *ptr) {
             {"MEM Freq Mtc", &MemFreqMtcTable, 0, nullptr, EmcClkOSLimit},
             {"MEM Freq Max", &MemFreqMax, 0, nullptr, EmcClkOSLimit},
             {"MEM Freq PLLM", &MemFreqPllmLimit, 2, nullptr, EmcClkPllmLimit},
+            // {"MEM Freq Dvb", &MemFreqDvbTable, 1, nullptr, EmcClkOSLimit},
             {"MEM Volt", &MemVoltHandler, 2, nullptr, MemVoltHOS},
             {"GPU Vmin", &GpuVmin, 0, nullptr, gpuVmin},
         };

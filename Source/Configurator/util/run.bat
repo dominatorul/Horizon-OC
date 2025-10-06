@@ -1,2 +1,2 @@
-python3 eostimingutil.py
+python eostimingutil.py
 
