@@ -2,8 +2,8 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v*.*.*'  # Trigger on tags like v1.2.3
+    branches:
+      - main  # Run on every commit to main
 
 jobs:
   release:
@@ -21,12 +21,30 @@ jobs:
           mkdir -p release
           zip -r release/dist.zip dist
 
-      - name: Create GitHub release
+      - name: Get latest release tag
+        id: get_latest_tag
+        run: |
+          LATEST_TAG=$(gh release list --limit 1 --json tagName -q '.[0].tagName' || echo "")
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine release tag
+        id: tag
+        run: |
+          if [ -z "${{ env.LATEST_TAG }}" ]; then
+            TAG="v0.1.0"
+          else
+            TAG="${{ env.LATEST_TAG }}"
+          fi
+          echo "RELEASE_TAG=$TAG" >> $GITHUB_ENV
+
+      - name: Create or update GitHub release
         id: create_release
-        uses: actions/create-release@v1
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
+          tag: ${{ env.RELEASE_TAG }}
+          name: Release ${{ env.RELEASE_TAG }}
           generate_release_notes: true
           draft: false
           prerelease: false
