@@ -3,7 +3,7 @@ name: Release and Deploy
 on:
   push:
     branches:
-      - main  # Adjust if your default branch is master
+      - main
   workflow_dispatch:
 
 permissions:
@@ -39,36 +39,31 @@ jobs:
           echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
 
       - name: Determine release tag
-        id: tag
         run: |
           if [ -z "${{ env.LATEST_TAG }}" ]; then
-            TAG="v0.1.0"
+            echo "RELEASE_TAG=v0.1.0" >> $GITHUB_ENV
           else
-            TAG="${{ env.LATEST_TAG }}"
+            echo "RELEASE_TAG=${{ env.LATEST_TAG }}" >> $GITHUB_ENV
           fi
-          echo "RELEASE_TAG=$TAG" >> $GITHUB_ENV
 
       - name: Create or update GitHub release
         run: |
+          gh auth setup-git
           if gh release view "$RELEASE_TAG" &>/dev/null; then
-            echo "Release exists, updating notes..."
             gh release edit "$RELEASE_TAG" --generate-notes
           else
-            echo "Creating new release..."
             gh release create "$RELEASE_TAG" --generate-notes
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload hoc.kip
-        run: |
-          gh release upload "$RELEASE_TAG" dist/atmosphere/hoc.kip --clobber
+        run: gh release upload "$RELEASE_TAG" dist/atmosphere/hoc.kip --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload dist.zip
-        run: |
-          gh release upload "$RELEASE_TAG" release/dist.zip --clobber
+        run: gh release upload "$RELEASE_TAG" release/dist.zip --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -77,13 +72,19 @@ jobs:
     needs: release
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Setup Pages
         uses: actions/configure-pages@v2
+
+      - name: Ensure dist exists
+        run: |
+          if [ ! -d "./pages/dist" ]; then
+            echo "Error: ./pages/dist does not exist"
+            exit 1
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
