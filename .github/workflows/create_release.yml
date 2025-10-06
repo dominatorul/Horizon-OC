@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - main  # Run on every commit to main
+      - main  # Trigger on every commit
 
 jobs:
   release:
@@ -40,10 +40,9 @@ jobs:
           echo "RELEASE_TAG=$TAG" >> $GITHUB_ENV
 
       - name: Create or update GitHub release
-        id: create_release
         run: |
           if gh release view "$RELEASE_TAG" &>/dev/null; then
-            echo "Release exists, updating..."
+            echo "Release exists, updating notes..."
             gh release edit "$RELEASE_TAG" --generate-notes
           else
             echo "Creating new release..."
