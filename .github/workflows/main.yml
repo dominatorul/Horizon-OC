@@ -1,81 +1,96 @@
-name: Release and Deploy
+name: Release
 
 on:
   push:
     branches:
-      - '**'
-  workflow_dispatch:
+      - main
+    tags-ignore:
+      - '*'
 
 permissions:
-  contents: write
-  pages: write
-  id-token: write
+  contents: write  # Required to create releases and push tags
 
 jobs:
-  release:
+  unit-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v5
+      - run: make test
 
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y zip jq
+  integration-test:
+    runs-on: ubuntu-latest
+    needs: unit-test
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
 
-      - name: Create dist zip
+      - name: Create dist.zip
         run: |
           mkdir -p release
           zip -r release/dist.zip dist
 
-      - name: Determine latest release tag
-        id: get_latest
+      - name: Determine release tag
+        id: tag
         run: |
-          LATEST=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+          LATEST_TAG=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
             https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest \
             | jq -r '.tag_name // empty')
-          echo "LATEST_TAG=$LATEST" >> $GITHUB_ENV
-          if [ -z "$LATEST" ]; then
-            echo "RELEASE_TAG=v0.1.0" >> $GITHUB_ENV
+          if [ -z "$LATEST_TAG" ]; then
+            RELEASE_TAG="v0.1.0"
           else
-            echo "RELEASE_TAG=$LATEST" >> $GITHUB_ENV
+            RELEASE_TAG="$LATEST_TAG"
           fi
+          echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
 
-      - name: Create or update release
-        id: release
+      - name: Create or update GitHub release via API
         run: |
-          RELEASE_NAME=${{ env.RELEASE_TAG }}
-          # Check if release exists
           RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
-            https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/${{ env.RELEASE_TAG }} \
+            https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/$RELEASE_TAG \
             | jq -r '.id // empty')
 
           if [ -z "$RELEASE_ID" ]; then
-            echo "Creating release $RELEASE_NAME"
             RELEASE_ID=$(curl -s -X POST -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
               -H "Content-Type: application/json" \
-              -d "{\"tag_name\":\"${{ env.RELEASE_TAG }}\",\"name\":\"$RELEASE_NAME\",\"draft\":false,\"prerelease\":false}" \
+              -d "{\"tag_name\":\"$RELEASE_TAG\",\"name\":\"$RELEASE_TAG\",\"draft\":false,\"prerelease\":false}" \
               https://api.github.com/repos/${GITHUB_REPOSITORY}/releases | jq -r '.id')
-          else
-            echo "Release exists, using ID $RELEASE_ID"
           fi
-
           echo "RELEASE_ID=$RELEASE_ID" >> $GITHUB_ENV
 
       - name: Upload hoc.kip
         run: |
           ASSET="dist/atmosphere/hoc.kip"
-          FILENAME=$(basename $ASSET)
+          if [ ! -f "$ASSET" ]; then
+            echo "File $ASSET not found!"
+            exit 1
+          fi
           curl -s -X POST \
             -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
             -H "Content-Type: application/octet-stream" \
             --data-binary @"$ASSET" \
-            "https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/${{ env.RELEASE_ID }}/assets?name=$FILENAME"
+            "https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/$RELEASE_ID/assets?name=$(basename $ASSET)"
 
       - name: Upload dist.zip
         run: |
           ASSET="release/dist.zip"
-          FILENAME=$(basename $ASSET)
           curl -s -X POST \
             -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
             -H "Content-Type: application/zip" \
             --data-binary @"$ASSET" \
-            "https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/${{ env.RELEASE_ID }}/assets?name=$FILENAME"
+            "https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/$RELEASE_ID/assets?name=$(basename $ASSET)"
+
+  release:
+    runs-on: ubuntu-latest
+    needs: integration-test
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.RELEASE_TOKEN }} # for pushing to protected branch
+      - name: Publish new tag
+        run: |
+          git config --global user.email "no_reply@gohr.digital"
+          git config --global user.name "Release Bot"
+          git tag -fa v5 -m "Update v5 tag"
+          git push origin v5 --force
