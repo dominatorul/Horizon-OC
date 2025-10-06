@@ -44,7 +44,7 @@ volatile CustomizeTable C = {
 
 .marikoEmcVddqVolt = 600000,
 
-.marikoCpuUV = 0,
+.marikoCpuUV = 0, // No undervolt
 
 .marikoGpuUV = 0,
 
