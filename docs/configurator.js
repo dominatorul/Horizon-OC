@@ -145,36 +145,43 @@ class GpuEntry extends CustEntry {
 const CustTable = [
   new CustEntry("mtcConf", "DRAM Timing", CustPlatform.All, 4,
     [
-      "<b>0</b>: AUTO_ADJ_ALL: Auto adjust mtc table with LPDDR4 3733 Mbps specs, 8Gb density. Change timing with Advanced Config (Default)",
-      "<b>1</b>: CUSTOM_ADJ_ALL: Adjust only non-zero preset timings in Advanced Config",
-      "<b>2</b>: NO_ADJ_ALL: Use 1600 mtc table without adjusting (Timing becomes tighter if you raise dram clock)."
-    ], 0, [0, 2], 1),
+      "<b>0</b>: AUTO_ADJ: Auto adjust mtc table with LPDDR4 4266 Mbps specs, 16Gb density."
+    ], 0, [0, 2], 0),
   new CustEntry("commonCpuBoostClock", "Boost Clock in kHz", CustPlatform.All, 4,
     ["System default: 1785000", "Boost clock will be applied when applications request Boost Mode via performance configuration."],
     1785000, [1020000, 3000000], 1, false),
   new CustEntry("commonEmcMemVolt", "EMC Vdd2 Voltage in uV", CustPlatform.All, 4,
-    ["Acceptable range: 1100000 ≤ x ≤ 1250000, and it should be divided evenly by 12500.", "Erista Default: 1125000", "Mariko Default: 1100000", "Official lpddr4(x) range: 1060mV~1175mV (1100mV nominal)", "OCS need high voltage unlike l4t because of not scaling mtc table well. However it is recommended to stay within official limits", "Not enabled by default"],
-    0, [1100000, 1250000], 12500),
+    ["Acceptable range: 1100000 ≤ x ≤ 1237500, and it should be divided evenly by 12500.", "Erista Default: 1125000", "Mariko Default: 1100000", "Official lpddr4(x) range: 1060mV~1175mV (1100mV nominal)", "OCS need high voltage unlike l4t because of not scaling mtc table well. However it is recommended to stay within official limits", "Not enabled by default"],
+    1175000, [1100000, 1237500], 12500),
   new CustEntry("eristaCpuMaxVolt", "Erista CPU Max Voltage in mV", CustPlatform.Erista, 4,
     ["Acceptable range: 1120 ≤ x ≤ 1300", "L4T Default: 1235"], 1235, [1120, 1300], 1),
   new CustEntry("eristaEmcMaxClock", "Erista RAM Max Clock in kHz", CustPlatform.Erista, 4,
-    ["Values should be ≥ 1600000, and divided evenly by 3200.", "Recommended Clocks: 1862400, 2131200 (JEDEC)", "<b>WARNING:</b> RAM overclock could be UNSTABLE if timing parameters are not suitable for your DRAM"], 1862400, [1600000, 2131200], 3200),
+    ["Values should be ≥ 1600000, and divided evenly by 3200.", "Recommended Clocks: 1862400, 2131200 (JEDEC)", "<b>WARNING:</b> RAM overclock could be UNSTABLE if timing parameters are not suitable for your DRAM"], 1600000, [1600000, 2131200], 3200),
   new CustEntry("marikoCpuMaxVolt", "Mariko CPU Max Voltage in mV", CustPlatform.Mariko, 4,
     ["System default: 1120", "Acceptable range: 1120 ≤ x ≤ 1300", "Changing this value affects cpu voltage calculation"], 1235, [1120, 1300], 5),
   new CustEntry("marikoEmcMaxClock", "Mariko RAM Max Clock in kHz", CustPlatform.Mariko, 4,
     ["Values should be ≥ 1600000, and divided evenly by 3200.", "Recommended Clocks: 1862400, 2131200, 2400000 (JEDEC)", "Some clocks above 2400Mhz might not boot, because OCS doesn't scale table very well", "<b>WARNING:</b> RAM overclock could be UNSTABLE if timing parameters are not suitable for your DRAM."],
-    1996800, [1600000, 2502400], 3200),
+    18624, [1600000, 2502400], 3200),
   new CustEntry("marikoEmcVddqVolt", "EMC Vddq (Mariko Only) Voltage in uV", CustPlatform.Mariko, 4,
     ["Acceptable range: 550000 ≤ x ≤ 650000", "Value should be divided evenly by 5000", "Default: 600000", "Official lpddr4(x) range: 570mV~650mV (600mV nominal)", "Not enabled by default."],
     0, [550000, 650000], 5000),
-  new CustEntry("marikoCpuUV", "Enable Mariko CPU Undervolt", CustPlatform.Mariko, 4,
-    ["Reduce CPU power draw", "<b>0</b> : Default Table", "<b>1</b> : Undervolt Level 1 (SLT - CPU speedo < 1650)", "<b>2</b> : Undervolt Level 1 (SLT - CPU speedo >= 1650)"], 0, [0, 2], 1),
-  new CustEntry("marikoGpuUV", "Enable Mariko GPU Undervolt", CustPlatform.Mariko, 4,
+  new CustEntry("marikoCpuUV", "Mariko CPU Undervolt", CustPlatform.Mariko, 4,
+    ["Reduce CPU power draw", "Your CPU might not withstand undervolt, and can hang your console, or crash games", "Undervolting too much will drop CPU performance even if it seems stable", "CPU voltages are dynamic and will change with temperature and gpu speedo"],
+    0, [0, 8], 1),
+  new CustEntry("marikoGpuUV", "EMariko GPU Undervolt", CustPlatform.Mariko, 4,
     ["Reduce GPU power draw", "Your GPU might not withstand undervolt, and can hang your console, or crash games", "Undervolting too much will drop GPU performance even if it seems stable", "GPU voltages are dynamic and will change with temperature and gpu speedo", "<b>0</b> : Default Table", "<b>1</b> : Undervolt Level 1 (SLT: Aggressive)", "<b>2</b> : Undervolt Level 2 (HiOPT: Drastic)", "<b>3</b> : Custom static GPU Voltage Table (Use Gpu Configuration below)"],
     0, [0, 3], 1),
+
+    new CustEntry("eristaCpuUv", "Mariko CPU Undervolt", CustPlatform.Erista, 4,
+    ["Reduce CPU power draw", "Your CPU might not withstand undervolt, and can hang your console, or crash games", "Undervolting too much will drop CPU performance even if it seems stable", "CPU voltages are dynamic and will change with temperature and gpu speedo"],
+    0, [0, 5], 1),
+    new CustEntry("eristaGpuUv", "EMariko GPU Undervolt", CustPlatform.Erista, 4,
+    ["Reduce GPU power draw", "Your GPU might not withstand undervolt, and can hang your console, or crash games", "Undervolting too much will drop GPU performance even if it seems stable", "GPU voltages are dynamic and will change with temperature and gpu speedo", "<b>0</b> : Default Table", "<b>1</b> : Undervolt Level 1 (SLT: Aggressive)", "<b>2</b> : Undervolt Level 2 (HiOPT: Drastic)", "<b>3</b> : Custom static GPU Voltage Table (Use Gpu Configuration below)"],
+    0, [0, 3], 1),
+
   new CustEntry("commonGpuVoltOffset", "GPU Volt Offset", CustPlatform.All, 4,
     ["Negative Voltage offset value for gpu dynamic voltage calculation", "For example, value of 10 will decrease 10mV gpu volt from all frequencies", "Default gpu vmin: Erista - 812.5mV / Mariko - 610mV", "Acceptable range: 0 ~ 100"],
-    0, [0, 100], 1)
+    0, [0, 25], 1)
 ];
 
 const AdvTable = [

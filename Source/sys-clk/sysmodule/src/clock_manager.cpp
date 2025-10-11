@@ -222,7 +222,11 @@ void ClockManager::Tick()
                     maxHz = this->GetMaxAllowedHz((SysClkModule)module, this->context->profile);
                     nearestHz = this->GetNearestHz((SysClkModule)module, targetHz, maxHz);
 
-                    if (nearestHz != this->context->freqs[module] && this->context->enabled/* && !apmExtIsBoostMode(this->context->perfConfId) && !this->config->GetConfigValue(HocClkConfigValue_OverwriteBoostMode)*/)
+                    std::uint32_t mode = 0;
+                    Result rc = apmExtGetPerformanceMode(&mode);
+                    ASSERT_RESULT_OK(rc, "apmExtGetPerformanceMode");
+            
+                    if (nearestHz != this->context->freqs[module] && this->context->enabled && !rc)
                     {
                         FileUtils::LogLine(
                             "[mgr] %s clock set : %u.%u MHz (target = %u.%u MHz)",
@@ -233,11 +237,11 @@ void ClockManager::Tick()
                         Board::SetHz((SysClkModule)module, nearestHz);
                         this->context->freqs[module] = nearestHz;
                         }
-                    // else
-                    // {
-                    //     Board::ResetToStockCpu();
-                    //     Board::ResetToStockGpu();
-                    // }
+                    else
+                    {
+                        Board::ResetToStockCpu();
+                        Board::ResetToStockGpu();
+                    }
             //     }
             // } else {
             //     #define GOVERNOR_LOAD_THRESHOLD 80
@@ -343,7 +347,7 @@ bool ClockManager::RefreshContext()
     bool shouldLogTemp = this->ConfigIntervalTimeout(SysClkConfigValue_TempLogIntervalMs, ns, &this->lastTempLogNs);
     for (unsigned int sensor = 0; sensor < SysClkThermalSensor_EnumMax; sensor++)
     {
-        millis = Board::GetTemperatureMilli((SysClkThermalSensor)sensor);
+        millis = Board::GetTemperatureMilli((SysClkThermalSensor)sensor, (bool)this->config->GetConfigValue(HocClkConfigValue_ReadRealTemps));
         if (shouldLogTemp)
         {
             FileUtils::LogLine("[mgr] %s temp: %u.%u °C", Board::GetThermalSensorName((SysClkThermalSensor)sensor, true), millis / 1000, (millis - millis / 1000 * 1000) / 100);

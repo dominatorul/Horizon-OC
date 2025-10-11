@@ -54,6 +54,9 @@ class BaseMenuGui : public BaseGui
         virtual void listUI() = 0;
 
     private:
-        char displayStrings[17][32];  // Pre-formatted display strings
-        tsl::Color tempColors[3];     // Pre-computed temperature colors
+        char displayStrings[20][32];  // Pre-formatted display strings
+        tsl::Color tempColors[6] = {
+            tsl::Color(0), tsl::Color(0), tsl::Color(0),
+            tsl::Color(0), tsl::Color(0), tsl::Color(0)
+        };
 };

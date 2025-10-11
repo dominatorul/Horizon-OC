@@ -64,24 +64,23 @@ volatile CustomizeTable C = {
 
 .EmcDvbShift = 0,
 
-// Defaults - (3-3-2) 0-1-4-3-6
 
 // Primary
-.t1_tRCD = 3,
-.t2_tRP  = 3,
-.t3_tRAS = 2,
+.t1_tRCD = 0,
+.t2_tRP  = 0,
+.t3_tRAS = 0,
 // Secondary
 .t4_tRRD = 0,
-.t5_tRFC = 1,
-.t6_tRTW = 4,
-.t7_tWTR = 3,
-.t8_tREFI= 6,
+.t5_tRFC = 0,
+.t6_tRTW = 0,
+.t7_tWTR = 0,
+.t8_tREFI= 0,
 
 .mem_burst_latency = 0, // 0 - 1600l, 1 = 1866bl, 2 = 2133bl
 
 .marikoCpuVmin = 600,
 
-.eristaGpuVmin = 775,
+.eristaGpuVmin = 810,
 
 .marikoGpuVmin = 610,
 

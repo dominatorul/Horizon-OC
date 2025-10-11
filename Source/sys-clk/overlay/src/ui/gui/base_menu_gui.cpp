@@ -13,7 +13,7 @@
 
 // Cache hardware model to avoid repeated syscalls
 
-BaseMenuGui::BaseMenuGui() : tempColors{tsl::Color(0), tsl::Color(0), tsl::Color(0)}
+BaseMenuGui::BaseMenuGui()
 {
     tsl::initializeThemeVars();
     this->context = nullptr;
@@ -40,8 +40,8 @@ void BaseMenuGui::preDraw(tsl::gfx::Renderer* renderer) {
     if(!this->context) [[unlikely]] return;
     
     // All constants pre-calculated and cached
-    static constexpr const char* const labels[10] = {
-        "App ID", "Profile", "CPU", "GPU", "MEM", "SoC", "Board", "Skin", "Now", "Avg"
+    static constexpr const char* const labels[14] = {
+        "App ID", "Profile", "CPU", "GPU", "MEM", "SoC", "Board", "Skin", "Now", "Avg", "CPU", "GPU", "PLL"
     };
 
     static constexpr u32 dataPositions[6] = {63-3+3, 200-1, 344-1-3, 200-1, 342-1, 321-1};
@@ -62,7 +62,7 @@ void BaseMenuGui::preDraw(tsl::gfx::Renderer* renderer) {
     u32 y = 91;
     
     // === TOP SECTION ===
-    renderer->drawRoundedRect(14, 70-1, 420, 30+2, 10.0f, renderer->aWithOpacity(tsl::tableBGColor));
+    // renderer->drawRoundedRect(14, 70-1, 420, 30+2, 10.0f, renderer->aWithOpacity(tsl::tableBGColor));
     
     // App ID - use pre-formatted string
     renderer->drawString(labels[0], false, positions[0], y, SMALL_TEXT_SIZE, tsl::sectionTextColor);
@@ -72,10 +72,10 @@ void BaseMenuGui::preDraw(tsl::gfx::Renderer* renderer) {
     renderer->drawString(labels[1], false, 423 - maxProfileValueWidth - labelWidths[1] - 9, y, SMALL_TEXT_SIZE, tsl::sectionTextColor);
     renderer->drawString(displayStrings[1], false, 423 - maxProfileValueWidth, y, SMALL_TEXT_SIZE, tsl::infoTextColor);
     
-    y = 129; // Direct assignment instead of += 38
+    y = y + 38; // Direct assignment instead of += 38
     
     // === MAIN DATA SECTION ===
-    renderer->drawRoundedRect(14, 106, 420, 116, 10.0f, renderer->aWithOpacity(tsl::tableBGColor));
+    // renderer->drawRoundedRect(14, 106, 420, 116, 10.0f, renderer->aWithOpacity(tsl::tableBGColor));
     
     // === FREQUENCY SECTION ===
     // Labels first (better cache locality)
@@ -88,14 +88,14 @@ void BaseMenuGui::preDraw(tsl::gfx::Renderer* renderer) {
     renderer->drawString(displayStrings[3], false, dataPositions[1], y, SMALL_TEXT_SIZE, tsl::infoTextColor);  // GPU
     renderer->drawString(displayStrings[4], false, dataPositions[2], y, SMALL_TEXT_SIZE, tsl::infoTextColor);  // MEM
     
-    y = 149; // Direct assignment (129 + 20)
+    y = y + 20; // Direct assignment (129 + 20)
     
     // === REAL FREQUENCIES ===
     renderer->drawString(displayStrings[5], false, dataPositions[0], y, SMALL_TEXT_SIZE, tsl::infoTextColor);  // CPU real
     renderer->drawString(displayStrings[6], false, dataPositions[1], y, SMALL_TEXT_SIZE, tsl::infoTextColor);  // GPU real
     renderer->drawString(displayStrings[7], false, dataPositions[2], y, SMALL_TEXT_SIZE, tsl::infoTextColor);  // MEM real
     
-    y = 169; // Direct assignment (149 + 20)
+    y = y + 20; // Direct assignment (149 + 20)
     
     // === VOLTAGES ===
     renderer->drawString(displayStrings[8], false, dataPositions[0], y, SMALL_TEXT_SIZE, tsl::infoTextColor);   // CPU voltage
@@ -110,20 +110,27 @@ void BaseMenuGui::preDraw(tsl::gfx::Renderer* renderer) {
         renderer->drawString(displayStrings[10], false, dataPositions[2], y, SMALL_TEXT_SIZE, tsl::infoTextColor);
     }
     
-    y = 191; // Direct assignment (169 + 22)
+    y = y + 20; // Direct assignment (169 + 22)
     
+
+    renderer->drawString(displayStrings[17], false, dataPositions[0], y, SMALL_TEXT_SIZE, tempColors[3]);  // CPU
+    renderer->drawString(displayStrings[18], false, dataPositions[1], y, SMALL_TEXT_SIZE, tempColors[4]);  // GPU
+    renderer->drawString(displayStrings[19], false, dataPositions[2], y, SMALL_TEXT_SIZE, tempColors[5]);  // PLL
+
+    y = y + 22; // Direct assignment (149 + 20)
+
     // === TEMPERATURE SECTION ===
     // Labels
     renderer->drawString(labels[5], false, positions[5], y, SMALL_TEXT_SIZE, tsl::sectionTextColor);
     renderer->drawString(labels[6], false, positions[6]-1, y, SMALL_TEXT_SIZE, tsl::sectionTextColor);
     renderer->drawString(labels[7], false, positions[7], y, SMALL_TEXT_SIZE, tsl::sectionTextColor);
-    
+
     // Temperatures with color - use pre-computed colors
     renderer->drawString(displayStrings[11], false, dataPositions[0], y, SMALL_TEXT_SIZE, tempColors[0]);  // SOC
     renderer->drawString(displayStrings[12], false, dataPositions[1], y, SMALL_TEXT_SIZE, tempColors[1]);  // PCB
     renderer->drawString(displayStrings[13], false, dataPositions[2], y, SMALL_TEXT_SIZE, tempColors[2]);  // Skin
-    
-    y = 211; // Direct assignment (191 + 20)
+
+    y = y + 20; // Direct assignment (191 + 20)
     
     // === SOC VOLTAGE & POWER ===
     // SOC voltage (if available)
@@ -137,6 +144,9 @@ void BaseMenuGui::preDraw(tsl::gfx::Renderer* renderer) {
     
     renderer->drawString(displayStrings[15], false, dataPositions[3], y, SMALL_TEXT_SIZE, tsl::infoTextColor);  // Power now
     renderer->drawString(displayStrings[16], false, dataPositions[4], y, SMALL_TEXT_SIZE, tsl::infoTextColor);  // Power avg
+
+    y = y + 20; // Direct assignment (191 + 20)
+
 }
 
 // Optimized refresh - now does all the string formatting once per second
@@ -161,8 +171,8 @@ void BaseMenuGui::refresh()
         PcvPowerDomainId_Max77621_Cpu,    // [0] CPU
         PcvPowerDomainId_Max77621_Gpu,    // [1] GPU  
         PcvPowerDomainId_Max77812_Dram,   // [2] EMC/DRAM - Mariko only
-        PcvPowerDomainId_Max77620_Sd0,    // [3] SOC - EOS only
-        PcvPowerDomainId_Max77620_Sd1     // [4] VDD2 - EOS only
+        PcvPowerDomainId_Max77620_Sd0,    // [3] SOC
+        PcvPowerDomainId_Max77620_Sd1     // [4] VDD2
     };
     
     // Voltage array for direct indexing
@@ -221,9 +231,10 @@ void BaseMenuGui::refresh()
     
     // Profile
     strcpy(displayStrings[1], sysclkFormatProfile(context->profile, true));
-    
+
     // Current frequencies
     u32 hz = context->freqs[0]; // CPU
+
     sprintf(displayStrings[2], "%u.%u MHz", hz / 1000000U, (hz / 100000U) % 10U);
     
     hz = context->freqs[1]; // GPU
@@ -257,20 +268,32 @@ void BaseMenuGui::refresh()
     } else if (emcVoltageUv) {
         sprintf(displayStrings[10], "%u mV", emcVoltageUv / 1000U);
     }
+
     
-    // Temperatures and pre-compute colors
-    u32 millis = context->temps[0]; // SOC
+    u32 millis = context->temps[SysClkThermalSensor_SOC]; // SOC
     sprintf(displayStrings[11], "%u.%u °C", millis / 1000U, (millis % 1000U) / 100U);
     tempColors[0] = tsl::GradientColor(millis * 0.001f);
     
-    millis = context->temps[1]; // PCB
+    millis = context->temps[SysClkThermalSensor_PCB]; // PCB
     sprintf(displayStrings[12], "%u.%u °C", millis / 1000U, (millis % 1000U) / 100U);
     tempColors[1] = tsl::GradientColor(millis * 0.001f);
     
-    millis = context->temps[2]; // Skin
+    millis = context->temps[SysClkThermalSensor_Skin]; // Skin
     sprintf(displayStrings[13], "%u.%u °C", millis / 1000U, (millis % 1000U) / 100U);
     tempColors[2] = tsl::GradientColor(millis * 0.001f);
-    
+
+    millis = context->temps[HocClkThermalSensor_CPU]; // 
+    sprintf(displayStrings[17], "%u.%u °C", millis / 1000U, (millis % 1000U) / 100U);
+    tempColors[3] = tsl::GradientColor(millis * 0.001f);
+
+    millis = context->temps[HocClkThermalSensor_GPU]; // Skin
+    sprintf(displayStrings[18], "%u.%u °C", millis / 1000U, (millis % 1000U) / 100U);
+    tempColors[4] = tsl::GradientColor(millis * 0.001f);
+
+    millis = context->temps[HocClkThermalSensor_PLL]; // Skin
+    sprintf(displayStrings[19], "%u.%u °C", millis / 1000U, (millis % 1000U) / 100U);
+    tempColors[5] = tsl::GradientColor(millis * 0.001f);
+
     // SOC voltage (if available)
     if (socVoltageUv) {
         sprintf(displayStrings[14], "%u mV", socVoltageUv / 1000U);
@@ -279,6 +302,8 @@ void BaseMenuGui::refresh()
     // Power
     sprintf(displayStrings[15], "%d mW", context->power[0]); // Now
     sprintf(displayStrings[16], "%d mW", context->power[1]); // Avg
+
+
 }
 
 tsl::elm::Element* BaseMenuGui::baseUI()

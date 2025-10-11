@@ -11,9 +11,13 @@
 #include <nxExt.h>
 #include "board.h"
 #include "errors.h"
-
+#include "i2c.h"
+#include <switch.h>
 #define HOSSVC_HAS_CLKRST (hosversionAtLeast(8,0,0))
 #define HOSSVC_HAS_TC (hosversionAtLeast(5,0,0))
+#define HOSSVC_HAS_MM (hosversionAtLeast(10,0,0))
+
+#define _REG(base, off, out) svcQueryMemoryMapping((u64*)base, off)
 
 static SysClkSocType g_socType = SysClkSocType_Erista;
 
@@ -69,6 +73,9 @@ PcvModuleId Board::GetPcvModuleId(SysClkModule sysclkModule)
 
 void Board::Initialize()
 {
+
+    // socthermInitialize();
+
     Result rc = 0;
 
     if(HOSSVC_HAS_CLKRST)
@@ -402,10 +409,9 @@ void Board::ResetToStockGpu()
         ASSERT_RESULT_OK(rc, "apmExtSysRequestPerformanceMode");
     }
 }
-std::uint32_t Board::GetTemperatureMilli(SysClkThermalSensor sensor)
+std::uint32_t Board::GetTemperatureMilli(SysClkThermalSensor sensor, bool readRealTemps)
 {
     std::int32_t millis = 0;
-
     if(sensor == SysClkThermalSensor_SOC)
     {
         millis = tmp451TempSoc();
@@ -422,12 +428,18 @@ std::uint32_t Board::GetTemperatureMilli(SysClkThermalSensor sensor)
             rc = tcGetSkinTemperatureMilliC(&millis);
             ASSERT_RESULT_OK(rc, "tcGetSkinTemperatureMilliC");
         }
+    } else if(sensor == HocClkThermalSensor_CPU && readRealTemps) {        
+        millis = socthermReadCpuTemp();
+    } else if(sensor == HocClkThermalSensor_GPU && readRealTemps) {
+        millis = socthermReadGpuTemp();
+    } else if(sensor == HocClkThermalSensor_PLL && readRealTemps) {
+        millis = socthermReadGpuTemp();
     }
     else
     {
-        ASSERT_ENUM_VALID(SysClkThermalSensor, sensor);
+        // ASSERT_ENUM_VALID(SysClkThermalSensor, sensor);
+        millis = 0;
     }
-
     return std::max(0, millis);
 }
 

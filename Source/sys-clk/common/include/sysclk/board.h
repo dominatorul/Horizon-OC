@@ -18,6 +18,8 @@ typedef enum
 {
     SysClkSocType_Erista = 0,
     SysClkSocType_Mariko,
+    HocClkSocType_MarikoLite,
+    HocClkSocType_Drake, // Maybe someday :(
     SysClkSocType_EnumMax
 } SysClkSocType;
 
@@ -44,6 +46,9 @@ typedef enum
     SysClkThermalSensor_SOC = 0,
     SysClkThermalSensor_PCB,
     SysClkThermalSensor_Skin,
+    HocClkThermalSensor_CPU,
+    HocClkThermalSensor_GPU,
+    HocClkThermalSensor_PLL,
     SysClkThermalSensor_EnumMax
 } SysClkThermalSensor;
 
@@ -97,6 +102,10 @@ static inline const char* sysclkFormatThermalSensor(SysClkThermalSensor thermSen
             return pretty ? "PCB" : "pcb";
         case SysClkThermalSensor_Skin:
             return pretty ? "Skin" : "skin";
+        case HocClkThermalSensor_CPU:
+            return pretty ? "CPU" : "cpu";
+        case HocClkThermalSensor_GPU:
+            return pretty ? "GPU" : "gpu";
         default:
             return NULL;
     }

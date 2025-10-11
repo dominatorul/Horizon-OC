@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <switch.h>
 #include <sysclk.h>
+#include "thermal.h"
 
 class Board
 {
@@ -32,7 +33,7 @@ class Board
     static std::uint32_t GetHz(SysClkModule module);
     static std::uint32_t GetRealHz(SysClkModule module);
     static void GetFreqList(SysClkModule module, std::uint32_t* outList, std::uint32_t maxCount, std::uint32_t* outCount);
-    static std::uint32_t GetTemperatureMilli(SysClkThermalSensor sensor);
+    static std::uint32_t GetTemperatureMilli(SysClkThermalSensor sensor, bool readRealTemps);
     static std::int32_t GetPowerMw(SysClkPowerSensor sensor);
     static std::uint32_t GetRamLoad(SysClkRamLoad load);
     static SysClkSocType GetSocType();

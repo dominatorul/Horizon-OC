@@ -93,6 +93,13 @@ void RefreshTask::run(retro_time_t currentTime)
             //Skin Temp
             if (context.temps[SysClkThermalSensor_Skin] != this->oldContext.temps[SysClkThermalSensor_Skin])
                 this->tempUpdateEvent.fire(SysClkThermalSensor_Skin, context.temps[SysClkThermalSensor_Skin]);
+
+            if (context.temps[HocClkThermalSensor_CPU] != this->oldContext.temps[HocClkThermalSensor_CPU])
+                this->tempUpdateEvent.fire(HocClkThermalSensor_CPU, context.temps[HocClkThermalSensor_CPU]);
+
+            if (context.temps[HocClkThermalSensor_GPU] != this->oldContext.temps[HocClkThermalSensor_GPU])
+                this->tempUpdateEvent.fire(HocClkThermalSensor_GPU, context.temps[HocClkThermalSensor_GPU]);
+
         }
 
         this->shouldNotifyTempChange = !this->shouldNotifyTempChange;

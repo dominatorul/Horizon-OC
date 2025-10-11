@@ -41,7 +41,7 @@ namespace ams::ldr::oc {
     const u32 WL = 14 + C.mem_burst_latency;
 
     /* Refresh Cycle time. (All Banks) */
-    const u32 tRFCab = (u32)(tRFC_values[C.t5_tRFC] * 1.5);
+    const u32 tRFCab = (u32)(tRFC_values[C.t5_tRFC] * 2.0);
 
     /* Precharge to Precharge Delay. (Cycles) */
     /* Don't touch! */
@@ -74,14 +74,14 @@ namespace ams::ldr::oc {
         const u32    tREFpb = tREFpb_values[C.t8_tREFI];
 
         /* Latency stuff. */
-        const u32 R2W = CEIL(RL + CEIL(tDQSCK_max/tCK_avg) + (BL/2) - WL + tWPRE + FLOOR(tRPST)) + 6;
+        const u32 R2W = (u32)(CEIL(tDQSCK_max / tCK_avg) + RL + (BL / 2) - WL + tWPRE + FLOOR(tRPST) + 12) - (C.t6_tRTW * 3);
         const u32 W2R = WL + (BL/2) + 1 + tWTR - 4;
         const u32 WTP = WL + (BL/2) + 1 + tWTR - 6;
 
         /* Refresh stuff. */
-        const u32 numOfRows = 65536;
-        const u32 REFRESH = MIN((u32)65472, u32(std::ceil((double(tREFpb) * C.eristaEmcMaxClock / numOfRows * 1.048 / 2 - 64))) / 4 * 4);
-        const u32 REFBW = MIN((u32)65536, REFRESH+64);
+        const u32 refresh_raw = (u32) ((tREFpb / tCK_avg) - 64);
+        const u32 refresh = MIN(65535u, refresh_raw);
+        const u32 refbw = MIN(16383u, refresh + 64);
 
         /* Do not touch stuff. */
         /* ACTIVATE-to-ACTIVATE command period. (same bank) */

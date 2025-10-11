@@ -24,6 +24,7 @@ typedef enum {
     HocClkConfigValue_SyncReverseNXMode,
     HocClkConfigValue_DockedGovernor,
     HocClkConfigValue_HandheldGovernor,
+    HocClkConfigValue_ReadRealTemps,
     SysClkConfigValue_EnumMax,
 } SysClkConfigValue;
 
@@ -55,6 +56,9 @@ static inline const char* sysclkFormatConfigValue(SysClkConfigValue val, bool pr
             return pretty ? "Docked Governor" : "governor_d";
         case HocClkConfigValue_HandheldGovernor:
             return pretty ? "Handheld Governor" : "governor_hh";
+        case HocClkConfigValue_ReadRealTemps:
+            return pretty ? "Read Real Temperatures" : "real_temps";
+
         default:
             return NULL;
     }
@@ -73,6 +77,7 @@ static inline uint64_t sysclkDefaultConfigValue(SysClkConfigValue val)
         case HocClkConfigValue_UncappedClocks:
         case HocClkConfigValue_OverwriteBoostMode:
         case HocClkConfigValue_SyncReverseNXMode:
+        case HocClkConfigValue_ReadRealTemps:
             return 0ULL;
         default:
             return 0ULL;
@@ -93,6 +98,7 @@ static inline uint64_t sysclkValidConfigValue(SysClkConfigValue val, uint64_t in
         case HocClkConfigValue_OverwriteBoostMode:
         case HocClkConfigValue_UncappedClocks:
         case HocClkConfigValue_SyncReverseNXMode:
+        case HocClkConfigValue_ReadRealTemps:
             return (input & 0x1) == input;
         default:
             return false;

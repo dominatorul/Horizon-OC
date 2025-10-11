@@ -40,10 +40,12 @@ void MiscGui::updateConfigToggles() {
 
 void MiscGui::listUI()
 {
-    this->listElement->addItem(new tsl::elm::CategoryHeader("Config"));
+    this->listElement->addItem(new tsl::elm::CategoryHeader("Options"));
     addConfigToggle(HocClkConfigValue_UncappedClocks);
     addConfigToggle(HocClkConfigValue_OverwriteBoostMode);
+//  this->listElement->addItem(new tsl::elm::CategoryHeader("Experemental"));
     addConfigToggle(HocClkConfigValue_SyncReverseNXMode);
+    addConfigToggle(HocClkConfigValue_ReadRealTemps);
 }
 
 void MiscGui::refresh() {

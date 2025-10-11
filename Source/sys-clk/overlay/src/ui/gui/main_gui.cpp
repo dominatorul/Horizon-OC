@@ -70,7 +70,7 @@ void MainGui::listUI()
 
     //this->listElement->addItem(new tsl::elm::CategoryHeader("Misc"));
 
-    tsl::elm::ListItem* miscItem = new tsl::elm::ListItem("Settings");
+    tsl::elm::ListItem* miscItem = new tsl::elm::ListItem("Options");
     miscItem->setClickListener([this](u64 keys) {
         if((keys & HidNpadButton_A) == HidNpadButton_A && this->context)
         {

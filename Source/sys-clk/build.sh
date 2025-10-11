@@ -29,7 +29,7 @@ make -j$CORES
 popd > /dev/null
 
 mkdir -p "$DIST_DIR/switch"
-cp -vf "$ROOT_DIR/manager/sys-clk-manager.nro" "$DIST_DIR/switch/sys-clk-manager.nro"
+cp -vf "$ROOT_DIR/manager/sys-clk-manager.nro" "$DIST_DIR/switch/horizon-oc-manager.nro"
 
 echo "*** overlay ***"
 pushd "$ROOT_DIR/overlay"
@@ -37,7 +37,7 @@ make -j$CORES
 popd > /dev/null
 
 mkdir -p "$DIST_DIR/switch/.overlays"
-cp -vf "$ROOT_DIR/overlay/out/sys-clk-overlay.ovl" "$DIST_DIR/switch/.overlays/sys-clk-overlay.ovl"
+cp -vf "$ROOT_DIR/overlay/out/horizon-oc-overlay.ovl" "$DIST_DIR/switch/.overlays/horizon-oc-overlay.ovl"
 
 echo "*** assets ***"
 mkdir -p "$DIST_DIR/config/sys-clk"

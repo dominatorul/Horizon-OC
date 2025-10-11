@@ -21,6 +21,7 @@
 #include "clock_manager.h"
 #include "ipc_service.h"
 #include "fancontrol.h"
+
 #define INNER_HEAP_SIZE 0x30000
 
 extern "C"
@@ -94,6 +95,7 @@ int main(int argc, char** argv)
 
     try
     {
+
         Board::Initialize();
         ProcessManagement::Initialize();
 
@@ -103,6 +105,7 @@ int main(int argc, char** argv)
         IpcService* ipcSrv = new IpcService(clockMgr);
 
         FileUtils::LogLine("Ready");
+
 
         clockMgr->SetRunning(true);
         clockMgr->GetConfig()->SetEnabled(true);

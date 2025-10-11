@@ -236,6 +236,7 @@ StatusTab::StatusTab(RefreshTask *refreshTask) :
                     this->skinTempCell->resetValueColor();
                 break;
             default:
+                this->skinTempCell->setValue(formatTemp(temp));
                 break;
         }
     });

@@ -24,3 +24,4 @@
 
 typedef char NsApplicationName[0x201];
 typedef uint8_t NsApplicationIcon[0x20000];
+
