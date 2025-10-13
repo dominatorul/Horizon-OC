@@ -112,10 +112,10 @@ brls::SelectListItem* createFreqListItem(SysClkModule module, uint32_t selectedF
             name = "GPU Frequency";
             break;
         case SysClkModule_MEM:
-            name = "MEM Frequency";
+            name = "Memory Frequency";
             break;
         default:
-            return nullptr;
+            return "Invalid HocClkModule!";
     }
 
     uint32_t* table = &g_freq_table_hz[module][0];

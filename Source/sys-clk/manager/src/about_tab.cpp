@@ -3,6 +3,7 @@
     Copyright (C) 2019-2020  natinusala
     Copyright (C) 2019  p-sam
     Copyright (C) 2019  m4xw
+    Copyright (C) 2025  Souldbminer
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,7 +34,7 @@ AboutTab::AboutTab()
     // Subtitle
     brls::Label *subTitle = new brls::Label(
         brls::LabelStyle::REGULAR,
-        "Nintendo Switch overclocking / underclocking system module and frontend app by the RetroNX Team", 
+        "Frontend for Horizon OC", 
         true
     );
     subTitle->setHorizontalAlign(NVG_ALIGN_CENTER);
@@ -42,9 +43,9 @@ AboutTab::AboutTab()
     // Copyright
     brls::Label *copyright = new brls::Label(
         brls::LabelStyle::DESCRIPTION,
-        "System module licensed under the Beerware license\n" \
+        "System module licensed under the GPLv2\n" \
         "Frontend app licensed under GPL-3.0\n" \
-        "\u00A9 2019 - 2020 natinusala, p-sam, m4xw",
+        "\u00A9 2025 Souldbminer, natinusala, p-sam, m4xw ",
         true
     );
     copyright->setHorizontalAlign(NVG_ALIGN_CENTER);
@@ -54,9 +55,9 @@ AboutTab::AboutTab()
     this->addView(new brls::Header("Links and Resources"));
     brls::Label *links = new brls::Label(
         brls::LabelStyle::SMALL,
-        "\uE016  User guide and code source can be found on our GitHub repository\n" \
-        "\uE016  The sys-clk manager is powered by Borealis, an hardware accelerated UI library\n" \
-        "\uE016  Join the RetroNX Discord server for support, to request features or just hang out!",
+        "\uE016  User guide and source coe can be found on our GitHub repository\n" \
+        "\uE016  The Horizon OC manager is powered by Borealis, an hardware accelerated UI library\n" \
+        "\uE016  Join the 60FPS Discord server for support, to request features or just hang out!",
         true
     );
     this->addView(links);

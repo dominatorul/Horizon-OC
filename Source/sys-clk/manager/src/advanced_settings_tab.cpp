@@ -34,7 +34,7 @@ AdvancedSettingsTab::AdvancedSettingsTab()
     {
         brls::Logger::error("Unable to get context");
         errorResult("sysclkIpcGetCurrentContext", rc);
-        brls::Application::crash("Could not get the current sys-clk context, please check that it is correctly installed and enabled.");
+        brls::Application::crash("Could not get the current hoc-clk context, please check that it is correctly installed and enabled.");
         return;
     }
 
@@ -172,6 +172,14 @@ std::string AdvancedSettingsTab::getDescriptionForConfig(SysClkConfigValue confi
             return "How often to log power consumption (in milliseconds)\n\uE016  Use 0 to disable";
         case SysClkConfigValue_PollingIntervalMs:
             return "How fast to check and apply profiles (in milliseconds)";
+        case HocClkConfigValue_UncappedClocks:
+            return "(DANGEROUS) Remove clock cappings";
+        case HocClkConfigValue_ReadRealTemps:
+            return "Read real temparatures from Tegra SocTherm";
+        case HocClkConfigValue_OverwriteBoostMode:
+            return "Overwrite clocks in boost mode";
+        case HocClkConfigValue_SyncReverseNXMode:
+            return "Sync the current mode from a ReverseNX Patch";
         default:
             return "";
     }

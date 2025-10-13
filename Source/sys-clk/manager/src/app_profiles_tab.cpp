@@ -154,7 +154,7 @@ void AppProfilesTab::updateEmptyListLabel(bool animate)
 {
     if (this->items.empty())
     {
-        this->emptyListLabel->setText("\uE140  You don't have any application installed on your Nintendo Switch.");
+        this->emptyListLabel->setText("\uE140  You don't have any applications installed on your console.");
         this->emptyListLabel->show([](){}, animate);
     }
     else if (!this->showEmptyProfiles && this->profilesItems.empty())

@@ -47,27 +47,27 @@ StatusTab::StatusTab(RefreshTask *refreshTask) :
     this->setSpacing(10);
     this->setMarginBottom(0);
 
-    // Enabled option
-    brls::ToggleListItem *serviceEnabledListItem = new brls::ToggleListItem("Enable service", context.enabled, "", "Yes", "No");
+    // // Enabled option
+    // brls::ToggleListItem *serviceEnabledListItem = new brls::ToggleListItem("Enable service", context.enabled, "", "Yes", "No");
 
-    serviceEnabledListItem->getClickEvent()->subscribe([this, serviceEnabledListItem](View* view)
-    {
-        bool enabled = serviceEnabledListItem->getToggleState();
-        brls::Logger::info("New service state = %d", enabled);
+    // serviceEnabledListItem->getClickEvent()->subscribe([this, serviceEnabledListItem](View* view)
+    // {
+    //     bool enabled = serviceEnabledListItem->getToggleState();
+    //     brls::Logger::info("New service state = %d", enabled);
 
-        Result rc = sysclkIpcSetEnabled(enabled);
+    //     Result rc = sysclkIpcSetEnabled(enabled);
 
-        if (R_FAILED(rc))
-        {
-            brls::Logger::error("Unable to set enabled state");
-            errorResult("sysclkIpcSetEnabled", rc);
-            // TODO: Put it back to on / off
-        }
+    //     if (R_FAILED(rc))
+    //     {
+    //         brls::Logger::error("Unable to set enabled state");
+    //         errorResult("sysclkIpcSetEnabled", rc);
+    //         // TODO: Put it back to on / off
+    //     }
 
-        this->refreshTask->fireNow();
-    });
+    //     this->refreshTask->fireNow();
+    // });
 
-    this->addView(serviceEnabledListItem);
+    // this->addView(serviceEnabledListItem);
 
     // Frequencies
     brls::Header *freqsHeader = new brls::Header("Frequencies");
@@ -115,7 +115,10 @@ StatusTab::StatusTab(RefreshTask *refreshTask) :
 
     this->skinTempCell = new StatusCell("Skin", formatTemp(context.temps[SysClkThermalSensor_Skin]));
     this->socTempCell = new StatusCell("SOC", formatTemp(context.temps[SysClkThermalSensor_SOC]));
-    this->pcbTempCell = new StatusCell("PCB", formatTemp(context.temps[SysClkThermalSensor_PCB]));
+    this->pcbTempCell = new StatusCell("Board", formatTemp(context.temps[SysClkThermalSensor_PCB]));
+    this->cpuTempCell = new StatusCell("CPU", formatTemp(context.temps[SysClkThermalSensor_PCB]));
+    this->gpuTempCell = new StatusCell("GPU", formatTemp(context.temps[SysClkThermalSensor_PCB]));
+    this->pllTempCell = new StatusCell("PLL", formatTemp(context.temps[SysClkThermalSensor_PCB]));
 
     if (context.temps[SysClkThermalSensor_SOC] > DANGEROUS_TEMP_THRESHOLD)
         this->socTempCell->setValueColor(DANGEROUS_TEMP_COLOR);
@@ -126,9 +129,21 @@ StatusTab::StatusTab(RefreshTask *refreshTask) :
     if (context.temps[SysClkThermalSensor_Skin] > DANGEROUS_TEMP_THRESHOLD)
         this->skinTempCell->setValueColor(DANGEROUS_TEMP_COLOR);
 
+    if (context.temps[HocClkThermalSensor_CPU] > DANGEROUS_TEMP_THRESHOLD)
+        this->skinTempCell->setValueColor(DANGEROUS_TEMP_COLOR);
+
+    if (context.temps[HocClkThermalSensor_GPU] > DANGEROUS_TEMP_THRESHOLD)
+        this->skinTempCell->setValueColor(DANGEROUS_TEMP_COLOR);
+
+    if (context.temps[HocClkThermalSensor_PLL] > DANGEROUS_TEMP_THRESHOLD)
+        this->skinTempCell->setValueColor(DANGEROUS_TEMP_COLOR);
+
     tempsLayout->addView(this->socTempCell);
     tempsLayout->addView(this->pcbTempCell);
     tempsLayout->addView(this->skinTempCell);
+    tempsLayout->addView(this->cpuTempCell);
+    tempsLayout->addView(this->gpuTempCell);
+    tempsLayout->addView(this->pllTempCell);
 
     this->addView(tempsLayout);
 
@@ -228,6 +243,32 @@ StatusTab::StatusTab(RefreshTask *refreshTask) :
 
                 break;
             case SysClkThermalSensor_Skin:
+                this->skinTempCell->setValue(formatTemp(temp));
+
+                if (temp > DANGEROUS_TEMP_THRESHOLD)
+                    this->skinTempCell->setValueColor(DANGEROUS_TEMP_COLOR);
+                else
+                    this->skinTempCell->resetValueColor();
+                break;
+
+            case HocClkThermalSensor_CPU:
+                this->skinTempCell->setValue(formatTemp(temp));
+
+                if (temp > DANGEROUS_TEMP_THRESHOLD)
+                    this->skinTempCell->setValueColor(DANGEROUS_TEMP_COLOR);
+                else
+                    this->skinTempCell->resetValueColor();
+                break;
+            case HocClkThermalSensor_GPU:
+                this->skinTempCell->setValue(formatTemp(temp));
+
+                if (temp > DANGEROUS_TEMP_THRESHOLD)
+                    this->skinTempCell->setValueColor(DANGEROUS_TEMP_COLOR);
+                else
+                    this->skinTempCell->resetValueColor();
+                break;
+
+            case HocClkThermalSensor_PLL:
                 this->skinTempCell->setValue(formatTemp(temp));
 
                 if (temp > DANGEROUS_TEMP_THRESHOLD)

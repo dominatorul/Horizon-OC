@@ -3,6 +3,7 @@
     Copyright (C) 2019-2020  natinusala
     Copyright (C) 2019  p-sam
     Copyright (C) 2019  m4xw
+    Copyright (C) 2025  Souldbminer
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
