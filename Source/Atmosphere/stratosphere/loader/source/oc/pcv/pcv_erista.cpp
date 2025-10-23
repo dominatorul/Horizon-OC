@@ -30,16 +30,7 @@ Result CpuFreqVdd(u32* ptr) {
     R_UNLESS(entry->step_mv == 5000,    ldr::ResultInvalidCpuFreqVddEntry());
     R_UNLESS(entry->max_mv == 1525'000, ldr::ResultInvalidCpuFreqVddEntry());
 
-    if (C.eristaCpuUV) {
-        if(!C.enableEristaCpuUnsafeFreqs) {
-            PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.eristaCpuDvfsTable)->freq);
-        } else {
-            PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.eristaCpuDvfsTableUnsafeFreqs)->freq);
-        }
-    } else {
-        PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.eristaCpuDvfsTable)->freq);
-    }
-
+    PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.eristaCpuDvfsTable)->freq);
     R_SUCCEED();
 }
 Result GpuVmin(u32 *ptr) {
@@ -123,14 +114,8 @@ Result GpuVmin(u32 *ptr) {
             max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTableSLT)->freq;
             break;
         case 2:
-            max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTableHigh)->freq;
-            break;
         case 3:
-            if(C.enableEristaGpuUnsafeFreqs) {
-                max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTableUv3UnsafeFreqs)->freq;
-            } else {
-                max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTable)->freq;
-            }
+            max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTableHigh)->freq;
             break;
         default:
             max_clock = GetDvfsTableLastEntry(C.eristaGpuDvfsTable)->freq;

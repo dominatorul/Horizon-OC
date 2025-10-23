@@ -292,7 +292,7 @@ bool ClockManager::RefreshContext()
     // restore clocks to stock values on app or profile change
     if (hasChanged)
     {
-        this->rnxSync->ToggleSync(this->GetConfig()->GetConfigValue(HocClkConfigValue_SyncReverseNXMode));
+        // this->rnxSync->ToggleSync(this->GetConfig()->GetConfigValue(HocClkConfigValue_SyncReverseNXMode));
         Board::ResetToStock();
         this->WaitForNextTick();
     }

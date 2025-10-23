@@ -36,6 +36,8 @@ typedef enum
     SysClkModule_CPU = 0,
     SysClkModule_GPU,
     SysClkModule_MEM,
+    HocClkModule_CPUUndervolt,
+    HocClkModule_GPUUndervolt,
     SysClkModule_EnumMax
 } SysClkModule;
 

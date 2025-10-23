@@ -48,23 +48,11 @@ namespace ams::ldr::oc::pcv::mariko
         R_UNLESS(entry->min_mv == 250'000, ldr::ResultInvalidCpuFreqVddEntry());
         R_UNLESS(entry->step_mv == 5000, ldr::ResultInvalidCpuFreqVddEntry());
         R_UNLESS(entry->max_mv == 1525'000, ldr::ResultInvalidCpuFreqVddEntry());
-        if (C.enableMarikoCpuUnsafeFreqs)
+        if (C.marikoCpuUV)
         {
+            PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.marikoCpuDvfsTableSLT)->freq);
+        } else {
             PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.marikoCpuDvfsTable)->freq);
-        }
-        else
-        {
-            if (C.marikoCpuUV)
-            {
-                if (!C.enableMarikoCpuUnsafeFreqs)
-                {
-                    PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.marikoCpuDvfsTableSLT)->freq);
-                }
-                else
-                {
-                    PATCH_OFFSET(ptr, GetDvfsTableLastEntry(C.marikoCpuDvfsTableUnsafeFreqs)->freq);
-                }
-            }
         }
         R_SUCCEED();
     }
@@ -186,17 +174,8 @@ namespace ams::ldr::oc::pcv::mariko
             max_clock = GetDvfsTableLastEntry(C.marikoGpuDvfsTableSLT)->freq;
             break;
         case 2:
-            max_clock = GetDvfsTableLastEntry(C.marikoGpuDvfsTableHiOPT)->freq;
-            break;
         case 3:
-            if (C.enableMarikoGpuUnsafeFreqs)
-            {
-                max_clock = GetDvfsTableLastEntry(C.marikoGpuDvfsTableUv3UnsafeFreqs)->freq;
-            }
-            else
-            {
-                max_clock = GetDvfsTableLastEntry(C.marikoGpuDvfsTable)->freq;
-            }
+            max_clock = GetDvfsTableLastEntry(C.marikoGpuDvfsTableHiOPT)->freq;
             break;
         default:
             max_clock = GetDvfsTableLastEntry(C.marikoGpuDvfsTable)->freq;

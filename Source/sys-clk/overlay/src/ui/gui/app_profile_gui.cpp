@@ -46,7 +46,8 @@ void AppProfileGui::openFreqChoiceGui(tsl::elm::ListItem* listItem, SysClkProfil
         }
 
         return true;
-    });
+    }, true
+    );
 }
 
 void AppProfileGui::addModuleListItem(SysClkProfile profile, SysClkModule module)

@@ -13,15 +13,21 @@
  #include "../format.h"
  #include "fatal_gui.h"
  
- FreqChoiceGui::FreqChoiceGui(std::uint32_t selectedHz, std::uint32_t *hzList, std::uint32_t hzCount, SysClkModule module, FreqChoiceListener listener)
+ FreqChoiceGui::FreqChoiceGui(std::uint32_t selectedHz, std::uint32_t *hzList, std::uint32_t hzCount, SysClkModule module, FreqChoiceListener listener, bool checkMax)
  {
      this->selectedHz = selectedHz;
      this->hzList = hzList;
      this->hzCount = hzCount;
-     this->module = module; // Add this
+     this->module = module;
      this->listener = listener;
+     this->checkMax = checkMax;
+     this->configList = new SysClkConfigValueList {};
  }
- 
+FreqChoiceGui::~FreqChoiceGui()
+{
+    delete this->configList;
+}
+
  tsl::elm::ListItem* FreqChoiceGui::createFreqListItem(std::uint32_t hz, bool selected, int safety)
  {
      std::string text = formatListFreqHz(hz);
@@ -61,6 +67,7 @@
  
  void FreqChoiceGui::listUI()
  {
+     sysclkIpcGetConfigValues(this->configList);
      // Add CategoryHeader based on module
      std::string moduleName = sysclkFormatModule(this->module, false);
      this->listElement->addItem(new tsl::elm::CategoryHeader(moduleName));
@@ -72,6 +79,16 @@
          hz = this->hzList[i];
          uint32_t mhz = hz / 1000000;
          // Skip 204 MHz exactly
+         if(checkMax) {
+            if (this->configList->values[HocClkConfigValue_MaxCpuClock] < mhz && moduleName == "cpu") {
+                continue;
+            }
+            
+            if (this->configList->values[HocClkConfigValue_MaxGpuClock] < mhz&& moduleName == "gpu") {
+                continue;
+            }
+            
+         }
          if (moduleName == "mem" && mhz <= 600)
          {
              continue;

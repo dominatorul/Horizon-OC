@@ -44,7 +44,7 @@ void GlobalOverrideGui::openFreqChoiceGui(SysClkModule module)
         this->context->overrideFreqs[module] = hz;
 
         return true;
-    });
+    }, true);
 }
 
 void GlobalOverrideGui::addModuleListItem(SysClkModule module)

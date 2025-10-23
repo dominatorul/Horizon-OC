@@ -15,16 +15,15 @@
 
 typedef enum {
     SysClkConfigValue_PollingIntervalMs = 0,
-    SysClkConfigValue_TempLogIntervalMs,
-    SysClkConfigValue_FreqLogIntervalMs,
-    SysClkConfigValue_PowerLogIntervalMs,
-    SysClkConfigValue_CsvWriteIntervalMs,
-    HocClkConfigValue_UncappedClocks,
-    HocClkConfigValue_OverwriteBoostMode,
-    HocClkConfigValue_SyncReverseNXMode,
-    HocClkConfigValue_DockedGovernor,
-    HocClkConfigValue_HandheldGovernor,
-    SysClkConfigValue_EnumMax,
+    SysClkConfigValue_TempLogIntervalMs = 1,
+    SysClkConfigValue_FreqLogIntervalMs = 2,
+    SysClkConfigValue_PowerLogIntervalMs = 3,
+    SysClkConfigValue_CsvWriteIntervalMs = 4,
+    HocClkConfigValue_UncappedClocks = 5,
+    HocClkConfigValue_OverwriteBoostMode = 6,
+    HocClkConfigValue_MaxCpuClock = 7,
+    HocClkConfigValue_MaxGpuClock = 8,
+    SysClkConfigValue_EnumMax = 9,
 } SysClkConfigValue;
 
 typedef struct {
@@ -49,14 +48,12 @@ static inline const char* sysclkFormatConfigValue(SysClkConfigValue val, bool pr
             return pretty ? "Uncapped Clocks" : "uncapped_clocks";
         case HocClkConfigValue_OverwriteBoostMode:
             return pretty ? "Overwrite Boost Mode" : "ow_boost";
-        case HocClkConfigValue_SyncReverseNXMode:
-            return pretty ? "ReverseNX Sync" : "rnx_sync";
-        case HocClkConfigValue_DockedGovernor:
-            return pretty ? "Docked Governor" : "governor_d";
-        case HocClkConfigValue_HandheldGovernor:
-            return pretty ? "Handheld Governor" : "governor_hh";
+        case HocClkConfigValue_MaxCpuClock:
+            return pretty ? "Max CPU Clock" : "cpu_max";
+        case HocClkConfigValue_MaxGpuClock:
+            return pretty ? "Max GPU Clock" : "gpu_max";
         default:
-            return NULL;
+            return pretty ? "Null" : "null";
     }
 }
 
@@ -72,8 +69,11 @@ static inline uint64_t sysclkDefaultConfigValue(SysClkConfigValue val)
         case SysClkConfigValue_CsvWriteIntervalMs:
         case HocClkConfigValue_UncappedClocks:
         case HocClkConfigValue_OverwriteBoostMode:
-        case HocClkConfigValue_SyncReverseNXMode:
             return 0ULL;
+        case HocClkConfigValue_MaxCpuClock:
+            return 1785ULL;
+        case HocClkConfigValue_MaxGpuClock:
+            return 921ULL;
         default:
             return 0ULL;
     }
@@ -92,8 +92,10 @@ static inline uint64_t sysclkValidConfigValue(SysClkConfigValue val, uint64_t in
             return input >= 0;
         case HocClkConfigValue_OverwriteBoostMode:
         case HocClkConfigValue_UncappedClocks:
-        case HocClkConfigValue_SyncReverseNXMode:
             return (input & 0x1) == input;
+        case HocClkConfigValue_MaxCpuClock:
+        case HocClkConfigValue_MaxGpuClock:
+            return input > 0;
         default:
             return false;
     }

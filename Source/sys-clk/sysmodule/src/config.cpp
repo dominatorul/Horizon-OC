@@ -419,7 +419,7 @@ bool Config::SetConfigValues(SysClkConfigValueList* configValues, bool immediate
     char* iniValues[SysClkConfigValue_EnumMax + 1];
 
     // char arrays to build strings
-    char valuesStr[SysClkConfigValue_EnumMax * 0x20];
+    char valuesStr[SysClkConfigValue_EnumMax * 0x80];
 
     // Iteration pointers
     char* sv = &valuesStr[0];
