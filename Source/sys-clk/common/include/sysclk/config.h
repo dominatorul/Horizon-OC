@@ -90,8 +90,8 @@ static inline uint64_t sysclkValidConfigValue(SysClkConfigValue val, uint64_t in
         case SysClkConfigValue_PowerLogIntervalMs:
         case SysClkConfigValue_CsvWriteIntervalMs:
             return input >= 0;
-        case HocClkConfigValue_OverwriteBoostMode:
         case HocClkConfigValue_UncappedClocks:
+        case HocClkConfigValue_OverwriteBoostMode:
             return (input & 0x1) == input;
         case HocClkConfigValue_MaxCpuClock:
         case HocClkConfigValue_MaxGpuClock:
