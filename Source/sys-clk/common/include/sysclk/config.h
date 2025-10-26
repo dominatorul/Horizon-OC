@@ -15,15 +15,23 @@
 
 typedef enum {
     SysClkConfigValue_PollingIntervalMs = 0,
-    SysClkConfigValue_TempLogIntervalMs = 1,
-    SysClkConfigValue_FreqLogIntervalMs = 2,
-    SysClkConfigValue_PowerLogIntervalMs = 3,
-    SysClkConfigValue_CsvWriteIntervalMs = 4,
-    HocClkConfigValue_UncappedClocks = 5,
-    HocClkConfigValue_OverwriteBoostMode = 6,
-    HocClkConfigValue_MaxCpuClock = 7,
-    HocClkConfigValue_MaxGpuClock = 8,
-    SysClkConfigValue_EnumMax = 9,
+    SysClkConfigValue_TempLogIntervalMs,
+    SysClkConfigValue_FreqLogIntervalMs,
+    SysClkConfigValue_PowerLogIntervalMs,
+    SysClkConfigValue_CsvWriteIntervalMs,
+    HocClkConfigValue_UncappedClocks,
+    HocClkConfigValue_OverwriteBoostMode,
+    HocClkConfigValue_EristaMaxCpuClock,
+    HocClkConfigValue_EristaMaxGpuClock,
+    HocClkConfigValue_EristaMaxMemClock,
+    HocClkConfigValue_MarikoMaxCpuClock,
+    HocClkConfigValue_MarikoMaxGpuClock,
+    HocClkConfigValue_MarikoMaxMemClock,
+    HocClkConfigValue_ThermalThrottle,
+    HocClkConfigValue_ThermalThrottleThreshold,
+    HocClkConfigValue_HandheldGovernor,
+    HocClkConfigValue_DockedGovernor,
+    SysClkConfigValue_EnumMax,
 } SysClkConfigValue;
 
 typedef struct {
@@ -48,10 +56,32 @@ static inline const char* sysclkFormatConfigValue(SysClkConfigValue val, bool pr
             return pretty ? "Uncapped Clocks" : "uncapped_clocks";
         case HocClkConfigValue_OverwriteBoostMode:
             return pretty ? "Overwrite Boost Mode" : "ow_boost";
-        case HocClkConfigValue_MaxCpuClock:
-            return pretty ? "Max CPU Clock" : "cpu_max";
-        case HocClkConfigValue_MaxGpuClock:
-            return pretty ? "Max GPU Clock" : "gpu_max";
+
+        case HocClkConfigValue_EristaMaxCpuClock:
+            return pretty ? "Max CPU Clock" : "cpu_max_e";
+        case HocClkConfigValue_EristaMaxGpuClock:
+            return pretty ? "Max GPU Clock" : "gpu_max_e";
+        case HocClkConfigValue_EristaMaxMemClock:
+            return pretty ? "Max MEM Clock" : "mem_max_e";
+
+        case HocClkConfigValue_MarikoMaxCpuClock:
+            return pretty ? "Max CPU Clock" : "cpu_max_m";
+        case HocClkConfigValue_MarikoMaxGpuClock:
+            return pretty ? "Max GPU Clock" : "gpu_max_m";
+        case HocClkConfigValue_MarikoMaxMemClock:
+            return pretty ? "Max MEM Clock" : "mem_max_m";
+
+        case HocClkConfigValue_ThermalThrottle:
+            return pretty ? "Thermal Throttle" : "thermal_throttle";
+
+        case HocClkConfigValue_ThermalThrottleThreshold:
+            return pretty ? "Thermal Throttle Threshold" : "thermal_throttle_threshold";
+
+        case HocClkConfigValue_DockedGovernor:
+            return pretty ? "Docked Governor" : "governor_docked";
+        case HocClkConfigValue_HandheldGovernor:
+            return pretty ? "Handheld Governor" : "governor_handheld";
+
         default:
             return pretty ? "Null" : "null";
     }
@@ -70,10 +100,26 @@ static inline uint64_t sysclkDefaultConfigValue(SysClkConfigValue val)
         case HocClkConfigValue_UncappedClocks:
         case HocClkConfigValue_OverwriteBoostMode:
             return 0ULL;
-        case HocClkConfigValue_MaxCpuClock:
+        case HocClkConfigValue_EristaMaxCpuClock:
             return 1785ULL;
-        case HocClkConfigValue_MaxGpuClock:
+        case HocClkConfigValue_EristaMaxGpuClock:
             return 921ULL;
+        case HocClkConfigValue_EristaMaxMemClock:
+            return 1600ULL;
+
+        case HocClkConfigValue_MarikoMaxCpuClock:
+            return 1963ULL;
+        case HocClkConfigValue_MarikoMaxGpuClock:
+            return 1075ULL;
+        case HocClkConfigValue_MarikoMaxMemClock:
+            return 1862ULL;
+
+        case HocClkConfigValue_ThermalThrottle:
+        case HocClkConfigValue_ThermalThrottleThreshold:
+        case HocClkConfigValue_DockedGovernor:
+        case HocClkConfigValue_HandheldGovernor:
+        case HocClkConfigValue_ThermalThrottleThreshold:
+            return 1ULL;
         default:
             return 0ULL;
     }
@@ -83,6 +129,13 @@ static inline uint64_t sysclkValidConfigValue(SysClkConfigValue val, uint64_t in
 {
     switch(val)
     {
+        case HocClkConfigValue_EristaMaxCpuClock:
+        case HocClkConfigValue_EristaMaxGpuClock:
+        case HocClkConfigValue_EristaMaxMemClock:
+        case HocClkConfigValue_MarikoMaxCpuClock:
+        case HocClkConfigValue_MarikoMaxGpuClock:
+        case HocClkConfigValue_MarikoMaxMemClock:
+        case HocClkConfigValue_ThermalThrottleThreshold:
         case SysClkConfigValue_PollingIntervalMs:
             return input > 0;
         case SysClkConfigValue_TempLogIntervalMs:
@@ -92,10 +145,10 @@ static inline uint64_t sysclkValidConfigValue(SysClkConfigValue val, uint64_t in
             return input >= 0;
         case HocClkConfigValue_UncappedClocks:
         case HocClkConfigValue_OverwriteBoostMode:
+        case HocClkConfigValue_ThermalThrottle:
+        case HocClkConfigValue_DockedGovernor:
+        case HocClkConfigValue_HandheldGovernor:
             return (input & 0x1) == input;
-        case HocClkConfigValue_MaxCpuClock:
-        case HocClkConfigValue_MaxGpuClock:
-            return input > 0;
         default:
             return false;
     }

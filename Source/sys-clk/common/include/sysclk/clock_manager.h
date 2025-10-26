@@ -36,3 +36,5 @@ typedef struct
 } SysClkTitleProfileList;
 
 #define SYSCLK_FREQ_LIST_MAX 32
+#define SYSCLK_GPU_BOOST_HZ 76800000
+#define SYSCLK_CPU_BOOST_HZ 1785000000

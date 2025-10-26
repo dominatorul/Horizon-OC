@@ -16,6 +16,8 @@
 #include "errors.h"
 #include "ipc_service.h"
 
+#define HOSPPC_HAS_BOOST (hosversionAtLeast(7,0,0))
+
 ClockManager *ClockManager::instance = NULL;
 
 ClockManager *ClockManager::GetInstance()
@@ -207,11 +209,20 @@ void ClockManager::Tick()
         std::uint32_t targetHz = 0;
         std::uint32_t maxHz = 0;
         std::uint32_t nearestHz = 0;
+        std::uint32_t mode = 0;
+        Result rc = apmExtGetCurrentPerformanceConfiguration(&mode);
+        ASSERT_RESULT_OK(rc, "apmExtGetCurrentPerformanceConfiguration");
+
         for (unsigned int module = 0; module < SysClkModule_EnumMax; module++)
         {
             targetHz = this->context->overrideFreqs[module];
 //            if (!this->config->GetConfigValue(HocClkConfigValue_DockedGovernor) || !this->config->GetConfigValue(HocClkConfigValue_HandheldGovernor))
 //            {
+                if((apmExtIsBoostMode(mode) && !this->config->GetConfigValue(HocClkConfigValue_OverwriteBoostMode)) || ((tmp451TempSoc() / 1000) > (int)this->config->GetConfigValue(HocClkConfigValue_ThermalThrottleThreshold) && this->config->GetConfigValue(HocClkConfigValue_ThermalThrottle)) ) { // WHY?!?!??!?!?
+                    Board::ResetToStockCpu();
+                    Board::ResetToStockGpu();
+                    return;
+                }
                 if (!targetHz)
                 {
                     targetHz = this->config->GetAutoClockHz(this->context->applicationId, (SysClkModule)module, this->context->profile);
@@ -221,9 +232,7 @@ void ClockManager::Tick()
                 {
                     maxHz = this->GetMaxAllowedHz((SysClkModule)module, this->context->profile);
                     nearestHz = this->GetNearestHz((SysClkModule)module, targetHz, maxHz);
-
-                    if (nearestHz != this->context->freqs[module] && this->context->enabled/* && !apmExtIsBoostMode(this->context->perfConfId) && !this->config->GetConfigValue(HocClkConfigValue_OverwriteBoostMode)*/)
-                    {
+                    if (nearestHz != this->context->freqs[module] && this->context->enabled) {
                         FileUtils::LogLine(
                             "[mgr] %s clock set : %u.%u MHz (target = %u.%u MHz)",
                             Board::GetModuleName((SysClkModule)module, true),
@@ -232,12 +241,10 @@ void ClockManager::Tick()
 
                         Board::SetHz((SysClkModule)module, nearestHz);
                         this->context->freqs[module] = nearestHz;
-                        }
-                    // else
-                    // {
-                    //     Board::ResetToStockCpu();
-                    //     Board::ResetToStockGpu();
-                    // }
+                        } else {
+                        Board::ResetToStockCpu();
+                        Board::ResetToStockGpu();
+                    }
             //     }
             // } else {
             //     #define GOVERNOR_LOAD_THRESHOLD 80

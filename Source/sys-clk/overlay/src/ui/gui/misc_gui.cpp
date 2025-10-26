@@ -102,12 +102,28 @@ void MiscGui::updateConfigToggles() {
 
 void MiscGui::listUI()
 {
-    this->listElement->addItem(new tsl::elm::CategoryHeader("Config"));
+    this->listElement->addItem(new tsl::elm::CategoryHeader("Settings"));
     addConfigToggle(HocClkConfigValue_UncappedClocks, nullptr);
     addConfigToggle(HocClkConfigValue_OverwriteBoostMode, nullptr);
 
-    addConfigButton(HocClkConfigValue_MaxCpuClock, nullptr, SysClkModule_CPU);
-    addConfigButton(HocClkConfigValue_MaxGpuClock, nullptr, SysClkModule_GPU);
+    this->listElement->addItem(new tsl::elm::CategoryHeader("Experimental"));
+    addConfigToggle(HocClkConfigValue_ThermalThrottle, nullptr);
+    addConfigToggle(HocClkConfigValue_DockedGovernor, nullptr);
+    addConfigToggle(HocClkConfigValue_HandheldGovernor, nullptr);
+
+
+    this->listElement->addItem(new tsl::elm::CategoryHeader("Max Clocks"));
+    if(IsMariko()) {
+        addConfigButton(HocClkConfigValue_MarikoMaxCpuClock, nullptr, SysClkModule_CPU);
+        addConfigButton(HocClkConfigValue_MarikoMaxGpuClock, nullptr, SysClkModule_GPU);
+        addConfigButton(HocClkConfigValue_MarikoMaxMemClock, nullptr, SysClkModule_MEM);
+    } else {
+        addConfigButton(HocClkConfigValue_EristaMaxCpuClock, nullptr, SysClkModule_CPU);
+        addConfigButton(HocClkConfigValue_EristaMaxGpuClock, nullptr, SysClkModule_GPU);
+        addConfigButton(HocClkConfigValue_EristaMaxMemClock, nullptr, SysClkModule_MEM);
+    }
+//  this->listElement->addItem(new tsl::elm::CategoryHeader("Voltages"));
+
 }
 
 void MiscGui::refresh() {

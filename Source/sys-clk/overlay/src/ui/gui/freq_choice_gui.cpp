@@ -79,15 +79,28 @@ FreqChoiceGui::~FreqChoiceGui()
          hz = this->hzList[i];
          uint32_t mhz = hz / 1000000;
          // Skip 204 MHz exactly
-         if(checkMax) {
-            if (this->configList->values[HocClkConfigValue_MaxCpuClock] < mhz && moduleName == "cpu") {
+         if(checkMax && IsMariko()) {
+            if (this->configList->values[HocClkConfigValue_MarikoMaxCpuClock] < mhz && moduleName == "cpu") {
                 continue;
             }
             
-            if (this->configList->values[HocClkConfigValue_MaxGpuClock] < mhz&& moduleName == "gpu") {
+            if (this->configList->values[HocClkConfigValue_MarikoMaxGpuClock] < mhz && moduleName == "gpu") {
+                continue;
+            }
+            if (this->configList->values[HocClkConfigValue_MarikoMaxMemClock] < mhz && moduleName == "mem") {
+                continue;
+            }
+        } else if (checkMax && IsErista()) {
+            if (this->configList->values[HocClkConfigValue_EristaMaxCpuClock] < mhz && moduleName == "cpu") {
                 continue;
             }
             
+            if (this->configList->values[HocClkConfigValue_EristaMaxGpuClock] < mhz && moduleName == "gpu") {
+                continue;
+            }
+            if (this->configList->values[HocClkConfigValue_EristaMaxMemClock] < mhz && moduleName == "mem") {
+                continue;
+            }
          }
          if (moduleName == "mem" && mhz <= 600)
          {
