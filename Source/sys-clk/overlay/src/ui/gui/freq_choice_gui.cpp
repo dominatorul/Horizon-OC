@@ -113,7 +113,7 @@ FreqChoiceGui::~FreqChoiceGui()
          if (IsMariko())
          {
              unsafe_cpu = 1964;
-             unsafe_gpu = 1153;
+             unsafe_gpu = 1076;
              danger_cpu = 2398;
              danger_gpu = 1306;
          }

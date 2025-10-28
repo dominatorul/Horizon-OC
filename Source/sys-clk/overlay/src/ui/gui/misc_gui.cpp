@@ -108,8 +108,10 @@ void MiscGui::listUI()
 
     this->listElement->addItem(new tsl::elm::CategoryHeader("Experimental"));
     addConfigToggle(HocClkConfigValue_ThermalThrottle, nullptr);
-    addConfigToggle(HocClkConfigValue_DockedGovernor, nullptr);
-    addConfigToggle(HocClkConfigValue_HandheldGovernor, nullptr);
+    addConfigToggle(HocClkConfigValue_HandheldTDP, nullptr);
+
+//  addConfigToggle(HocClkConfigValue_DockedGovernor, nullptr);
+//  addConfigToggle(HocClkConfigValue_HandheldGovernor, nullptr);
 
 
     this->listElement->addItem(new tsl::elm::CategoryHeader("Max Clocks"));

@@ -465,6 +465,7 @@ SysClkSocType Board::GetSocType() {
     return g_socType;
 }
 
+
 void Board::FetchHardwareInfos()
 {
     u64 sku = 0;
@@ -478,8 +479,13 @@ void Board::FetchHardwareInfos()
 
     switch(sku)
     {
-        case 2 ... 5:
+        case 2:
+        case 3:
+        case 5:
             g_socType = SysClkSocType_Mariko;
+            break;
+        case 4:
+            g_socType = SysClkSocType_MarikoLite;
             break;
         default:
             g_socType = SysClkSocType_Erista;

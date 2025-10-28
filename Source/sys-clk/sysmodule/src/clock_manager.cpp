@@ -44,7 +44,6 @@ void ClockManager::Initialize()
 ClockManager::ClockManager()
 {
     this->config = Config::CreateDefault();
-
     this->context = new SysClkContext;
     this->context->applicationId = 0;
     this->context->profile = SysClkProfile_Handheld;
@@ -124,7 +123,16 @@ std::uint32_t ClockManager::GetMaxAllowedHz(SysClkModule module, SysClkProfile p
         {
             if (profile < SysClkProfile_HandheldCharging)
             {
-                return Board::GetSocType() == SysClkSocType_Mariko ? 614400000 : 460800000;
+                switch(Board::GetSocType()) {
+                    case SysClkSocType_Erista:
+                        return 460800000;
+                    case SysClkSocType_Mariko:
+                        return 614400000;
+                    case SysClkSocType_MarikoLite:
+                        return 537600000;
+                    default:
+                        return 4294967294;
+                }
             }
             else if (profile <= SysClkProfile_HandheldChargingUSB)
             {
@@ -210,19 +218,44 @@ void ClockManager::Tick()
         std::uint32_t maxHz = 0;
         std::uint32_t nearestHz = 0;
         std::uint32_t mode = 0;
+        
+        AppletOperationMode opMode = appletGetOperationMode();
         Result rc = apmExtGetCurrentPerformanceConfiguration(&mode);
         ASSERT_RESULT_OK(rc, "apmExtGetCurrentPerformanceConfiguration");
 
+        if(this->config->GetConfigValue(HocClkConfigValue_HandheldTDP) && opMode == AppletOperationMode_Handheld) {
+                if(Board::GetSocType() == SysClkSocType_MarikoLite) {
+                    if(Board::GetPowerMw(SysClkPowerSensor_Now) < -(int)this->config->GetConfigValue(HocClkConfigValue_LiteTDPLimit)) {
+                        ResetToStockClocks();
+                        return;
+                    }
+                } else {
+                    if(Board::GetPowerMw(SysClkPowerSensor_Now) < -(int)this->config->GetConfigValue(HocClkConfigValue_HandheldTDPLimit)) {
+                        ResetToStockClocks();
+                        return;
+                    }
+                }
+            }
+
+        if(apmExtIsBoostMode(mode) && !this->config->GetConfigValue(HocClkConfigValue_OverwriteBoostMode)) {
+            ResetToStockClocks();
+            return;
+        }
+
+        if(((tmp451TempSoc() / 1000) > (int)this->config->GetConfigValue(HocClkConfigValue_ThermalThrottleThreshold)) && this->config->GetConfigValue(HocClkConfigValue_ThermalThrottle)) {
+            ResetToStockClocks();
+            return;
+        }
+        if(this->config->GetConfigValue(HocClkConfigValue_HandheldGovernor) && opMode == AppletOperationMode_Handheld) {
+            
+        }
+        if(this->config->GetConfigValue(HocClkConfigValue_DockedGovernor) && opMode == AppletOperationMode_Console) {
+            
+        }
         for (unsigned int module = 0; module < SysClkModule_EnumMax; module++)
         {
-            targetHz = this->context->overrideFreqs[module];
-//            if (!this->config->GetConfigValue(HocClkConfigValue_DockedGovernor) || !this->config->GetConfigValue(HocClkConfigValue_HandheldGovernor))
-//            {
-                if((apmExtIsBoostMode(mode) && !this->config->GetConfigValue(HocClkConfigValue_OverwriteBoostMode)) || ((tmp451TempSoc() / 1000) > (int)this->config->GetConfigValue(HocClkConfigValue_ThermalThrottleThreshold) && this->config->GetConfigValue(HocClkConfigValue_ThermalThrottle)) ) { // WHY?!?!??!?!?
-                    Board::ResetToStockCpu();
-                    Board::ResetToStockGpu();
-                    return;
-                }
+                targetHz = this->context->overrideFreqs[module];
+
                 if (!targetHz)
                 {
                     targetHz = this->config->GetAutoClockHz(this->context->applicationId, (SysClkModule)module, this->context->profile);
@@ -241,25 +274,16 @@ void ClockManager::Tick()
 
                         Board::SetHz((SysClkModule)module, nearestHz);
                         this->context->freqs[module] = nearestHz;
-                        } else {
-                        Board::ResetToStockCpu();
-                        Board::ResetToStockGpu();
-                    }
-            //     }
-            // } else {
-            //     #define GOVERNOR_LOAD_THRESHOLD 80
-            //     if(apmExtIsBoostMode(this->context->perfConfId)) {
-            //         Board::ResetToStockCpu(); // GOVERNOR: Reset to stock clocks if boost mode (dont use governor when boosted)
-            //         Board::ResetToStockGpu();
-            //     } else {
-            //         // Actually run the CPU governor
-            //         if(t210EmcLoadCpu() > GOVERNOR_LOAD_THRESHOLD) {
-            //             realHz = targetHz / 1000000
-            //         }
-            //     }
-            }
+                }
+                }
+
         }
     }
+}
+
+void ClockManager::ResetToStockClocks() {
+    Board::ResetToStockCpu();
+    Board::ResetToStockGpu();
 }
 
 void ClockManager::WaitForNextTick()

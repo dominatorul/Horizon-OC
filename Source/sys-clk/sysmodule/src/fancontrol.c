@@ -2,7 +2,7 @@
 #include "tmp451.h"
 
 //Fan curve table
-const TemperaturePoint defaultTable[] =
+TemperaturePoint defaultTable[] =
 {
     { .temperature_c = 25.0, .fanLevel_f = 0.00 },
     { .temperature_c = 30.0, .fanLevel_f = 0.00 },
@@ -135,7 +135,7 @@ void FanControllerThreadFunction(void*)
     FanController fc;
     float fanLevelSet_f = 0;
     float temperatureC_f = 0;
-    u64 awakeSleepTime = 250000000ULL; // 0.25 second when awake (250ms - responsive)
+    u64 awakeSleepTime = 1000000000ULL; // 1 second when awake
     u64 sleepSleepTime = 10000000000ULL; // 10 seconds when in sleep
     int sleepCheckCounter = 0;
 

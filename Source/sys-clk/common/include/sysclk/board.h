@@ -18,6 +18,7 @@ typedef enum
 {
     SysClkSocType_Erista = 0,
     SysClkSocType_Mariko,
+    SysClkSocType_MarikoLite,
     SysClkSocType_EnumMax
 } SysClkSocType;
 

@@ -19,18 +19,30 @@ typedef enum {
     SysClkConfigValue_FreqLogIntervalMs,
     SysClkConfigValue_PowerLogIntervalMs,
     SysClkConfigValue_CsvWriteIntervalMs,
+
     HocClkConfigValue_UncappedClocks,
     HocClkConfigValue_OverwriteBoostMode,
+
     HocClkConfigValue_EristaMaxCpuClock,
     HocClkConfigValue_EristaMaxGpuClock,
     HocClkConfigValue_EristaMaxMemClock,
     HocClkConfigValue_MarikoMaxCpuClock,
     HocClkConfigValue_MarikoMaxGpuClock,
     HocClkConfigValue_MarikoMaxMemClock,
+
     HocClkConfigValue_ThermalThrottle,
     HocClkConfigValue_ThermalThrottleThreshold,
+
     HocClkConfigValue_HandheldGovernor,
     HocClkConfigValue_DockedGovernor,
+
+    HocClkConfigValue_HandheldTDP,
+    HocClkConfigValue_HandheldTDPLimit,
+    HocClkConfigValue_LiteTDPLimit,
+    HocClkConfigValue_TDPCycleLimit,
+
+    HocClkConfigValue_EnforceBoardLimit,
+
     SysClkConfigValue_EnumMax,
 } SysClkConfigValue;
 
@@ -82,6 +94,18 @@ static inline const char* sysclkFormatConfigValue(SysClkConfigValue val, bool pr
         case HocClkConfigValue_HandheldGovernor:
             return pretty ? "Handheld Governor" : "governor_handheld";
 
+        case HocClkConfigValue_HandheldTDP:
+            return pretty ? "Handheld TDP" : "handheld_tdp";
+
+        case HocClkConfigValue_HandheldTDPLimit:
+            return pretty ? "TDP Limit" : "tdp_limit";
+
+        case HocClkConfigValue_LiteTDPLimit:
+            return pretty ? "Lite TDP Limit" : "tdp_limit_l";
+
+        case HocClkConfigValue_TDPCycleLimit:
+            return pretty ? "TDP Cycle Limit" : "tdp_limit_c";
+
         default:
             return pretty ? "Null" : "null";
     }
@@ -115,11 +139,18 @@ static inline uint64_t sysclkDefaultConfigValue(SysClkConfigValue val)
             return 1862ULL;
 
         case HocClkConfigValue_ThermalThrottle:
-        case HocClkConfigValue_ThermalThrottleThreshold:
         case HocClkConfigValue_DockedGovernor:
         case HocClkConfigValue_HandheldGovernor:
-        case HocClkConfigValue_ThermalThrottleThreshold:
+        case HocClkConfigValue_HandheldTDP:
             return 1ULL;
+        case HocClkConfigValue_ThermalThrottleThreshold:
+            return 70ULL;
+        case HocClkConfigValue_HandheldTDPLimit:
+            return 8600ULL;
+        case HocClkConfigValue_LiteTDPLimit:
+            return 6400ULL;
+        case HocClkConfigValue_TDPCycleLimit:
+            return 10ULL;
         default:
             return 0ULL;
     }
@@ -136,18 +167,22 @@ static inline uint64_t sysclkValidConfigValue(SysClkConfigValue val, uint64_t in
         case HocClkConfigValue_MarikoMaxGpuClock:
         case HocClkConfigValue_MarikoMaxMemClock:
         case HocClkConfigValue_ThermalThrottleThreshold:
+        case HocClkConfigValue_HandheldTDPLimit:
+        case HocClkConfigValue_LiteTDPLimit:
         case SysClkConfigValue_PollingIntervalMs:
             return input > 0;
         case SysClkConfigValue_TempLogIntervalMs:
         case SysClkConfigValue_FreqLogIntervalMs:
         case SysClkConfigValue_PowerLogIntervalMs:
         case SysClkConfigValue_CsvWriteIntervalMs:
+        case HocClkConfigValue_TDPCycleLimit:
             return input >= 0;
         case HocClkConfigValue_UncappedClocks:
         case HocClkConfigValue_OverwriteBoostMode:
         case HocClkConfigValue_ThermalThrottle:
         case HocClkConfigValue_DockedGovernor:
         case HocClkConfigValue_HandheldGovernor:
+        case HocClkConfigValue_HandheldTDP:
             return (input & 0x1) == input;
         default:
             return false;

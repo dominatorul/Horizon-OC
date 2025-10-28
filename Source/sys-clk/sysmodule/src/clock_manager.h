@@ -12,6 +12,7 @@
 
 #include <atomic>
 #include <sysclk.h>
+#include <switch.h>
 
 #include "config.h"
 #include "board.h"
@@ -37,6 +38,7 @@ class ClockManager
     bool Running();
     void GetFreqList(SysClkModule module, std::uint32_t* list, std::uint32_t maxCount, std::uint32_t* outCount);
     void Tick();
+    void ResetToStockClocks();
     void WaitForNextTick();
     void SetRNXRTMode(ReverseNXMode mode);
     struct {
