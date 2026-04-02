@@ -152,19 +152,19 @@ Refer to COMPILATION.md
 ## Credits
 * **Lightos's Cat** - Cat
 
-* **Souldbminer** – Hoc-clk and loader development
-* **Lightos** – Loader patches development, hoc-clk developlent, guides
+* **Souldbminer** - hoc-clk and loader development
+* **Lightos** - Loader patches development, hoc-clk development, guides
 * **SciresM** - Atmosphere CFW
-* **CTCaer** - L4T, Hekate, proper ram timings
-* **KazushiMe** – Switch OC Suite
-* **hanai3bi (meha)** – Switch OC Suite, EOS, sys-clk-eos
-* **NaGaa95** – L4T-OC-kernel
-* **B3711 (halop)** – EOS
-* **sys-clk team (m4xw, p-sam, natinusala)** – Sys-clk
-* **Dominatorul** – Soctherm driver, guides, general help
-* **b0rd2death** – Ultrahand sys-clk & Status Monitor fork
+* **CTCaer** - L4T, Hekate, proper RAM timings
+* **KazushiMe** - Switch OC Suite
+* **Hanai3bi (Meha)** - Switch OC Suite, EOS, sys-clk-eos
+* **NaGaa95** - L4T-OC kernel, Status Monitor fork 
+* **B3711 (halop)** - EOS
+* **sys-clk team (m4xw, p-sam, natinusala)** - sys-clk
+* **Dominatorul** - Soctherm driver, guides, general help
+* **b0rd2death** - Ultrahand sys-clk & Status Monitor fork
 * **MasaGratoR and ZachyCatGames** - General help
-* **MasaGratoR** - Status Monitor & Display Refresh Rate Driver
-* **Dominatorul, Samybigio, Arcdelta, Miki, Happy, Flopsider, Winnerboi77, Blaise, Alvise, TDRR, agjeococh, frost, letum00 and Xenshen** - Testing
+* **MasaGratoR** - Status Monitor & Display Refresh Rate driver
+* **Dominatorul, Samybigio, Arcdelta, Miki, Happy, Flopsider, Winnerboi77, Blaise, Alvise, TDRR, agjeococh, frost, letum00, and Xenshen** - Testing
 * **Samybigio2011** - Italian translations
 * **Nvidia** - [Tegra X1 Technical Reference Manual](https://developer.nvidia.com/embedded/dlc/tegra-x1-technical-reference-manual), soctherm driver, L4T
