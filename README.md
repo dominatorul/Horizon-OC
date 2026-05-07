@@ -86,7 +86,7 @@ Refer to COMPILATION.md
 * 2133 → Mariko JEDEC standard max (4266 Modules)
 * 1996 → JEDEC standard
 * 1866 → Mariko JEDEC standard max (3733 Modules)
-* 1600 → official docked, boost mode, erista safe max, JEDEC.
+* 1600 → official docked, boost mode, Erista JEDEC standard max (3200 Modules), JEDEC.
 * 1331 → official handheld, JEDEC.
 * 1065
 * 800
